@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/css/lib/dropzone/dropzone.css" rel="stylesheet">
+    <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Dashboard</h3></div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start Page Content -->
+        <div class="row">
+            <!-- Column -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-two">
+                            <header>
+                                <div class="avatar">
+
+                                    {% if current_user.avatar %}
+                                        <img src="../static/images/avatar/{{ current_user.avatar }}" alt="avatar"/>
+                                    {% else %}
+                                        <img src="../static/images/avatar/1.jpg" alt="avatar"/>
+                                    {% endif %}
+                                </div>
+                            </header>
+
+                            <h3>{{ current_user.username }}</h3>
+                            <div class="desc">
+                                {% if current_user.signature %}{{ current_user.signature }}
+                                {% else %}
+                                    这个人很懒，没有个性签名~~
+                                {% endif %}
+                            </div>
+                            <div class="contacts">
+                                <a href=""><i class="fa fa-plus"></i></a>
+                                <a href=""><i class="fa fa-whatsapp"></i></a>
+                                <a href=""><i class="fa fa-envelope"></i></a>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs profile-tab tab_list" role="tablist">
+                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#profile"
+                                                role="tab">个人信息</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#settings"
+                                                role="tab">更新信息</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#password"
+                                                role="tab">修改密码</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#certification"
+                                                role="tab">实名认证</a></li>
+                    </ul>
+                    <br>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile" role="tabpanel">
+                            <div class="card-body card-user">
+                                <div class="row">
+                                    <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            {% if current_user.name %}{{ current_user.name }}
+                                            {% else %}
+                                                无
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6 b-r"><strong>手机</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            {% if current_user.phone %}{{ current_user.phone }}
+                                            {% else %}
+                                                无
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6 b-r"><strong>邮箱</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            {% if current_user.email %}{{ current_user.email }}
+                                            {% else %}
+                                                无
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3 col-xs-6"><strong>住址</strong>
+                                        <br>
+                                        <p class="text-muted">
+                                            {% if current_user.location %}{{ current_user.location }}
+                                            {% else %}
+                                                无
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <strong>个人简介</strong>
+                                <br>
+                                <p>
+                                    {% if current_user.about_me %}{{ current_user.about_me }}
+                                    {% else %}
+                                        这个人很懒，没有个人简介~~
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="settings" role="tabpanel">
+                            <div class="card-body">
+                                <form class="form-horizontal form-material col-md-12" enctype="multipart/form-data"
+                                      method="POST">
+                                    {{ edit.csrf_token }}
+                                    {{ wtf.form_field(edit.avatar, class="form-control") }}
+                                    {{ wtf.form_field(edit.location, class="input-default form-control form-control-line") }}
+                                    {{ wtf.form_field(edit.signature, class="input-default form-control form-control-line") }}
+                                    {{ wtf.form_field(edit.about_me, class="input-default form-control form-control-line") }}
+                                    {{ edit.submit1(class="btn btn-info btn") }}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="password" role="tabpanel">
+                            <div class="card-body">
+                                <form class="form-horizontal form-material col-md-12" method="POST">
+                                    {{ password.csrf_token }}
+                                    {{ wtf.form_field(password.old, class="input-default form-control form-control-line") }}
+                                    {{ wtf.form_field(password.password, class="input-default form-control form-control-line") }}
+                                    {{ wtf.form_field(password.password2, class="input-default form-control form-control-line") }}
+                                    {{ password.submit2(class="btn btn-info") }}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="certification" role="tabpanel">
+                            <div class="card-body card-user">
+                                {% if  current_user.is_certificated %}
+                                    <div class="row">
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                {% if current_user.name %}{{ current_user.name }}
+                                                {% else %}
+                                                    无
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>手机</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                {% if current_user.phone %}{{ current_user.phone }}
+                                                {% else %}
+                                                    无
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>身份证</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                {% if current_user.email %}{{ current_user.id_card }}
+                                                {% else %}
+                                                    无
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <form class="form-horizontal form-material col-md-12" method="POST">
+                                        {{ certification.csrf_token }}
+                                        {{ wtf.form_field(certification.name, class="input-default form-control form-control-line") }}
+                                        {{ wtf.form_field(certification.id, class="input-default form-control form-control-line") }}
+                                        {{ wtf.form_field(certification.phone, class="input-default form-control form-control-line") }}
+                                        {{ certification.submit3(class="btn btn-info") }}
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        </div>
+
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- footer -->
+    <footer class="footer"> © 2018 All rights reserved. Template designed by <a href="https://colorlib.com">Colorlib</a>
+    </footer>
+    <!-- End footer -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.querySelector('.sweet-confirm').onclick = function () {
+            swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this imaginary file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel plx!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        swal({
+                            title: "Auto close alert!",
+                            text: "I will close in 2 seconds.",
+                            timer: 0,
+                            showConfirmButton: false
+                        });
+                        alert('asd');
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+        };
+    </script>
+{% endblock %}

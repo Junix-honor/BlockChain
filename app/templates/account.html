@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    <!-- Bootstrap Core CSS -->
+    {#    <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">#}
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Dashboard</h3></div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        {#        <!-- Button trigger modal -->#}
+        {#        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">#}
+        {#            Launch demo modal#}
+        {#        </button>#}
+
+        <!-- Modal -->
+        <div class="modal fade" id="addModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="addModalLabel">添加账户</h3>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('account.add') }}" method="post" role="form" id="accountForm">
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12  p-t-20">
+                                        <div class="form-group">
+                                            <label class="control-label" for="chain_address">区块链地址
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" name="chain_address" id="chain_address"
+                                                   class="form-control"
+                                                   placeholder="http://">
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="chain_password">区块链密码
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" id="chain_password" name="chain_password"
+                                                   class="form-control form-control-danger"
+                                                   placeholder="请输入6-15位密码">
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="chain_password2">确认密码
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" id="chain_password2" name="chain_password2"
+                                                   class="form-control form-control-danger" placeholder="">
+                                            <small class="form-control-feedback form-feedback"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="account_hash">账户HASH地址
+                                                <span class="text-danger">*</span></label>
+                                            <input type="text" id="account_hash" name="account_hash"
+                                                   class="form-control form-control-danger" placeholder="">
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="account_alias">别名</label>
+                                            <input type="text" id="account_alias" name="account_alias"
+                                                   class="form-control form-control-danger" placeholder="">
+                                            <small class="form-control-feedback form-feedback"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="card-title m-t-15">高级</h4>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group row">
+                                            <label class="control-label col-md-4">是否开启跨链权限</label>
+                                            <div class="col-md-8">
+                                                <div class="radio row">
+                                                    <label class="checkbox col-md-3">
+                                                        <input type="radio" name="across_chain" id="cross_chain1"
+                                                               value="true" checked>开启
+                                                    </label>
+                                                    <label class="checkbox col-md-3">
+                                                        <input type="radio" name="across_chain" id="cross_chain2"
+                                                               value="false">不开启
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="pay_password">单独支付密码</label>
+                                            <input type="password" id="pay_password" name="pay_password"
+                                                   class="form-control form-control-danger"
+                                                   placeholder="请输入6-15位密码">
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-danger">
+                                            <label class="control-label" for="pay_password2">确认密码</label>
+                                            <input type="password" id="pay_password2" name="pay_password2"
+                                                   class="form-control form-control-danger" placeholder="">
+                                            <small class="form-control-feedback form-feedback"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 ">
+                                        <div class="form-group has-danger">
+                                            <div class="checkbox checkbox-success">
+                                                <input id="subscribe" type="checkbox" name="subscribe"
+                                                       class="form-control-danger">
+                                                <label for="subscribe"> 同意《xxxx》条款
+                                                    <span class="text-danger">*</span></label></label>
+                                                <small class="form-control-feedback form-feedback"
+                                                       style="display: block"> </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="add_submit">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ current_user.username }}的账户</h4>
+                        <h6 class="card-subtitle">帐号信息</h6>
+                        <div class="table-responsive m-t-40">
+                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                                <thead class="thead-add">
+                                <tr>
+                                    <th>区块链地址</th>
+                                    <th>账户hash地址</th>
+                                    <th>账户别名</th>
+                                    <th>跨链权限</th>
+                                    <th>注册时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for account in accounts %}
+                                    <tr>
+                                        <td>{{ account.chain_address }}</td>
+                                        <td>{{ account.account_hash }}</td>
+                                        <td>{{ account.account_alias }}</td>
+                                        <td>{{ '有' if account.across_chain else '无' }}</td>
+                                        <td>{{ moment(account.timestamp).format('L') }}</td>
+                                        <td>
+                                            <a href="#" class="table-action"><i class="fa fa-pencil"></i></a>
+                                            <a href="#" class="table-action"><i class="fa fa-trash-o"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- footer -->
+    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
+    <!-- End footer -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/lib/datatables/datatables.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="../static/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- Form validation -->
+    <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+
+    <script>
+        $(function () {
+            $("#add_submit").click(function () {
+                $("#accountForm").submit();
+            });
+        })
+        $(function () {
+            var validator;
+            validator = $("#accountForm").validate({
+                rules: {
+                    chain_address: {
+                        required: true,
+                        url: true,
+                        remote: {
+                            url: "{{ url_for('account.validate_chain_address') }}",
+                            type: "post",
+                            data: {
+                                chain_address: function () {
+                                    return $("#chain_address").val();
+                                }
+                            }
+                        }
+                    },
+                    chain_password: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 15,
+                    },
+                    chain_password2: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 15,
+                        equalTo: "#chain_password"
+                    },
+                    account_hash: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('account.validate_account_hash') }}",
+                            type: "post",
+                            data: {
+                                chain_address: function () {
+                                    return $("#chain_address").val();
+                                },
+                                account_hash: function () {
+                                    return $("#account_hash").val();
+                                }
+                            }
+                        }
+                    },
+                    account_alias: {
+                        remote: {
+                            url: "{{ url_for('account.validate_account_alias') }}",
+                            type: "post",
+                            data: {
+                                account_alias: function () {
+                                    return $("#account_alias").val();
+                                }
+                            }
+                        }
+                    },
+                    pay_password: {
+                        minlength: 6,
+                        maxlength: 15,
+                    },
+                    pay_password2: {
+                        minlength: 6,
+                        maxlength: 15,
+                        equalTo: "#pay_password"
+                    },
+                    subscribe: {
+                        required: true
+                    }
+                },
+                messages: {          //自定义提示信息
+                    chain_address: {
+                        required: "区块链地址必填",
+                        url: "区块链地址格式错误",
+                        remote: "区块链地址不存在"
+                    },
+                    chain_password: {
+                        required: "密码必填",
+                        minlength: "密码最小长度为6",
+                        maxlength: "密码最大长度为15"
+                    },
+                    chain_password2: {
+                        required: "区块链密码必填",
+                        minlength: "密码最小长度为6",
+                        maxlength: "密码最大长度为15",
+                        equalTo: "两次密码输入不一致"
+                    },
+                    account_hash: {
+                        required: "账户HASH地址必填",
+                        remote: "账户HASH已经存在"
+                    },
+                    account_alias: {
+                        remote: "账户别名已经存在"
+                    },
+                    pay_password: {
+                        minlength: "密码最小长度为6",
+                        maxlength: "密码最大长度为15"
+                    },
+                    pay_password2: {
+                        minlength: "密码最小长度为6",
+                        maxlength: "密码最大长度为15",
+                        equalTo: "两次密码输入不一致"
+                    },
+                    subscribe: {
+                        required: "请阅读并同意相关条款"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).siblings(".form-control-feedback").html(error)
+                }
+            });
+        });
+        $(function () {
+            $('#myTable').DataTable(
+                {
+                    "bPaginate": true, //翻页功能
+                    "bLengthChange": true, //改变每页显示数据数量
+                    "bFilter": true, //过滤功能
+                    "bSort": true, //排序功能
+                    "bInfo": true,//页脚信息
+                    "bAutoWidth": true,//自动宽度
+                    "aaSorting": [[1, "desc"]],//默认第几个排序
+                    "bStateSave": true,//状态保存
+                    "pading": false,
+                    // "pagingType": "full_numbers",
+                    "searching": true,//搜索框是否显示
+                    "lengthChange": true,//左上角每页显示条数是否显示
+                    "oLanguage": {//插件的汉化
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        },
+                        "sZeroRecords": "没有检索到数据",
+                        "sProcessing": "<img src='' />",
+                        "sSearch": "Search"
+                    },
+                    dom: "<B><lfrt><'table-foot'ip>",
+                    buttons: [
+                        {
+                            text: 'Add',
+                            action: function (e, dt, node, config) {
+                                $('#addModal').modal('show')
+                            }
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'Export'
+                        },
+                    ]
+                }
+            )
+        });
+
+
+    </script>
+{% endblock %}
