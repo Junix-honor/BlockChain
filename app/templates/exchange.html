@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block styles %}
+    <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
     {{ super() }}
 {% endblock %}
 {% block page_content %}
@@ -52,7 +53,7 @@
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="ti-user"></i></div>
                                         <input type="text" class="form-control form-type" name="exchange_account"
-                                               id="exchange_account" placeholder="请输入账户地址或别名">
+                                               id="exchange_account" placeholder="请输入账户地址">
                                     </div>
                                     <small class="form-control-feedback form-feedback"></small>
                                 </div>
@@ -92,7 +93,8 @@
                             </div>
                             <div class="form-group row m-b-0">
                                 <div class="offset-sm-2 col-sm-10">
-                                    <button type="submit" class="btn btn-info waves-effect waves-light">确定
+                                    <button type="submit" class="btn btn-info waves-effect waves-light"
+                                            id="common-submit">确定
                                     </button>
                                 </div>
                             </div>
@@ -262,6 +264,7 @@
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
 
     <script>
+        //金额
         function checknum(obj) {
             if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
                 obj.value = obj.value;
@@ -272,8 +275,7 @@
 
         //exchangeForm
         $(function () {
-            var validator;
-            validator = $("#exchangeForm").validate({
+            $("#exchangeForm").validate({
                 rules: {
                     personal_account: {
                         required: true,
@@ -281,7 +283,7 @@
                     exchange_account: {
                         required: true,
                         remote: {
-                            url: "{{ url_for('exchange.validate_exchange_account') }}",
+                            url: "{{ url_for('exchange.validate_same_user_account') }}",
                             type: "post",
                             data: {
                                 exchange_account: function () {
@@ -291,14 +293,25 @@
                                     return $("#personal_account").val();
                                 }
                             }
-                        },
-                        validate_same_user_account: true
+                        }
                     },
                     money: {
                         required: true,
                     },
                     password: {
                         required: true,
+                        remote: {
+                            url: "{{ url_for('exchange.validate_password') }}",
+                            type: "post",
+                            data: {
+                                password: function () {
+                                    return $("#password").val();
+                                },
+                                personal_account: function () {
+                                    return $("#personal_account").val();
+                                }
+                            }
+                        }
                     },
                     subscribe: {
                         required: true
@@ -310,13 +323,15 @@
                     },
                     exchange_account: {
                         required: "交易账户必填",
-                        remote: "交易区块链上该交易账户不存在"
+                        remote: "交易账户不能是本人账户"
                     },
                     money: {
                         required: "交易金额必填",
                     },
                     password: {
                         required: "交易密码必填",
+                        remote: "交易密码错误"
+
                     },
                     subscribe: {
                         required: "请阅读并同意相关条款"
@@ -324,38 +339,53 @@
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
                     $(element).parent().siblings(".form-control-feedback").html(error)
+                },
+                submitHandler: function (form) {
+                    swal({
+                            title: "你确定要交易吗?",
+                            text:
+                                "<hr>" +
+                                "<dl class='row m-l-30 m-r-30'>" +
+                                "<dt class='col-sm-4'>本人账户</dt><dd class='col-sm-8 dd-hiden'>" + $("#personal_account").text() + "</dd>" +
+                                "<dt class='col-sm-4' >交易账户</dt><dd class='col-sm-8 dd-hiden'>" + $("#exchange_account").val() + "</dd>" +
+                                "<dt class='col-sm-4'>交易金额</dt><dd class='col-sm-8'>" + $("#money").val() + "</dd>"
+                                + "</dl>"
+                                + "<hr>",
+                            html: true,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "确定",
+                            cancelButtonText: "取消",
+                            closeOnConfirm: false,
+                            closeOnCancel: false,
+                            showLoaderOnConfirm: true
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                swal("交易", "正在进行区块链交易，请稍等", "info");
+                                // 朝后端发送ajax请求删除数据之后 再弹下面的提示框
+                                $.ajax({
+                                    url: "{{ url_for('exchange.common') }}",
+                                    type: 'post',
+                                    data_type: 'json',
+                                    data: $('#exchangeForm').serialize(),
+                                    success: function (args) {
+                                        if (args.code === 1000) {
+                                            swal("交易成功", args.message, "success");
+                                        } else {
+                                            swal('错误', '出现了位置的错误', 'info')
+                                        }
+                                    }
+
+                                })
+
+                            } else {
+                                swal("取消", "取消成功", "error");
+                            }
+                        });
                 }
             });
-            $.validator.addMethod("validate_same_user_account", function (value, element, params) {
-                var result = true;
-                $.ajax({
-                    type: "POST",
-                    url: "{{ url_for('exchange.validate_same_user_account') }}",
-                    dataType: "json",    //数据类型为json,发回的数据已自动解析
-                    async: false,
-                    data: {
-                        exchange_account: function () {
-                            return $("#exchange_account").val();
-                        },
-                        personal_account: function () {
-                            return $("#personal_account").val();
-                        }
-                    },
-                    success: function (data) {
-                        console.log(data)
-                        if (data)
-                            result = true;
-                        else
-                            result = false;
-                        console.log(result)
-                    },
-                    error: function (error) {
-                        alert("ajax error")
-                    }
-                });
-                console.log(result)
-                return result;
-            }, "交易账户不能是本人账户")
         });
     </script>
 {% endblock %}

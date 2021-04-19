@@ -46,6 +46,7 @@ def user():
         current_user.name = certification.name.data
         current_user.id_card = certification.id.data
         current_user.phone = certification.phone.data
+        current_user.pay_password = certification.pay_password.data
         current_user.certificate()
         db.session.add(current_user._get_current_object())
         db.session.commit()

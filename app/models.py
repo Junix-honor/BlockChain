@@ -51,7 +51,17 @@ class Account(db.Model):
     pay_password = db.Column(db.String(128))
     across_chain = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     # TODO:余额
+
+    def is_independent_pay_password(self):
+        return True if self.pay_password else False
+
+    def verify_password(self, password):
+        if self.is_independent_pay_password():
+            return self.pay_password == password
+        else:
+            return self.user.pay_password == password
 
 
 @login_manager.user_loader

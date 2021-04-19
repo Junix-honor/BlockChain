@@ -35,7 +35,7 @@ class CertificationForm(FlaskForm):
     id = StringField('身份证', validators=[DataRequired(), regexp(
         r'^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$',
         message="身份证格式不正确")])
-    # password = PasswordField('新密码', validators=[
-    #     DataRequired(), EqualTo('password2', message='两次密码不一致'), length(6, 6, '请输入六位支付密码')])
-    # password2 = PasswordField('确认密码', validators=[DataRequired()])
+    pay_password = PasswordField('支付密码', validators=[
+        DataRequired(), EqualTo('pay_password2', message='两次密码不一致'), length(6, 6, '请输入六位支付密码')])
+    pay_password2 = PasswordField('确认密码', validators=[DataRequired()])
     submit3 = SubmitField('提交')
