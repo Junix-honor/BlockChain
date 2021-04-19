@@ -51,6 +51,7 @@ class Account(db.Model):
     pay_password = db.Column(db.String(128))
     across_chain = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    # TODO:余额
 
 
 @login_manager.user_loader

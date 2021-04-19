@@ -262,34 +262,30 @@
                         <li class="nav-devider"></li>
                         <li class="nav-label">Home</li>
                         <li><a href="{{ url_for('main.index') }}" aria-expanded="false"><i
-                                class="fa fa-tachometer"></i><span
+                                class="fa fa-home"></i><span
                                 class="hide-menu">主页</span></a>
                         </li>
                         <li class="nav-label">Personal</li>
                         <li><a href="{{ url_for('main.user') }}"
-                               aria-expanded="false"><i class="fa fa-columns"></i>
+                               aria-expanded="false"><i class="fa fa-user"></i>
                             <span class="hide-menu">个人中心</span></a>
                         </li>
 
                         <li><a href="{{ url_for('account.index') }}" aria-expanded="false"><i
-                                class="fa fa-book"></i><span
+                                class="fa fa-google-wallet"></i><span
                                 class="hide-menu">个人账户 </span></a>
                         </li>
                         <li class="nav-label">Exchange</li>
-                        <li><a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i>
+                        <li><a href="{{ url_for('exchange.index') }}" aria-expanded="false">
+                            <i class="fa fa-exchange"></i>
                             <span class="hide-menu">交易</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href=#>普通交易</a></li>
-                                <li><a href=#>跨链交易</a></li>
-                                <li><a href=#>交易记录</a></li>
-                            </ul>
                         </li>
                         <li><a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-bar-chart"></i><span
                                 class="hide-menu">区块链</span></a>
                             <ul aria-expanded="false" class="collapse">
 
-                                <li><a href=#>区块链</a></li>
-                                <li><a href=#>活跃区块链配置</a></li>
+                                <li><a href=#>交易平台</a></li>
+                                <li><a href=#>交易记录</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -322,7 +318,7 @@
     <script src="../static/js/lib/jquery/jquery.nicescroll.js"></script>
 
     <!--Menu sidebar -->
-    <script src="../static/js/sidebarmenu.js"></script>
+    {#    <script src="../static/js/sidebarmenu.js"></script>#}
     <!-- Bootstrap tether Core JavaScript -->
     <script src="../static/js/lib/bootstrap/popper.min.js"></script>
     <script src="../static/js/lib/bootstrap/bootstrap.min.js"></script>

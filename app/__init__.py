@@ -39,4 +39,7 @@ def create_app(config_name):
     from .account import account as account_blueprint
     app.register_blueprint(account_blueprint, url_prefix='/account')
 
+    from .exchange import exchange as exchange_blueprint
+    app.register_blueprint(exchange_blueprint, url_prefix='/exchange')
+
     return app

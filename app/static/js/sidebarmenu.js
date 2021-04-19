@@ -1,4 +1,9 @@
-
+/*
+Template Name: Admin Press Admin
+Author: Themedesigner
+Email: niravjoshi87@gmail.com
+File: js
+*/
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(['jquery'], factory);

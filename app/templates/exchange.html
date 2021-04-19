@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Dashboard</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-lg-6 responsive-md-100">
+                <div class="card card-outline-info">
+                    <div class="card-header">
+                        <h4 class="m-b-0 text-white">普通交易</h4>
+                    </div>
+                    <div class="card-body m-l-10 m-r-10">
+                        <form class="form-horizontal p-t-20" method="post" role="form" id="exchangeForm"
+                              action="{{ url_for('exchange.common') }}">
+                            <div class="form-group row">
+                                <label for="personal_account" class="col-sm-2 control-label">本人账户
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        <select class="form-control form-type" id="personal_account"
+                                                name="personal_account">
+                                            {% for account in accounts %}
+                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="exchange_account" class="col-sm-2 control-label">交易账户
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        <input type="text" class="form-control form-type" name="exchange_account"
+                                               id="exchange_account" placeholder="请输入账户地址或别名">
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="money" class="col-sm-2 control-label">交易金额
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-money"></i></div>
+                                        <input type="text" class="form-control form-type" id="money" name="money"
+                                               placeholder="请输入交易金额" onkeyup=" checknum(this);">
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="password" class="col-sm-2 control-label">支付密码
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                        <input type="password" class="form-control form-type" name="password"
+                                               id="password" placeholder="请输入支付密码">
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <div class="checkbox checkbox-success">
+                                        <input id="subscribe" type="checkbox" name="subscribe">
+                                        <label for="subscribe">同意《xxxx》条款</label>
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row m-b-0">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <button type="submit" class="btn btn-info waves-effect waves-light">确定
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 responsive-md-100">
+                <div class="card card-outline-primary">
+                    <div class="card-header">
+                        <h4 class="m-b-0 text-white">跨链交易</h4>
+                    </div>
+                    <div class="card-body m-l-10 m-r-10">
+                        <form class="form-horizontal p-t-20" method="post" role="form" id="crossExchangeForm"
+                              action="{{ url_for('exchange.index') }}">
+                            <div class="form-group row">
+                                <label for="out_account" class="col-sm-2 control-label">转出账户
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        <select class="form-control form-type" id="out_account"
+                                                name="out_account">
+                                            {% for account in accounts %}
+                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="in_account" class="col-sm-2 control-label">转入账户
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        <select class="form-control form-type" id="in_account"
+                                                name="in_account">
+                                            {% for account in accounts %}
+                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cross_money" class="col-sm-2 control-label">交易金额
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-money"></i></div>
+                                        <input type="text" class="form-control form-type" id="cross_money"
+                                               name="cross_money"
+                                               placeholder="请输入交易金额">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cross_password" class="col-sm-2 control-label">支付密码
+                                    <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                        <input type="password" class="form-control form-type" name="cross_password"
+                                               id="cross_password" placeholder="请输入支付密码">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <div class="checkbox checkbox-success">
+                                        <input id="subscribe" type="checkbox">
+                                        <label for="subscribe">同意《xxxx》条款</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row m-b-0">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">确定
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline-success">
+                    <div class="card-header">
+                        <h4 class="m-b-0 text-white">交易记录</h4>
+                    </div>
+                    <div class="card-body m-l-10 m-r-10">
+                        <h5 class="card-title m-t-15">普通交易</h5>
+                        <h6 class="card-subtitle">交易信息</h6>
+                        <div class=" table-responsive">
+                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                                <thead class="thead-add">
+                                <tr>
+                                    <th>本人账户</th>
+                                    <th>交易账户</th>
+                                    <th>交易金额</th>
+                                    <th>交易时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-body m-l-10 m-r-10">
+                        <h5 class="card-title m-t-15">跨链交易</h5>
+                        <h6 class="card-subtitle">交易信息</h6>
+                        <div class=" table-responsive">
+                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                                <thead class="thead-add">
+                                <tr>
+                                    <th>转出账户</th>
+                                    <th>转入账户</th>
+                                    <th>交易金额</th>
+                                    <th>交易时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                    <td>121123</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- footer -->
+    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
+    <!-- End footer -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/lib/datatables/datatables.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="../static/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- Form validation -->
+    <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+
+    <script>
+        function checknum(obj) {
+            if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
+                obj.value = obj.value;
+            } else {
+                obj.value = obj.value.substring(0, obj.value.length - 1);
+            }
+        }
+
+        //exchangeForm
+        $(function () {
+            var validator;
+            validator = $("#exchangeForm").validate({
+                rules: {
+                    personal_account: {
+                        required: true,
+                    },
+                    exchange_account: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('exchange.validate_exchange_account') }}",
+                            type: "post",
+                            data: {
+                                exchange_account: function () {
+                                    return $("#exchange_account").val();
+                                },
+                                personal_account: function () {
+                                    return $("#personal_account").val();
+                                }
+                            }
+                        },
+                        validate_same_user_account: true
+                    },
+                    money: {
+                        required: true,
+                    },
+                    password: {
+                        required: true,
+                    },
+                    subscribe: {
+                        required: true
+                    }
+                },
+                messages: {          //自定义提示信息
+                    personal_account: {
+                        required: "个人账户必填",
+                    },
+                    exchange_account: {
+                        required: "交易账户必填",
+                        remote: "交易区块链上该交易账户不存在"
+                    },
+                    money: {
+                        required: "交易金额必填",
+                    },
+                    password: {
+                        required: "交易密码必填",
+                    },
+                    subscribe: {
+                        required: "请阅读并同意相关条款"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("validate_same_user_account", function (value, element, params) {
+                var result = true;
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('exchange.validate_same_user_account') }}",
+                    dataType: "json",    //数据类型为json,发回的数据已自动解析
+                    async: false,
+                    data: {
+                        exchange_account: function () {
+                            return $("#exchange_account").val();
+                        },
+                        personal_account: function () {
+                            return $("#personal_account").val();
+                        }
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        if (data)
+                            result = true;
+                        else
+                            result = false;
+                        console.log(result)
+                    },
+                    error: function (error) {
+                        alert("ajax error")
+                    }
+                });
+                console.log(result)
+                return result;
+            }, "交易账户不能是本人账户")
+        });
+    </script>
+{% endblock %}
