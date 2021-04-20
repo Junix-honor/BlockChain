@@ -354,7 +354,6 @@
                             html: true,
                             type: "warning",
                             showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
                             confirmButtonText: "确定",
                             cancelButtonText: "取消",
                             closeOnConfirm: false,
@@ -372,14 +371,20 @@
                                     data: $('#exchangeForm').serialize(),
                                     success: function (args) {
                                         if (args.code === 1000) {
-                                            swal("交易成功", args.message, "success");
+                                            swal({
+                                                title: "交易成功",
+                                                text: args.message,
+                                                type: "success",
+                                                showConfirmButton: false,
+                                            });
                                         } else {
                                             swal('错误', '出现了位置的错误', 'info')
                                         }
+                                        setTimeout(function () {
+                                            window.location.reload()
+                                        }, 2000);
                                     }
-
                                 })
-
                             } else {
                                 swal("取消", "取消成功", "error");
                             }
