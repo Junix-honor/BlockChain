@@ -10,6 +10,8 @@ from . import exchange
 from .. import db, avatars
 from ..models import User, Account
 
+from ..common_deal.Bitcoin import create_deal
+
 
 @exchange.route('/', methods=['GET'])
 @login_required
@@ -22,11 +24,13 @@ def index():
 @exchange.route('/common', methods=['POST'])
 @login_required
 def common():
-    personal_account = request.form.get("personal_account")
-    exchange_account = request.form.get("exchange_account")
-    money = request.form.get("money")
-    print(personal_account, exchange_account, money)
-    time.sleep(5)
+    personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
+    # time.sleep(5)
+    create_deal(personal_account.account_hash,
+                request.form.get("exchange_account"),
+                personal_account.chain_password,
+                request.form.get("money"),
+                personal_account.chain_address)
     return jsonify({"code": 1000, "message": "交易成功"})
 
 
