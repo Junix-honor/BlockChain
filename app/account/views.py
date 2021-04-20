@@ -49,7 +49,7 @@ def edit():
                             "chain_password": account.chain_password,
                             "account_hash": account.account_hash,
                             "account_alias": account.account_alias,
-                            "pay_password": account.pay_password,
+                            # TODO:"pay_password": account.pay_password,
                             "across_chain": account.across_chain
                             })
         else:
@@ -62,7 +62,7 @@ def edit():
         account.chain_password = request.form.get("edit_chain_password")
         account.account_hash = request.form.get("edit_account_hash")
         account.account_alias = request.form.get("edit_account_alias")
-        account.pay_password = request.form.get("edit_pay_password")
+        # TODO:account.pay_password = request.form.get("edit_pay_password")
         account.across_chain = True if request.form.get("edit_across_chain") == 'true' else False
         db.session.add(account)
         db.session.commit()

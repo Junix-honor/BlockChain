@@ -26,7 +26,7 @@ def common():
     exchange_account = request.form.get("exchange_account")
     money = request.form.get("money")
     print(personal_account, exchange_account, money)
-    time.sleep(30)
+    time.sleep(5)
     return jsonify({"code": 1000, "message": "交易成功"})
 
 
@@ -58,7 +58,7 @@ def validate_same_user_account():
 def validate_password():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
     print(personal_account.chain_address)
-    if personal_account.verify_password(request.form.get('password')):
+    if personal_account.verify_pay_password(request.form.get('password')):
         return jsonify(True)
     else:
         return jsonify(False)
