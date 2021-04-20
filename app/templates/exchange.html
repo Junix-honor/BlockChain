@@ -375,14 +375,14 @@
                                                 title: "交易成功",
                                                 text: args.message,
                                                 type: "success",
-                                                showConfirmButton: false,
+                                                customClass: "common-exchange"
                                             });
+                                            $('.common-exchange .confirm').click(function () {
+                                                window.location.reload()
+                                            })
                                         } else {
                                             swal('错误', '出现了位置的错误', 'info')
                                         }
-                                        setTimeout(function () {
-                                            window.location.reload()
-                                        }, 2000);
                                     }
                                 })
                             } else {
