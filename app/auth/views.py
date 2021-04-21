@@ -16,15 +16,13 @@ def before_request():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data.lower()).first()
-        print(1)
+        user = User.query.filter_by(username=form.username.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
                 next = url_for('main.index')
             return redirect(next)
-        print(2)
         flash('Invalid email or password.', 'error')
     return render_template('auth/login.html', form=form)
 
@@ -41,12 +39,11 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data.lower(),
+        user = User(email=form.email.data,
                     username=form.username.data,
                     password=form.password.data)
+        print(form.password.data)
         db.session.add(user)
         db.session.commit()
-        print("110")
-        print(form)
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)

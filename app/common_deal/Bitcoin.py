@@ -1,6 +1,7 @@
 import web3
 from web3 import Web3, IPCProvider
 from decimal import *
+import hashlib
 
 
 # 输入信息正确情况
