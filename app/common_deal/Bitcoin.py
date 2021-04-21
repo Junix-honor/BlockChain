@@ -1,15 +1,17 @@
 import web3
 from web3 import Web3, IPCProvider
 from decimal import *
-#输入信息正确情况
-def is_connection(address_vps_one,address_vps_two,pw1,number,RPC_server):
+
+
+# 输入信息正确情况
+def is_connection(address_vps_one, address_vps_two, pw1, number, RPC_server):
     try:
         web3.HTTPProvider(RPC_server)
     except ConnectionError:
         print("Connection error")
 
 
-def create_deal(address_vps_one,address_vps_two,pw1,number,RPC_server):
+def create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
     w3 = Web3(Web3.HTTPProvider(RPC_server))
     print("create deal")
     amount = number  # Ether
@@ -21,8 +23,8 @@ def create_deal(address_vps_one,address_vps_two,pw1,number,RPC_server):
     # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(receiving_address), 'ether'))
     # w3.personal.unlockAccount(address_vps_one, pw1)
 
-    #判断转账余额是否足够
-    if w3.fromWei(w3.eth.getBalance(sending_address), 'ether')+Decimal.from_float(0.1) > amount:
+    # 判断转账余额是否足够
+    if w3.fromWei(w3.eth.getBalance(sending_address), 'ether') + Decimal.from_float(0.1) > amount:
         # 创建交易
 
         signed_txn = w3.eth.account.sign_transaction(dict(
@@ -38,8 +40,8 @@ def create_deal(address_vps_one,address_vps_two,pw1,number,RPC_server):
 
         tx_hash = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
         # 交易完后打印账户的余额
-        #print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(sending_address), 'ether'))
-        #print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(receiving_address), 'ether'))
+        # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(sending_address), 'ether'))
+        # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(receiving_address), 'ether'))
 
         return w3.eth.get_transaction(tx_hash)
 
@@ -48,14 +50,10 @@ def create_deal(address_vps_one,address_vps_two,pw1,number,RPC_server):
         return 0
 
 
-
-
-
 if __name__ == "__main__":
-
-    #print(w3.isConnected())
-    #print(w3.eth.accounts)
-    #print("Host has %d Ether"% w3.fromWei(w3.eth.getBalance("0x8c569830D4b7A1D7bbF0E034Be2a2C095ee6f3Dd"), 'ether'))
+    # print(w3.isConnected())
+    # print(w3.eth.accounts)
+    # print("Host has %d Ether"% w3.fromWei(w3.eth.getBalance("0x8c569830D4b7A1D7bbF0E034Be2a2C095ee6f3Dd"), 'ether'))
 
     First_address = '0xf5e7d4Ac497af19cAF97d459048f8Efe5ac833BC'
     Second_address = '0x7E4BBD69250C1F6B21023c6a21A0F5ef836b4578'
@@ -64,6 +62,6 @@ if __name__ == "__main__":
     RPC_server = 'HTTP://127.0.0.1:7545'
     number = 12
 
-    #查询具体信息s
-    #print(create_deal(Second_address,First_address,Second_pw,number,'HTTP://127.0.0.1:7545')['from'])
+    # 查询具体信息s
+    # print(create_deal(Second_address,First_address,Second_pw,number,'HTTP://127.0.0.1:7545')['from'])
     create_deal(First_address, Second_address, First_pw, number, RPC_server)
