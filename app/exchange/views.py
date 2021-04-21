@@ -8,9 +8,10 @@ import base64
 
 from . import exchange
 from .. import db, avatars
-from ..models import User, Account
+from ..models import User, Account, CommonExchangeRecord
 
-from ..common_deal.Bitcoin import create_deal
+
+# from ..common_deal.Bitcoin import create_deal
 
 
 @exchange.route('/', methods=['GET'])
@@ -25,12 +26,17 @@ def index():
 @login_required
 def common():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
-    # time.sleep(5)
-    create_deal(personal_account.account_hash,
-                request.form.get("exchange_account"),
-                personal_account.chain_password,
-                request.form.get("money"),
-                personal_account.chain_address)
+    time.sleep(5)
+    # create_deal(personal_account.account_hash,
+    #             request.form.get("exchange_account"),
+    #             personal_account.chain_password,
+    #             request.form.get("money"),
+    #             personal_account.chain_address)
+    record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
+                                  exchange_money=request.form.get("money"),
+                                  account=personal_account)
+    db.session.add(record)
+    db.session.commit()
     return jsonify({"code": 1000, "message": "交易成功"})
 
 

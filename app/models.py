@@ -74,6 +74,7 @@ class Account(db.Model):
     across_chain = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     money = db.Column(db.Float)
+    common_exchange_records = db.relationship('CommonExchangeRecord', backref='account', lazy='dynamic')
 
     # pay_password哈希
     @property
@@ -94,9 +95,13 @@ class Account(db.Model):
         return True if self.pay_password_hash else False
 
 
-class CommonRecord(db.Model):
-    __tablename__ = 'common_records'
+class CommonExchangeRecord(db.Model):
+    __tablename__ = 'common_exchange_records'
     id = db.Column(db.Integer, primary_key=True)
+    account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    exchange_account_hash = db.Column(db.String(128))
+    exchange_money = db.Column(db.Float)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
 
 @login_manager.user_loader
