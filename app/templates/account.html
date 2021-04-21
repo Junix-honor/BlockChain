@@ -364,7 +364,6 @@
                 rules: {
                     chain_address: {
                         required: true,
-                        url: true,
                         remote: {
                             url: "{{ url_for('account.validate_chain_address') }}",
                             type: "post",
@@ -427,7 +426,6 @@
                 messages: {          //自定义提示信息
                     chain_address: {
                         required: "RPC地址必填",
-                        url: "RPC地址格式错误",
                         remote: "RPC地址不存在"
                     },
                     chain_password: {
@@ -469,7 +467,6 @@
                 rules: {
                     edit_chain_address: {
                         required: true,
-                        url: true,
                         remote: {
                             url: "{{ url_for('account.validate_chain_address') }}",
                             type: "post",
@@ -536,7 +533,6 @@
                 messages: {          //自定义提示信息
                     edit_chain_address: {
                         required: "RPC地址必填",
-                        url: "RPC地址格式错误",
                         remote: "RPC地址不存在"
                     },
                     edit_chain_password: {

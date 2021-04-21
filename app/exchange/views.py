@@ -1,3 +1,4 @@
+import decimal
 import os
 import time
 
@@ -11,7 +12,7 @@ from .. import db, avatars
 from ..models import User, Account, CommonExchangeRecord
 
 
-# from ..common_deal.Bitcoin import create_deal
+from ..common_deal.Bitcoin import create_deal
 
 
 @exchange.route('/', methods=['GET'])
@@ -27,11 +28,13 @@ def index():
 def common():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
     time.sleep(5)
-    # create_deal(personal_account.account_hash,
-    #             request.form.get("exchange_account"),
-    #             personal_account.chain_password,
-    #             request.form.get("money"),
-    #             personal_account.chain_address)
+    #create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
+    info=create_deal(personal_account.account_hash,
+                request.form.get("exchange_account"),
+                personal_account.chain_password,
+                decimal.Decimal(request.form.get("money")),
+                personal_account.chain_address)
+    print(info)
     record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
                                   exchange_money=request.form.get("money"),
                                   account=personal_account)

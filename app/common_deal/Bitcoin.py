@@ -64,5 +64,5 @@ if __name__ == "__main__":
     number = 12
 
     # 查询具体信息s
-    # print(create_deal(Second_address,First_address,Second_pw,number,'HTTP://127.0.0.1:7545')['from'])
+    print(create_deal(Second_address,First_address,Second_pw,number,RPC_server))
     create_deal(First_address, Second_address, First_pw, number, RPC_server)
