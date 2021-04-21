@@ -75,8 +75,6 @@ class Account(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     money = db.Column(db.Float)
 
-    # TODO:余额
-
     # pay_password哈希
     @property
     def pay_password(self):
@@ -94,6 +92,11 @@ class Account(db.Model):
 
     def is_independent_pay_password(self):
         return True if self.pay_password_hash else False
+
+
+class CommonRecord(db.Model):
+    __tablename__ = 'common_records'
+    id = db.Column(db.Integer, primary_key=True)
 
 
 @login_manager.user_loader
