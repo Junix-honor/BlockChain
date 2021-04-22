@@ -26,6 +26,9 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     is_certificated = db.Column(db.Integer(), default=0)
     accounts = db.relationship('Account', backref='user', lazy='dynamic')
+    # 密保
+    protection_question = db.Column(db.String(128))
+    protection_answer_hash = db.Column(db.String(128))
 
     # password哈希
     @property
@@ -50,6 +53,18 @@ class User(UserMixin, db.Model):
 
     def verify_pay_password(self, password):
         return check_password_hash(self.pay_password_hash, password)
+
+    # 密保哈希
+    @property
+    def protection_answer(self):
+        raise AttributeError('protection_answer is not a readable attribute')
+
+    @protection_answer.setter
+    def protection_answer(self, answer):
+        self.protection_answer_hash = generate_password_hash(answer)
+
+    def verify_protection_answer(self, answer):
+        return check_password_hash(self.protection_answer_hash, answer)
 
     def ping(self):
         self.last_seen = datetime.utcnow()

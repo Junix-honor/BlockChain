@@ -26,7 +26,7 @@
                         <h4 class="card-title">{{ current_user.username }}的账户</h4>
                         <h6 class="card-subtitle">帐号信息</h6>
                         <div class=" table-responsive">
-                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                            <table id="accountTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
                                     <th>RPC地址</th>
@@ -44,7 +44,7 @@
                                         <td>{{ account.account_hash }}</td>
                                         <td>{{ account.account_alias }}</td>
                                         <td>{{ '有' if account.across_chain else '无' }}</td>
-                                        <td>{{ moment(account.timestamp).format('L') }}</td>
+                                        <td>{{ moment(account.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                         <td>
                                             <a href="javascript:void(0);" class="table-action account-edit"
                                                edit_id="{{ account.id }}"><i class=" fa fa-pencil"></i></a>
@@ -569,7 +569,7 @@
             });
         });
         $(function () {
-            $('#myTable').DataTable(
+            $('#accountTable').DataTable(
                 {
                     "bPaginate": true, //翻页功能
                     "bLengthChange": true, //改变每页显示数据数量

@@ -342,10 +342,18 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    $.Notification.notify('{{ category }}', 'bottom right', 'Notification', '{{ message }}')
-                {% endfor %}
+                    {#$.Notification.notify('{{ category }}', 'top right', 'Notification', '{{ message }}')#}
+                    {% if category =='error' %}
+                        $(function (){sweetAlert("错误", "{{ message }}", "{{ category }}")
+                    {% elif category =='success'%}
+                        $(function (){sweetAlert("成功", "{{ message }}", "{{ category }}")
+                    {% elif category =='info'%}
+                        $(function (){sweetAlert("注意", "{{ message }}", "{{ category }}")
+                    {% endif %}
+                {% endfor %}})
             {% endif %}
         {% endwith %}
     </script>
     {{ moment.include_moment() }}
+    {{ moment.locale('zh-cn') }}
 {% endblock %}

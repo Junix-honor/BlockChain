@@ -12,7 +12,7 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../../static/images/favicon.png">
     <title>CoinDash - Cryptocurrency Dashboard Admin Template</title>
-     <!-- Custom CSS -->
+    <!-- Custom CSS -->
     <link href="../../static/css/lib/sweetalert/sweetalert.css" rel="stylesheet">
     <link href="../../static/css/style.css" rel="stylesheet">
     <link href="../../static/css/lib/notifications/notification.css" rel="stylesheet">
@@ -29,24 +29,41 @@
                 <div class="col-lg-4">
                     <div class="login-content card">
                         <div class="login-form">
-                            <h4>登录</h4>
-                            <form method="POST">
-                                {{ form.csrf_token }}
-                                {{ wtf.form_field(form.username) }}
-                                {{ wtf.form_field(form.password) }}
+                            <h3>登录</h3>
+                            <form class="form" action="{{ url_for('auth.login') }}"
+                                  method="post" role="form" id="loginForm">
+                                <div class="form-group">
+                                    <label for="username">用户名
+                                        <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        <input type="text" class="form-control form-type" id="username"
+                                               name="username" placeholder="">
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">密码
+                                        <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                        <input type="password" class="form-control form-type" id="password"
+                                               name="password" placeholder="">
+                                    </div>
+                                    <small class="form-control-feedback form-feedback"></small>
+                                </div>
                                 <div class="checkbox">
                                     <label>
                                         <input id="remember_me" name="remember_me" type="checkbox" value="y"> 自动登录
                                     </label>
-                                    {#                                    {{ wtf.form_field(form.remember_me) }}#}
                                     <label class="pull-right">
                                         <a href="#">忘记密码?</a>
                                     </label>
 
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Sign in</button>
-                                <div class="register-link m-t-15 text-center">
-                                    <p>Don't have account ? <a href="{{ url_for('auth.register') }}"> Sign Up Here</a>
+                                <button type="submit" class="btn btn-info btn-flat m-b-30 m-t-30">登录</button>
+                                <div class="register-link m-t-5 text-center">
+                                    <p>没有帐号? <a href="{{ url_for('auth.register') }}">注册</a>
                                     </p>
                                 </div>
                             </form>
@@ -60,41 +77,76 @@
 </div>
 <!-- End Wrapper -->
 
- <!-- All Jquery -->
-    <script src="../../static/js/lib/jquery/jquery.min.js"></script>
-    <script src="../../static/js/lib/jquery/jquery.app.js"></script>
-    <script src="../../static/js/lib/jquery/jquery.blockUI.js"></script>
-    <script src="../../static/js/lib/jquery/jquery.nicescroll.js"></script>
+<!-- All Jquery -->
+<script src="../../static/js/lib/jquery/jquery.min.js"></script>
+<script src="../../static/js/lib/jquery/jquery.app.js"></script>
+<script src="../../static/js/lib/jquery/jquery.blockUI.js"></script>
+<script src="../../static/js/lib/jquery/jquery.nicescroll.js"></script>
 
-    <!--Menu sidebar -->
-    {#    <script src="../static/js/sidebarmenu.js"></script>#}
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="../../static/js/lib/bootstrap/popper.min.js"></script>
-    <script src="../../static/js/lib/bootstrap/bootstrap.min.js"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="../../static/js/jquery.slimscroll.js"></script>
-    <!--stickey kit -->
-    <script src="../../static/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
-    <!--Custom JavaScript -->
-    <script src="../../static/js/lib/webticker/jquery.webticker.min.js"></script>
-    <script src="../../static/js/lib/peitychart/jquery.peity.min.js"></script>
-    <!-- sweetalert-->
-    <script src="../../static/js/lib/sweetalert/sweetalert.min.js"></script>
-    <!-- notification-->
-    <script src="../../static/js/lib/notifyjs/dist/notify.min.js"></script>
-    <script src="../../static/js/lib/notifications/notify-metro.js"></script>
-    <script src="../../static/js/lib/notifications/notifications.js"></script>
-    <!-- scripit init-->
-    <script src="../../static/js/custom.min.js"></script>
-    <script src="../../static/js/dashboard-1.js"></script><script src="../../static/js/custom.min.js"></script>
+<!--Menu sidebar -->
+{#    <script src="../static/js/sidebarmenu.js"></script>#}
+<!-- Bootstrap tether Core JavaScript -->
+<script src="../../static/js/lib/bootstrap/popper.min.js"></script>
+<script src="../../static/js/lib/bootstrap/bootstrap.min.js"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="../../static/js/jquery.slimscroll.js"></script>
+<!--stickey kit -->
+<script src="../../static/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+<!--Custom JavaScript -->
+<script src="../../static/js/lib/webticker/jquery.webticker.min.js"></script>
+<script src="../../static/js/lib/peitychart/jquery.peity.min.js"></script>
+<!-- sweetalert-->
+<script src="../../static/js/lib/sweetalert/sweetalert.min.js"></script>
+<!-- notification-->
+<script src="../../static/js/lib/notifyjs/dist/notify.min.js"></script>
+<script src="../../static/js/lib/notifications/notify-metro.js"></script>
+<script src="../../static/js/lib/notifications/notifications.js"></script>
+<!-- scripit init-->
+<script src="../../static/js/custom.min.js"></script>
+<script src="../../static/js/dashboard-1.js"></script>
+<script src="../../static/js/custom.min.js"></script>
+<!-- Form validation -->
+<script src="../../static/js/lib/form-validation/jquery.validate.min.js"></script>
+
 <script>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                $.Notification.notify('{{ category }}', 'top right', 'Notification', '{{ message }}')
-            {% endfor %}
+                {#$.Notification.notify('{{ category }}', 'top right', 'Notification', '{{ message }}')#}
+                {% if category =='error' %}
+                    $(function (){sweetAlert("错误", "{{ message }}", "{{ category }}")
+                {% elif category =='success'%}
+                    $(function (){sweetAlert("成功", "{{ message }}", "{{ category }}")
+                {% elif category =='info'%}
+                    $(function (){sweetAlert("注意", "{{ message }}", "{{ category }}")
+                {% endif %}
+            {% endfor %}})
         {% endif %}
     {% endwith %}
+    //registerForm
+    $(function () {
+        $("#loginForm").validate({
+            rules: {
+                username: {
+                    required: true,
+                },
+                password: {
+                    required: true,
+                },
+            },
+            messages: {          //自定义提示信息
+                username: {
+                    required: "*用户名必填",
+                },
+                password: {
+                    required: "*密码必填",
+                },
+            },
+            errorPlacement: function (error, element) {      //错误信息的位置
+                $(element).parent().siblings(".form-control-feedback").html(error)
+            }
+        });
+    });
 </script>
 </body>
 

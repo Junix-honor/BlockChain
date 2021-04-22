@@ -195,31 +195,38 @@
                         <h5 class="card-title m-t-15">普通交易</h5>
                         <h6 class="card-subtitle">交易信息</h6>
                         <div class=" table-responsive">
-                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                            <table id="commonExchangeTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
                                     <th>本人账户</th>
-                                    <th>交易账户</th>
+                                    <th>RPC地址</th>
+                                    <th>本人账户地址</th>
+                                    <th>交易账户地址</th>
                                     <th>交易金额</th>
                                     <th>交易时间</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                </tr>
+                                {% for record in common_exchange_records %}
+                                    <tr>
+                                        <td>{{ record.account.account_alias }}</td>
+                                        <td>{{ record.account.chain_address }}</td>
+                                        <td>{{ record.account.account_hash }}</td>
+                                        <td>{{ record.exchange_account_hash }}</td>
+                                        <td>{{ record.exchange_money }}</td>
+                                        <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    <hr>
                     <div class="card-body m-l-10 m-r-10">
                         <h5 class="card-title m-t-15">跨链交易</h5>
                         <h6 class="card-subtitle">交易信息</h6>
                         <div class=" table-responsive">
-                            <table id="myTable" class="display nowrap table table-hover table-bordered">
+                            <table id="crossExchangeTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
                                     <th>转出账户</th>
@@ -391,6 +398,92 @@
                         });
                 }
             });
+        });
+
+        //commonExchangeTable
+        $(function () {
+            $('#commonExchangeTable').DataTable(
+                {
+                    "bPaginate": true, //翻页功能
+                    "bLengthChange": true, //改变每页显示数据数量
+                    "bFilter": true, //过滤功能
+                    "bSort": true, //排序功能
+                    "bInfo": true,//页脚信息
+                    "bAutoWidth": true,//自动宽度
+                    "aaSorting": [[1, "desc"]],//默认第几个排序
+                    "bStateSave": true,//状态保存
+                    "pading": false,
+                    // "pagingType": "full_numbers",
+                    "searching": true,//搜索框是否显示
+                    "lengthChange": true,//左上角每页显示条数是否显示
+                    "oLanguage": {//插件的汉化
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        },
+                        "sZeroRecords": "没有检索到数据",
+                        "sProcessing": "<img src='' />",
+                        "sSearch": "Search"
+                    },
+                    dom: "<B><lfrt><'table-foot'ip>",
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Export'
+                        },
+                    ]
+                }
+            )
+        });
+
+        //crossExchangeTable
+        $(function () {
+            $('#crossExchangeTable').DataTable(
+                {
+                    "bPaginate": true, //翻页功能
+                    "bLengthChange": true, //改变每页显示数据数量
+                    "bFilter": true, //过滤功能
+                    "bSort": true, //排序功能
+                    "bInfo": true,//页脚信息
+                    "bAutoWidth": true,//自动宽度
+                    "aaSorting": [[1, "desc"]],//默认第几个排序
+                    "bStateSave": true,//状态保存
+                    "pading": false,
+                    // "pagingType": "full_numbers",
+                    "searching": true,//搜索框是否显示
+                    "lengthChange": true,//左上角每页显示条数是否显示
+                    "oLanguage": {//插件的汉化
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        },
+                        "sZeroRecords": "没有检索到数据",
+                        "sProcessing": "<img src='' />",
+                        "sSearch": "Search"
+                    },
+                    dom: "<B><lfrt><'table-foot'ip>",
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Export'
+                        },
+                    ]
+                }
+            )
         });
     </script>
 {% endblock %}

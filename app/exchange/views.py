@@ -11,7 +11,6 @@ from . import exchange
 from .. import db, avatars
 from ..models import User, Account, CommonExchangeRecord
 
-
 from ..common_deal.Bitcoin import create_deal
 
 
@@ -19,8 +18,13 @@ from ..common_deal.Bitcoin import create_deal
 @login_required
 def index():
     accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
+    # common_exchange_records = CommonExchangeRecord.query.filter_by()
+    common_exchange_records = []
+    for account in accounts:
+        common_exchange_records += account.common_exchange_records.all()
+    print(common_exchange_records)
     print(accounts)
-    return render_template('exchange.html', accounts=accounts)
+    return render_template('exchange.html', accounts=accounts,common_exchange_records=common_exchange_records)
 
 
 @exchange.route('/common', methods=['POST'])
@@ -28,12 +32,12 @@ def index():
 def common():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
     time.sleep(5)
-    #create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
-    info=create_deal(personal_account.account_hash,
-                request.form.get("exchange_account"),
-                personal_account.chain_password,
-                decimal.Decimal(request.form.get("money")),
-                personal_account.chain_address)
+    # create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
+    info = create_deal(personal_account.account_hash,
+                       request.form.get("exchange_account"),
+                       personal_account.chain_password,
+                       decimal.Decimal(request.form.get("money")),
+                       personal_account.chain_address)
     print(info)
     record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
                                   exchange_money=request.form.get("money"),
