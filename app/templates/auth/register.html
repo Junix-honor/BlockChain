@@ -203,12 +203,12 @@
             }
         });
         $.validator.addMethod("checkUsername", function (value, element, params) {
-            var checkName = /^\w{4,10}$/g;
-            return this.optional(element) || (checkName.test(value));
+            var check = /^\w{4,10}$/g;
+            return this.optional(element) || (check.test(value));
         }, "*只允许4-10位英文字母、数字或者下画线");
         $.validator.addMethod("checkPassword", function (value, element, params) {
-            var checkName = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
-            return this.optional(element) || (checkName.test(value));
+            var check = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+            return this.optional(element) || (check.test(value));
         }, "*密码由字母、数字、特殊符号组成，区分大小写");
     });
 </script>

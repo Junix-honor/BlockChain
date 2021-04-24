@@ -29,17 +29,31 @@
                     <div class="card-body">
                         <div class="card-two">
                             <header>
-                                <div class="avatar">
-
-                                    {% if current_user.avatar %}
-                                        <img src="../static/images/avatar/{{ current_user.avatar }}" alt="avatar"/>
-                                    {% else %}
-                                        <img src="../static/images/avatar/1.jpg" alt="avatar"/>
-                                    {% endif %}
-                                </div>
+                                <form enctype="multipart/form-data" method="POST" id="avatarForm"
+                                      action="{{ url_for('user.avatar') }}" role="form">
+                                    <div class="avatar headerSpan">
+                                        {% if current_user.avatar %}
+                                            <img src="../static/images/avatar/{{ current_user.avatar }}" alt="avatar"/>
+                                        {% else %}
+                                            <img src="../static/images/avatar/dragon_2.jpg" alt="avatar"/>
+                                        {% endif %}
+                                        <input type="file" id="avatar" name="avatar" accept="image/*"
+                                               class="hiddenInput">
+                                    </div>
+                                </form>
                             </header>
 
                             <h3>{{ current_user.username }}</h3>
+
+                            {% if current_user.is_certificated %}
+                                <div class="is_certificated">
+                                    <i class="ti-id-badge m-r-5"></i>已实名
+                                </div>
+                            {% else %}
+                                <div class="not_certificated">
+                                    <i class="ti-id-badge m-r-5"></i> 未实名
+                                </div>
+                            {% endif %}
                             <div class="desc">
                                 {% if current_user.signature %}{{ current_user.signature }}
                                 {% else %}
@@ -48,8 +62,10 @@
                             </div>
                             <div class="contacts">
                                 <a href=""><i class="fa fa-plus"></i></a>
-                                <a href=""><i class="fa fa-whatsapp"></i></a>
-                                <a href=""><i class="fa fa-envelope"></i></a>
+                                <a href="javascript:void(0)" type="button" data-toggle="tooltip" data-placement="bottom"
+                                   title="{{ current_user.phone }}"><i
+                                        class="fa fa-whatsapp"></i></a>
+                                <a href="mailto:{{ current_user.email }}"><i class="fa fa-envelope"></i></a>
                                 <div class="clear"></div>
                             </div>
                         </div>
@@ -60,98 +76,28 @@
             <!-- Column -->
             <div class="col-lg-12">
                 <div class="card">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs profile-tab tab_list" role="tablist">
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#profile"
-                                                role="tab">个人信息</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#settings"
-                                                role="tab">更新信息</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#password"
-                                                role="tab">修改密码</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#certification"
-                                                role="tab">实名认证</a></li>
-                    </ul>
-                    <br>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="profile" role="tabpanel">
-                            <div class="card-body card-user">
-                                <div class="row">
-                                    <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
-                                        <br>
-                                        <p class="text-muted">
-                                            {% if current_user.name %}{{ current_user.name }}
-                                            {% else %}
-                                                无
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-3 col-xs-6 b-r"><strong>手机</strong>
-                                        <br>
-                                        <p class="text-muted">
-                                            {% if current_user.phone %}{{ current_user.phone }}
-                                            {% else %}
-                                                无
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-3 col-xs-6 b-r"><strong>邮箱</strong>
-                                        <br>
-                                        <p class="text-muted">
-                                            {% if current_user.email %}{{ current_user.email }}
-                                            {% else %}
-                                                无
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-3 col-xs-6"><strong>住址</strong>
-                                        <br>
-                                        <p class="text-muted">
-                                            {% if current_user.location %}{{ current_user.location }}
-                                            {% else %}
-                                                无
-                                            {% endif %}
-                                        </p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <strong>个人简介</strong>
-                                <br>
-                                <p>
-                                    {% if current_user.about_me %}{{ current_user.about_me }}
-                                    {% else %}
-                                        这个人很懒，没有个人简介~~
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="settings" role="tabpanel">
-                            <div class="card-body">
-                                <form class="form-horizontal form-material col-md-12" enctype="multipart/form-data"
-                                      method="POST">
-                                    {{ edit.csrf_token }}
-                                    {{ wtf.form_field(edit.avatar, class="form-control") }}
-                                    {{ wtf.form_field(edit.location, class="input-default form-control form-control-line") }}
-                                    {{ wtf.form_field(edit.signature, class="input-default form-control form-control-line") }}
-                                    {{ wtf.form_field(edit.about_me, class="input-default form-control form-control-line") }}
-                                    {{ edit.submit1(class="btn btn-info btn") }}
-                                </form>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="password" role="tabpanel">
-                            <div class="card-body">
-                                <form class="form-horizontal form-material col-md-12" method="POST">
-                                    {{ password.csrf_token }}
-                                    {{ wtf.form_field(password.old, class="input-default form-control form-control-line") }}
-                                    {{ wtf.form_field(password.password, class="input-default form-control form-control-line") }}
-                                    {{ wtf.form_field(password.password2, class="input-default form-control form-control-line") }}
-                                    {{ password.submit2(class="btn btn-info") }}
-                                </form>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="certification" role="tabpanel">
-                            <div class="card-body card-user">
-                                {% if  current_user.is_certificated %}
+                    <div class="card-body">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs customtab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#profile"
+                                                    role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span>
+                                <span class="hidden-xs-down">个人信息</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#settings"
+                                                    role="tab" id="update"><span class="hidden-sm-up"><i
+                                    class="ti-settings"></i></span>
+                                <span class="hidden-xs-down">更新信息</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#changePassword"
+                                                    role="tab"><span class="hidden-sm-up"><i class="ti-lock"></i></span>
+                                <span class="hidden-xs-down">修改密码</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#certification"
+                                                    role="tab"><span class="hidden-sm-up"><i
+                                    class="ti-id-badge"></i></span>
+                                <span class="hidden-xs-down">实名认证</span></a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content m-t-30">
+                            <div class="tab-pane active" id="profile" role="tabpanel">
+                                <div class="card-body user-body">
                                     <div class="row">
                                         <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
                                             <br>
@@ -171,27 +117,216 @@
                                                 {% endif %}
                                             </p>
                                         </div>
-                                        <div class="col-md-3 col-xs-6 b-r"><strong>身份证</strong>
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>邮箱</strong>
                                             <br>
                                             <p class="text-muted">
-                                                {% if current_user.email %}{{ current_user.id_card }}
+                                                {% if current_user.email %}{{ current_user.email }}
+                                                {% else %}
+                                                    无
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6"><strong>住址</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                {% if current_user.location %}{{ current_user.location }}
                                                 {% else %}
                                                     无
                                                 {% endif %}
                                             </p>
                                         </div>
                                     </div>
-                                {% else %}
-                                    <form class="form-horizontal form-material col-md-12" method="POST">
-                                        {{ certification.csrf_token }}
-                                        {{ wtf.form_field(certification.name, class="input-default form-control form-control-line") }}
-                                        {{ wtf.form_field(certification.id, class="input-default form-control form-control-line") }}
-                                        {{ wtf.form_field(certification.phone, class="input-default form-control form-control-line") }}
-                                        {{ wtf.form_field(certification.pay_password, class="input-default form-control form-control-line") }}
-                                        {{ wtf.form_field(certification.pay_password2, class="input-default form-control form-control-line") }}
-                                        {{ certification.submit3(class="btn btn-info") }}
+                                    <hr>
+                                    <strong>个人简介</strong>
+                                    <br>
+                                    <p>
+                                        {% if current_user.about_me %}{{ current_user.about_me }}
+                                        {% else %}
+                                            这个人很懒，没有个人简介~~
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="settings" role="tabpanel">
+                                <div class="card-body user-body">
+                                    {#                                                                    <form class="form-horizontal form-material col-md-12" enctype="multipart/form-data"#}
+                                    {#                                                                          method="POST">#}
+                                    {#                                                                        {{ edit.csrf_token }}#}
+                                    {#                                                                        {{ wtf.form_field(edit.avatar, class="form-control") }}#}
+                                    {#                                                                        {{ wtf.form_field(edit.location, class="input-default form-control form-control-line") }}#}
+                                    {#                                                                        {{ wtf.form_field(edit.signature, class="input-default form-control form-control-line") }}#}
+                                    {#                                                                        {{ wtf.form_field(edit.about_me, class="input-default form-control form-control-line") }}#}
+                                    {#                                                                        {{ edit.submit1(class="btn btn-info btn") }}#}
+                                    {#                                                                    </form>#}
+                                    <form class="form" action="{{ url_for('user.edit') }}"
+                                          method="post" role="form" id="editForm">
+                                        <div class="form-group">
+                                            <label for="username">用户名
+                                                <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="ti-user"></i></div>
+                                                <input type="text" class="form-control form-type" id="username"
+                                                       name="username" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="location">住址</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="ti-location-pin"></i></div>
+                                                <input type="text" class="form-control form-type" id="location"
+                                                       name="location" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="signature">个性签名</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-pencil"></i></div>
+                                                <input type="text" class="form-control form-type" id="signature"
+                                                       name="signature" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="about_me">个人简介</label>
+                                            <div class="input-group">
+                                                {#                                            <div class="input-group-addon"><i class="ti-info"></i></div>#}
+                                                <textarea class="form-control" id="about_me"
+                                                          name="about_me" placeholder="" rows="4"></textarea>
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <button type="submit"
+                                                class="btn btn-info btn-flat m-b-30 m-t-10">确定
+                                        </button>
                                     </form>
-                                {% endif %}
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="changePassword" role="tabpanel">
+                                <div class="card-body user-body">
+                                    <form class="form" action="{{ url_for('user.password_change') }}"
+                                          method="post" role="form" id="passwordForm">
+                                        <div class="form-group">
+                                            <label for="old_password">旧密码
+                                                <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="ti-key"></i></div>
+                                                <input type="password" class="form-control form-type" id="old_password"
+                                                       name="old_password" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">新密码
+                                                <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                                <input type="password" class="form-control form-type" id="password"
+                                                       name="password" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password2">确认密码
+                                                <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                                <input type="password" class="form-control form-type" id="password2"
+                                                       name="password2" placeholder="">
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"></small>
+                                        </div>
+                                        <button type="submit"
+                                                class="btn btn-info btn-flat m-b-30 m-t-10">确定
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="certification" role="tabpanel">
+                                <div class="card-body user-body">
+                                    {% if  current_user.is_certificated %}
+                                        <div class="row">
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
+                                                <br>
+                                                <p class="text-muted">
+                                                    {{ current_user.name }}
+                                                </p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>手机</strong>
+                                                <br>
+                                                <p class="text-muted">
+                                                    {{ current_user.phone }}
+                                                </p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>身份证</strong>
+                                                <br>
+                                                <p class="text-muted">
+                                                    {{ current_user.id_card }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <form class="form" action="{{ url_for('user.certification') }}"
+                                              method="post" role="form" id="certificationForm">
+                                            <div class="form-group">
+                                                <label for="name">姓名
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="ti-user"></i></div>
+                                                    <input type="text" class="form-control form-type" id="name"
+                                                           name="name" placeholder="">
+                                                </div>
+                                                <small class="form-control-feedback form-feedback"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_card">身份证号
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="ti-id-badge"></i></div>
+                                                    <input type="text" class="form-control form-type" id="id_card"
+                                                           name="id_card" placeholder="">
+                                                </div>
+                                                <small class="form-control-feedback form-feedback"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone">手机号
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                                    <input type="text" class="form-control form-type" id="phone"
+                                                           name="phone" placeholder="">
+                                                </div>
+                                                <small class="form-control-feedback form-feedback"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pay_password">支付密码
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                                    <input type="password" class="form-control form-type"
+                                                           id="pay_password"
+                                                           name="pay_password" placeholder="">
+                                                </div>
+                                                <small class="form-control-feedback form-feedback"></small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pay_password2">确认密码
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                                    <input type="password" class="form-control form-type"
+                                                           id="pay_password2"
+                                                           name="pay_password2" placeholder="">
+                                                </div>
+                                                <small class="form-control-feedback form-feedback"></small>
+                                            </div>
+                                            <button type="submit"
+                                                    class="btn btn-info btn-flat m-b-30 m-t-10">确定
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -210,32 +345,205 @@
 {% endblock %}
 {% block scripts %}
     {{ super() }}
+    <!-- Form validation -->
+    <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
     <script>
-        document.querySelector('.sweet-confirm').onclick = function () {
-            swal({
-                    title: "Are you sure?",
-                    text: "You will not be able to recover this imaginary file!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel plx!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function (isConfirm) {
-                    if (isConfirm) {
-                        swal({
-                            title: "Auto close alert!",
-                            text: "I will close in 2 seconds.",
-                            timer: 0,
-                            showConfirmButton: false
-                        });
-                        alert('asd');
-                    } else {
-                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+        //editForm
+        $(function () {
+            $("#editForm").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('user.validate_username') }}",
+                            type: "post",
+                            data: {
+                                username: function () {
+                                    return $("#username").val();
+                                }
+                            }
+                        }
+                    },
+                    location: {},
+                    signature: {
+                        maxlength: 50
+                    },
+                    about_me: {
+                        maxlength: 200
                     }
-                });
-        };
+                },
+                messages: {          //自定义提示信息
+                    username: {
+                        required: "*用户名必填",
+                        remote: "*用户名已经存在"
+                    },
+                    location: {},
+                    signature: {
+                        maxlength: "*个性签名不超过50字"
+                    },
+                    about_me: {
+                        maxlength: "*个人简介不超过200字",
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                }
+            });
+        });
+        //passwordForm
+        $(function () {
+            $("#passwordForm").validate({
+                rules: {
+                    old_password: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('user.validate_password') }}",
+                            type: "post",
+                            data: {
+                                old_password: function () {
+                                    return $("#old_password").val();
+                                }
+                            }
+                        }
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 20,
+                        checkPassword: true
+                    },
+                    password2: {
+                        required: true,
+                        equalTo: "#password",
+                        minlength: 8,
+                        maxlength: 20
+                    }
+                },
+                messages: {          //自定义提示信息
+                    old_password: {
+                        required: "*旧密码必填",
+                        remote: "*密码错误"
+                    },
+                    password: {
+                        required: "*新密码必填",
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20",
+                    },
+                    password2: {
+                        required: "*新密码必填",
+                        equalTo: "*两次密码输入不一致",
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20",
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("checkPassword", function (value, element, params) {
+                var checkName = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+                return this.optional(element) || (checkName.test(value));
+            }, "*密码由字母、数字、特殊符号组成，区分大小写");
+        });
+        //certificationForm
+        $(function () {
+            $("#certificationForm").validate({
+                rules: {
+                    name: {
+                        required: true,
+                        checkName: true
+                    },
+                    id_card: {
+                        required: true,
+                        checkID: true
+                    },
+                    phone: {
+                        required: true,
+                        checkPhone: true
+                    },
+                    pay_password: {
+                        required: true,
+                        minlength: 8,
+                        maxlength: 20,
+                        checkPassword: true
+                    },
+                    pay_password2: {
+                        required: true,
+                        equalTo: "#pay_password",
+                        minlength: 8,
+                        maxlength: 20
+                    }
+                },
+                messages: {          //自定义提示信息
+                    name: {
+                        required: "*姓名必填"
+                    },
+                    id_card: {
+                        required: "*身份证号必填"
+                    },
+                    phone: {
+                        required: "*手机号必填"
+                    },
+                    pay_password: {
+                        required: "*支付密码必填",
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20",
+                    },
+                    pay_password2: {
+                        required: "*支付密码必填",
+                        equalTo: "*两次密码输入不一致",
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20",
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("checkPassword", function (value, element, params) {
+                var check = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+                return this.optional(element) || (check.test(value));
+            }, "*密码由字母、数字、特殊符号组成，区分大小写");
+            $.validator.addMethod("checkName", function (value, element, params) {
+                var check = /^(([a-zA-Z+\.?\·?a-zA-Z+]{2,30}$)|([\u4e00-\u9fa5+\·?\u4e00-\u9fa5+]{2,30}$))/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入真实姓名");
+            $.validator.addMethod("checkID", function (value, element, params) {
+                var check = /^(^[1-9]\d{5}[1-9]\d{3}(((0[2])([0|1|2][0-8])|(([0-1][1|4|6|9])([0|1|2][0-9]|[3][0]))|(((0[1|3|5|7|8])|(1[0|2]))(([0|1|2]\d)|3[0-1]))))((\d{4})|\d{3}[Xx])$)$/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入正确的身份证号");
+            $.validator.addMethod("checkPhone", function (value, element, params) {
+                var check = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入正确的手机号码");
+        });
+        $('#update').on('click', function () {
+            let currentBtn = $(this);
+            $.ajax({
+                url: "{{ url_for('user.edit') }}",
+                type: "get",
+                data: '',
+                success: function (args) {
+                    if (args.code === 1000) {
+                        $('#username').val(args.username);
+                        $('#location').val(args.location);
+                        $('#signature').val(args.signature);
+                        $('#about_me').val(args.about_me);
+                    } else {
+                        alert("error")
+                    }
+                },
+                error: function (error) {
+                    alert("ajax error")
+                }
+
+            })
+        })
+        $('#avatar').change(function () {
+            $("#avatarForm").submit();
+        })
     </script>
 {% endblock %}

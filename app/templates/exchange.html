@@ -198,7 +198,6 @@
                             <table id="commonExchangeTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
-                                    <th>本人账户</th>
                                     <th>RPC地址</th>
                                     <th>本人账户地址</th>
                                     <th>交易账户地址</th>
@@ -209,7 +208,6 @@
                                 <tbody>
                                 {% for record in common_exchange_records %}
                                     <tr>
-                                        <td>{{ record.account.account_alias }}</td>
                                         <td>{{ record.account.chain_address }}</td>
                                         <td>{{ record.account.account_hash }}</td>
                                         <td>{{ record.exchange_account_hash }}</td>

@@ -42,4 +42,7 @@ def create_app(config_name):
     from .exchange import exchange as exchange_blueprint
     app.register_blueprint(exchange_blueprint, url_prefix='/exchange')
 
+    from .user import user as user_blueprint
+    app.register_blueprint(user_blueprint, url_prefix='/user')
+
     return app
