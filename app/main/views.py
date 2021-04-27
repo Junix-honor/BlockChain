@@ -10,6 +10,7 @@ from ..models import User, Account
 
 
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
     common_exchange_records = []

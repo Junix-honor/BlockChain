@@ -85,6 +85,7 @@ class Account(db.Model):
     chain_password = db.Column(db.String(128))
     account_hash = db.Column(db.String(128))
     account_alias = db.Column(db.String(128))
+    is_independent_password = db.Column(db.Boolean, default=False)
     pay_password_hash = db.Column(db.String(128))
     across_chain = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -101,13 +102,10 @@ class Account(db.Model):
         self.pay_password_hash = generate_password_hash(password)
 
     def verify_pay_password(self, password):
-        if self.is_independent_pay_password():
+        if self.is_independent_password:
             return check_password_hash(self.pay_password_hash, password)
         else:
             return self.user.verify_pay_password(password)
-
-    def is_independent_pay_password(self):
-        return True if self.pay_password_hash else False
 
 
 class CommonExchangeRecord(db.Model):

@@ -24,7 +24,7 @@ def index():
         common_exchange_records += account.common_exchange_records.all()
     print(common_exchange_records)
     print(accounts)
-    return render_template('exchange.html', accounts=accounts,common_exchange_records=common_exchange_records)
+    return render_template('exchange.html', accounts=accounts, common_exchange_records=common_exchange_records)
 
 
 @exchange.route('/common', methods=['POST'])
@@ -45,6 +45,12 @@ def common():
     db.session.add(record)
     db.session.commit()
     return jsonify({"code": 1000, "message": "交易成功"})
+
+
+@exchange.route('/cross', methods=['POST', 'GET'])
+@login_required
+def cross():
+    return render_template('cross_chain.html')
 
 
 # # 检查exchange_account是否存在

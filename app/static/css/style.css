@@ -4011,7 +4011,7 @@ table.dataTable thead .sorting::after {
 }
 
 .form-type {
-    padding: 0 1.95rem;
+    padding: 0 1.95rem !important;
 }
 
 .chat-user-search .form-control {
@@ -5023,7 +5023,7 @@ footer p {
     height: 44px;
     border-radius: 0;
     box-shadow: none;
-    border: 1px solid rgba(120, 130, 140, 0.13);
+    border: 1px solid rgba(120, 130, 140, 0.13) !important;
     font-family: sans-serif;
     background: #FAFAFA;
     color: #000;

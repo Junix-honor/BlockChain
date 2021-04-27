@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    {{ super() }}
+    <link href="../static/css/lib/bootstrap-step/bs-is-fun.css" rel="stylesheet"/>
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Dashboard</h3></div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ current_user.username }}的账户</h4>
+                        <h6 class="card-subtitle">帐号信息</h6>
+                        <!--步骤条-->
+                        <div class="container mt-5">
+                            <div class="row">
+                                <div class="align-middle">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                        <span class="fa-stack-1x">1</span>
+                                    </span>
+                                    <div class="d-inline-block">
+                                        <p class="mb-1">Finished</p>
+                                        <p class="position-absolute text-muted">This is a description</p>
+                                    </div>
+                                </div>
+                                <span class="col border mx-3 my-auto"></span>
+                                <div class="align-middle">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                        <span class="fa-stack-1x">2</span>
+                                    </span>
+                                    <div class="d-inline-block">
+                                        <p class="mb-1"><strong>In Progress</strong></p>
+                                        <p class="position-absolute text-muted">This is a description</p>
+                                    </div>
+                                </div>
+                                <span class="col border mx-3 my-auto"></span>
+                                <div class="align-middle">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                        <span class="fa-stack-1x">3</span>
+                                    </span>
+                                    <div class="d-inline-block">
+                                        <p class="mb-1">Waiting</p>
+                                        <p class="position-absolute text-muted">This is a description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- footer -->
+    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
+    <!-- End footer -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/lib/bootstrap-step/brush.js"></script>
+{% endblock %}

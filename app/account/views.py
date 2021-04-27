@@ -31,6 +31,9 @@ def add():
                       across_chain=True
                       if request.form.get("across_chain") == 'true'
                       else False,
+                      is_independent_password=True
+                      if request.form.get("independent_password") == 'true'
+                      else False,
                       user=current_user._get_current_object())
     db.session.add(account)
     db.session.commit()
@@ -49,7 +52,6 @@ def edit():
                             "chain_password": account.chain_password,
                             "account_hash": account.account_hash,
                             "account_alias": account.account_alias,
-                            # TODO:"pay_password": account.pay_password,
                             "across_chain": account.across_chain
                             })
         else:
@@ -62,11 +64,22 @@ def edit():
         account.chain_password = request.form.get("edit_chain_password")
         account.account_hash = request.form.get("edit_account_hash")
         account.account_alias = request.form.get("edit_account_alias")
-        # TODO:account.pay_password = request.form.get("edit_pay_password")
         account.across_chain = True if request.form.get("edit_across_chain") == 'true' else False
         db.session.add(account)
         db.session.commit()
         return redirect(url_for("account.index"))
+
+
+# 修改密码
+@account.route('/password', methods=['POST'])
+@login_required
+def password():
+    account = current_user.accounts.filter_by(id=int(request.form.get("password_account_id"))).first()
+    account.is_independent_password = True if request.form.get("edit_independent_password") == 'true' else False
+    account.pay_password = request.form.get("edit_password")
+    db.session.add(account)
+    db.session.commit()
+    return redirect(url_for("account.index"))
 
 
 # 删除账户
@@ -77,6 +90,18 @@ def delete():
     current_user.accounts.filter_by(id=request.form.get("delete_id")).delete()
     db.session.commit()
     return jsonify({"code": 1000, "message": "删除成功！"})
+
+
+# 检查密码是否正确
+@account.route('/validate/password', methods=['POST'])
+def validate_password():
+    print(request.form.get('password_account_id'))
+    print(request.form.get('old_password'))
+    account = Account.query.filter_by(id=int(request.form.get('password_account_id'))).first()
+    if account and account.verify_pay_password(password=request.form.get('old_password')):
+        return jsonify(True)
+    else:
+        return jsonify(False)
 
 
 # 检查address是否存在

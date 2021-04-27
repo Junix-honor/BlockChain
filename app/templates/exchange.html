@@ -2,6 +2,8 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block styles %}
     <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/lib/bootstrap/bootstrap-select.min.css" rel="stylesheet"/>
+
     {{ super() }}
 {% endblock %}
 {% block page_content %}
@@ -36,10 +38,10 @@
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="ti-user"></i></div>
-                                        <select class="form-control form-type" id="personal_account"
+                                        <select class="form-control  form-type" id="personal_account"
                                                 name="personal_account">
                                             {% for account in accounts %}
-                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
+                                                <option value="{{ account.id }}" class="select-value">{{ account.account_alias }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -267,6 +269,8 @@
     <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- Form validation -->
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+    <script src=../static/js/lib/bootstrap/bootstrap-select.min.js></script>
+    <script src="../static/js/lib/bootstrap/defaults-zh_CN.min.js"></script>
 
     <script>
         //金额

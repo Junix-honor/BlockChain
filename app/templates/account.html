@@ -47,9 +47,14 @@
                                         <td>{{ moment(account.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                         <td>
                                             <a href="javascript:void(0);" class="table-action account-edit"
-                                               edit_id="{{ account.id }}"><i class=" fa fa-pencil"></i></a>
+                                               edit_id="{{ account.id }}"
+                                               title="编辑账户"><i class=" fa fa-pencil"></i></a>
                                             <a href="javascript:void(0);" class="table-action account-delete"
-                                               delete_id="{{ account.id }}"><i class="fa fa-trash-o"></i></a>
+                                               delete_id="{{ account.id }}"
+                                               title="删除帐号"><i class="fa fa-trash-o"></i></a>
+                                            <a href="javascript:void(0);" class="table-action account-password"
+                                               passwerd_id="{{ account.id }}"
+                                               title="修改密码"><i class="fa fa-lock"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -140,26 +145,51 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label class="control-label col-md-4">是否开启跨链权限</label>
+                                        <label class="control-label col-md-4">是否开启跨链权限
+                                            <span class="text-danger">*</span></label>
                                         <div class="col-md-8">
                                             <div class="radio row">
                                                 <label class="checkbox col-md-3">
                                                     <input type="radio" name="across_chain" id="cross_chain1"
-                                                           value="true" checked>开启
+                                                           value="true">开启
                                                 </label>
                                                 <label class="checkbox col-md-3">
                                                     <input type="radio" name="across_chain" id="cross_chain2"
                                                            value="false">不开启
                                                 </label>
                                             </div>
+                                            <small class="form-control-feedback form-feedback"> </small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-4">是否设置单独支付密码
+                                            <span class="text-danger">*</span></label>
+                                        <div class="col-md-8">
+                                            <div class="radio row">
+                                                <label class="checkbox col-md-3">
+                                                    <input type="radio" name="independent_password"
+                                                           id="independent_password1"
+                                                           value="true">是
+                                                </label>
+                                                <label class="checkbox col-md-3">
+                                                    <input type="radio" name="independent_password"
+                                                           id="independent_password2"
+                                                           value="false">否
+                                                </label>
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="independent_password_field" style="display:none">
                                 <div class="col-md-6">
                                     <div class="form-group has-danger">
-                                        <label class="control-label" for="pay_password">单独支付密码</label>
+                                        <label class="control-label" for="pay_password">独立支付密码</label>
                                         <input type="password" id="pay_password" name="pay_password"
                                                class="form-control form-control-danger"
                                                placeholder="请输入6-15位密码">
@@ -183,9 +213,8 @@
                                                    class="form-control-danger">
                                             <label for="subscribe"> 同意《xxxx》条款
                                                 <span class="text-danger">*</span></label></label>
-                                            <small class="form-control-feedback form-feedback"
-                                                   style="display: block"> </small>
                                         </div>
+                                        <small class="form-control-feedback form-feedback"> </small>
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +224,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="add_submit">添加</button>
+                    <button type="button" class="btn btn-info" id="add_submit">添加</button>
                 </div>
             </div>
         </div>
@@ -287,26 +316,8 @@
                                                            value="false">不开启
                                                 </label>
                                             </div>
+                                            <small class="form-control-feedback form-feedback"> </small>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group has-danger">
-                                        <label class="control-label" for="edit_pay_password">单独支付密码</label>
-                                        <input type="password" id="edit_pay_password" name="edit_pay_password"
-                                               class="form-control form-control-danger"
-                                               placeholder="请输入6-15位密码">
-                                        <small class="form-control-feedback form-feedback"></small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group has-danger">
-                                        <label class="control-label" for="edit_pay_password2">确认密码</label>
-                                        <input type="password" id="edit_pay_password2" name="edit_pay_password2"
-                                               class="form-control form-control-danger" placeholder="">
-                                        <small class="form-control-feedback form-feedback"> </small>
                                     </div>
                                 </div>
                             </div>
@@ -318,9 +329,8 @@
                                                    class="form-control-danger">
                                             <label for="edit_subscribe"> 同意《xxxx》条款
                                                 <span class="text-danger">*</span></label></label>
-                                            <small class="form-control-feedback form-feedback"
-                                                   style="display: block"> </small>
                                         </div>
+                                        <small class="form-control-feedback form-feedback"> </small>
                                     </div>
                                 </div>
                             </div>
@@ -330,7 +340,90 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="edit_submit">修改</button>
+                    <button type="button" class="btn btn-info" id="edit_submit">修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- passwordModal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">修改密码</h3>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('account.password') }}" method="post" role="form" id="passwordForm">
+                        <div class="form-body">
+                            <input type="hidden" name="password_account_id" id="password_account_id" value=""/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="old_password">旧密码
+                                            <span class="text-danger">*</span></label>
+                                        <input type="password" id="old_password" name="old_password"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-5">是否设置单独支付密码
+                                            <span class="text-danger">*</span></label>
+                                        <div class="col-md-7">
+                                            <div class="radio row">
+                                                <label class="checkbox col-md-3">
+                                                    <input type="radio" name="edit_independent_password"
+                                                           id="edit_independent_password1"
+                                                           value="true">是
+                                                </label>
+                                                <label class="checkbox col-md-3">
+                                                    <input type="radio" name="edit_independent_password"
+                                                           id="edit_independent_password2"
+                                                           value="false">否
+                                                </label>
+                                            </div>
+                                            <small class="form-control-feedback form-feedback"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row edit_independent_password_field" style="display:none">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="edit_password">新的支付密码</label>
+                                        <input type="password" id="edit_password" name="edit_password"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row edit_independent_password_field" style="display:none">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="edit_password2">确认密码</label>
+                                        <input type="password" id="edit_password2" name="edit_password2"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-info" id="password_submit">修改</button>
                 </div>
             </div>
         </div>
@@ -358,6 +451,21 @@
         $("#edit_submit").click(function () {
             $("#accountEditForm").submit();
         });
+        $("#password_submit").click(function () {
+            $("#passwordForm").submit();
+        });
+        $('#independent_password1').change(function () {
+            $('#independent_password_field').show();
+        })
+        $('#independent_password2').change(function () {
+            $('#independent_password_field').hide();
+        })
+        $('#edit_independent_password1').change(function () {
+            $('.edit_independent_password_field').show();
+        })
+        $('#edit_independent_password2').change(function () {
+            $('.edit_independent_password_field').hide();
+        })
         //accountForm
         $(function () {
             $("#accountForm").validate({
@@ -378,7 +486,6 @@
                         required: true
                     },
                     chain_password2: {
-                        required: true,
                         equalTo: "#chain_password"
                     },
                     account_hash: {
@@ -410,13 +517,18 @@
                             }
                         }
                     },
+                    across_chain: {
+                        required: true
+                    },
+                    independent_password: {
+                        required: true
+                    },
                     pay_password: {
                         minlength: 6,
                         maxlength: 15,
+                        checkPayPassword: true
                     },
                     pay_password2: {
-                        minlength: 6,
-                        maxlength: 15,
                         equalTo: "#pay_password"
                     },
                     subscribe: {
@@ -425,41 +537,52 @@
                 },
                 messages: {          //自定义提示信息
                     chain_address: {
-                        required: "RPC地址必填",
-                        remote: "RPC地址不存在"
+                        required: "*RPC地址必填",
+                        remote: "*RPC地址不存在"
                     },
                     chain_password: {
-                        required: "私钥必填"
+                        required: "*私钥必填"
                     },
                     chain_password2: {
-                        required: "私钥必填",
-                        equalTo: "两次私钥输入不一致"
+                        equalTo: "*两次私钥输入不一致"
                     },
                     account_hash: {
-                        required: "账户地址必填",
-                        remote: "账户已经存在"
+                        required: "*账户地址必填",
+                        remote: "*账户已经存在"
                     },
                     account_alias: {
-                        required: "帐号别名必填",
-                        remote: "账户别名已经存在"
+                        required: "*帐号别名必填",
+                        remote: "*账户别名已经存在"
+                    },
+                    across_chain: {
+                        required: "*请选择是否开启跨链权限"
+                    },
+                    independent_password: {
+                        required: "*请选择是否设置单独支付密码"
                     },
                     pay_password: {
-                        minlength: "密码最小长度为6",
-                        maxlength: "密码最大长度为15"
+                        minlength: "*密码最小长度为6",
+                        maxlength: "*密码最大长度为15"
                     },
                     pay_password2: {
-                        minlength: "密码最小长度为6",
-                        maxlength: "密码最大长度为15",
-                        equalTo: "两次密码输入不一致"
+                        equalTo: "*两次密码输入不一致"
                     },
                     subscribe: {
-                        required: "请阅读并同意相关条款"
+                        required: "*请阅读并同意相关条款"
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).siblings(".form-control-feedback").html(error)
+                    if (element.is(':checkbox'))
+                        $(element).parent().siblings(".form-control-feedback").html(error)
+                    else if (element.is(':radio'))
+                        $(element).parent().parent().siblings(".form-control-feedback").html(error)
+                    else
+                        $(element).siblings(".form-control-feedback").html(error)
                 }
             });
+            $.validator.addMethod("checkPayPassword", function (value, element, params) {
+                return !($(element).val() === '' && $("input[name='independent_password']:checked").val() === 'true');
+            }, "*请输入独立支付密码");
         });
         //accountEditForm
         $(function () {
@@ -481,7 +604,6 @@
                         required: true
                     },
                     edit_chain_password2: {
-                        required: true,
                         equalTo: "#edit_chain_password"
                     },
                     edit_account_hash: {
@@ -517,14 +639,8 @@
                             }
                         }
                     },
-                    edit_pay_password: {
-                        minlength: 6,
-                        maxlength: 15,
-                    },
-                    edit_pay_password2: {
-                        minlength: 6,
-                        maxlength: 15,
-                        equalTo: "#edit_pay_password"
+                    edit_across_chain: {
+                        required: true
                     },
                     edit_subscribe: {
                         required: true
@@ -532,42 +648,100 @@
                 },
                 messages: {          //自定义提示信息
                     edit_chain_address: {
-                        required: "RPC地址必填",
-                        remote: "RPC地址不存在"
+                        required: "*RPC地址必填",
+                        remote: "*RPC地址不存在"
                     },
                     edit_chain_password: {
-                        required: "私钥必填"
+                        required: "*私钥必填"
                     },
                     edit_chain_password2: {
-                        required: "私钥必填",
-                        equalTo: "两次私钥输入不一致"
+                        equalTo: "*两次私钥输入不一致"
                     },
                     edit_account_hash: {
-                        required: "账户地址必填",
-                        remote: "账户已经存在"
+                        required: "*账户地址必填",
+                        remote: "*账户已经存在"
                     },
                     edit_account_alias: {
-                        required: "帐号别名必填",
-                        remote: "账户别名已经存在"
-                    },
-                    edit_pay_password: {
-                        minlength: "密码最小长度为6",
-                        maxlength: "密码最大长度为15"
-                    },
-                    edit_pay_password2: {
-                        minlength: "密码最小长度为6",
-                        maxlength: "密码最大长度为15",
-                        equalTo: "两次密码输入不一致"
+                        required: "*帐号别名必填",
+                        remote: "*账户别名已经存在"
+                    }, edit_across_chain: {
+                        required: "*请选择是否开启跨链权限"
                     },
                     edit_subscribe: {
-                        required: "请阅读并同意相关条款"
+                        required: "*请阅读并同意相关条款"
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).siblings(".form-control-feedback").html(error)
+                    if (element.is(':checkbox'))
+                        $(element).parent().siblings(".form-control-feedback").html(error)
+                    else if (element.is(':radio'))
+                        $(element).parent().parent().siblings(".form-control-feedback").html(error)
+                    else
+                        $(element).siblings(".form-control-feedback").html(error)
                 }
             });
         });
+        //accountForm
+        $(function () {
+            $("#passwordForm").validate({
+                rules: {
+                    old_password: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('account.validate_password') }}",
+                            type: "post",
+                            data: {
+                                old_password: function () {
+                                    return $("#old_password").val();
+                                },
+                                password_account_id: function () {
+                                    return $("#password_account_id").val();
+                                }
+                            }
+                        }
+                    },
+                    edit_independent_password: {
+                        required: true
+                    },
+                    edit_password: {
+                        minlength: 8,
+                        maxlength: 15,
+                        checkPayPassword: true
+                    },
+                    edit_password2: {
+                        equalTo: "#edit_password"
+                    }
+                },
+                messages: {          //自定义提示信息
+                    old_password: {
+                        required: "*旧密码必填",
+                        remote: "*密码错误"
+                    },
+                    edit_independent_password: {
+                        required: "*请选择是否设置单独支付密码"
+                    },
+                    edit_password: {
+                        minlength: "*密码最小长度为6",
+                        maxlength: "*密码最大长度为15"
+                    },
+                    edit_password2: {
+                        equalTo: "*两次密码输入不一致"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    if (element.is(':checkbox'))
+                        $(element).parent().siblings(".form-control-feedback").html(error)
+                    else if (element.is(':radio'))
+                        $(element).parent().parent().siblings(".form-control-feedback").html(error)
+                    else
+                        $(element).siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("checkPayPassword", function (value, element, params) {
+                return !($(element).val() === '' && $("input[name='edit_independent_password']:checked").val() === 'true');
+            }, "*请输入独立支付密码");
+        });
+        //table
         $(function () {
             $('#accountTable').DataTable(
                 {
@@ -656,6 +830,7 @@
                     }
                 });
         });
+        //编辑账户
         $('.account-edit').on('click', function () {
             let currentBtn = $(this);
             $('#editModal').modal('show')
@@ -687,6 +862,12 @@
                 }
 
             })
+        })
+        //修改密码
+        $('.account-password').on('click', function () {
+            let currentBtn = $(this);
+            $('#passwordModal').modal('show')
+            $('#password_account_id').val(currentBtn.attr('passwerd_id'));
         })
     </script>
 {% endblock %}
