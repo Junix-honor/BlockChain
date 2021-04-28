@@ -139,7 +139,7 @@
                                     <hr>
                                     <strong>个人简介</strong>
                                     <br>
-                                    <p>
+                                    <p class="text-muted">
                                         {% if current_user.about_me %}{{ current_user.about_me }}
                                         {% else %}
                                             这个人很懒，没有个人简介~~
@@ -149,15 +149,6 @@
                             </div>
                             <div class="tab-pane" id="settings" role="tabpanel">
                                 <div class="card-body user-body">
-                                    {#                                                                    <form class="form-horizontal form-material col-md-12" enctype="multipart/form-data"#}
-                                    {#                                                                          method="POST">#}
-                                    {#                                                                        {{ edit.csrf_token }}#}
-                                    {#                                                                        {{ wtf.form_field(edit.avatar, class="form-control") }}#}
-                                    {#                                                                        {{ wtf.form_field(edit.location, class="input-default form-control form-control-line") }}#}
-                                    {#                                                                        {{ wtf.form_field(edit.signature, class="input-default form-control form-control-line") }}#}
-                                    {#                                                                        {{ wtf.form_field(edit.about_me, class="input-default form-control form-control-line") }}#}
-                                    {#                                                                        {{ edit.submit1(class="btn btn-info btn") }}#}
-                                    {#                                                                    </form>#}
                                     <form class="form" action="{{ url_for('user.edit') }}"
                                           method="post" role="form" id="editForm">
                                         <div class="form-group">
@@ -246,28 +237,52 @@
                             <div class="tab-pane" id="certification" role="tabpanel">
                                 <div class="card-body user-body">
                                     {% if  current_user.is_certificated %}
-                                        <div class="row">
-                                            <div class="col-md-3 col-xs-6 b-r"><strong>姓名</strong>
-                                                <br>
-                                                <p class="text-muted">
-                                                    {{ current_user.name }}
-                                                </p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"><strong>手机</strong>
-                                                <br>
-                                                <p class="text-muted">
-                                                    {{ current_user.phone }}
-                                                </p>
-                                            </div>
-                                            <div class="col-md-3 col-xs-6 b-r"><strong>身份证</strong>
-                                                <br>
-                                                <p class="text-muted">
-                                                    {{ current_user.id_card }}
-                                                </p>
+                                        <div class="card-content">
+                                            <div class="alert alert-success p-l-20 p-r-20 p-t-20">
+                                                <h4 class="alert-heading"><i class="ti-check-box m-r-10"></i>您已经实名认证!
+                                                </h4>
+                                                <hr>
+                                                <div class="row p-l-10 p-r-10">
+                                                    <div class="col-md-3 col-xs-6 b-r">
+                                                        <strong>姓名</strong>
+                                                        <br>
+                                                        <p class="text-muted">
+                                                            {{ current_user.name }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-3 col-xs-6 b-r">
+                                                        <strong>手机</strong>
+                                                        <br>
+                                                        <p class="text-muted">
+                                                            {{ current_user.phone }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-3 col-xs-6 b-r"><strong>身份证</strong>
+                                                        <br>
+                                                        <p class="text-muted">
+                                                            {{ current_user.id_card|id_code }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div>
+                                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                                            data-target="#certificationEditModal">修改实名认证
+                                                    </button>
+                                                    <button class="btn btn-link" type="button" data-toggle="modal"
+                                                            data-target="#payPasswordModal">修改支付密码
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     {% else %}
-                                        <form class="form" action="{{ url_for('user.certification') }}"
+                                        <div class="alert alert-danger p-l-20 p-r-20 p-t-20">
+                                            <h4 class="alert-heading"><i class="ti-alert m-r-10"></i>您还未实名认证！
+                                            </h4>
+                                            <hr>
+                                            <p>完成实名认证，才能开启个人账户、交易等功能。</p>
+                                        </div>
+                                        <form class="form p-l-10 p-r-10" action="{{ url_for('user.certification') }}"
                                               method="post" role="form" id="certificationForm">
                                             <div class="form-group">
                                                 <label for="name">姓名
@@ -338,19 +353,134 @@
         <!-- End PAge Content -->
     </div>
     <!-- End Container fluid  -->
-    <!-- footer -->
-    <footer class="footer"> © 2018 All rights reserved. Template designed by <a href="https://colorlib.com">Colorlib</a>
-    </footer>
-    <!-- End footer -->
+
+    <!-- passwordModal -->
+    <div class="modal fade" id="payPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">修改支付密码</h3>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('user.pay_password_change') }}" method="post"
+                          role="form" id="payPasswordForm">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="old_pay_password">旧密码
+                                            <span class="text-danger">*</span></label>
+                                        <input type="password" id="old_pay_password" name="old_pay_password"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="edit_pay_password">新的支付密码
+                                            <span class="text-danger">*</span></label>
+                                        <input type="password" id="edit_pay_password" name="edit_pay_password"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group has-danger">
+                                        <label class="control-label" for="edit_pay_password2">确认密码
+                                            <span class="text-danger">*</span></label>
+                                        <input type="password" id="edit_pay_password2" name="edit_pay_password2"
+                                               class="form-control form-control-danger"
+                                               placeholder="">
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-info" id="pay_password_edit_submit">修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- certificationEditModal -->
+    <div class="modal fade" id="certificationEditModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="editModalLabel">修改实名认证</h3>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form" action="{{ url_for('user.certification_edit') }}"
+                          method="post" role="form" id="certificationEditForm">
+                        <div class="form-group">
+                            <label for="edit_name">姓名
+                                <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="ti-user"></i></div>
+                                <input type="text" class="form-control form-type" id="edit_name"
+                                       name="edit_name" placeholder="">
+                            </div>
+                            <small class="form-control-feedback form-feedback"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_id_card">身份证号
+                                <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="ti-id-badge"></i></div>
+                                <input type="text" class="form-control form-type" id="edit_id_card"
+                                       name="edit_id_card" placeholder="">
+                            </div>
+                            <small class="form-control-feedback form-feedback"></small>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit_phone">手机号
+                                <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                <input type="text" class="form-control form-type" id="edit_phone"
+                                       name="edit_phone" placeholder="">
+                            </div>
+                            <small class="form-control-feedback form-feedback"></small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-info" id="certification_edit_submit">修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block scripts %}
     {{ super() }}
     <!-- Form validation -->
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
     <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
+        //表单js提交
+        $("#pay_password_edit_submit").click(function () {
+            $("#payPasswordForm").submit();
+        });
+        $("#certification_edit_submit").click(function () {
+            $("#certificationEditForm").submit();
+        });
         //editForm
         $(function () {
             $("#editForm").validate({
@@ -416,10 +546,7 @@
                         checkPassword: true
                     },
                     password2: {
-                        required: true,
                         equalTo: "#password",
-                        minlength: 8,
-                        maxlength: 20
                     }
                 },
                 messages: {          //自定义提示信息
@@ -433,10 +560,7 @@
                         maxlength: "*密码最大长度为20",
                     },
                     password2: {
-                        required: "*新密码必填",
                         equalTo: "*两次密码输入不一致",
-                        minlength: "*密码最小长度为8",
-                        maxlength: "*密码最大长度为20",
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
@@ -520,6 +644,107 @@
                 return this.optional(element) || (check.test(value));
             }, "*请输入正确的手机号码");
         });
+        //certificationEditForm
+        $(function () {
+            $("#certificationEditForm").validate({
+                rules: {
+                    edit_name: {
+                        required: true,
+                        checkName: true
+                    },
+                    edit_id_card: {
+                        required: true,
+                        checkID: true
+                    },
+                    edit_phone: {
+                        required: true,
+                        checkPhone: true
+                    }
+                },
+                messages: {          //自定义提示信息
+                    edit_name: {
+                        required: "*姓名必填"
+                    },
+                    edit_id_card: {
+                        required: "*身份证号必填"
+                    },
+                    edit_phone: {
+                        required: "*手机号必填"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("checkName", function (value, element, params) {
+                var check = /^(([a-zA-Z+\.?\·?a-zA-Z+]{2,30}$)|([\u4e00-\u9fa5+\·?\u4e00-\u9fa5+]{2,30}$))/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入真实姓名");
+            $.validator.addMethod("checkID", function (value, element, params) {
+                var check = /^(^[1-9]\d{5}[1-9]\d{3}(((0[2])([0|1|2][0-8])|(([0-1][1|4|6|9])([0|1|2][0-9]|[3][0]))|(((0[1|3|5|7|8])|(1[0|2]))(([0|1|2]\d)|3[0-1]))))((\d{4})|\d{3}[Xx])$)$/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入正确的身份证号");
+            $.validator.addMethod("checkPhone", function (value, element, params) {
+                var check = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+                return this.optional(element) || (check.test(value));
+            }, "*请输入正确的手机号码");
+        });
+        //payPasswordForm
+        $(function () {
+            $("#payPasswordForm").validate({
+                rules: {
+                    old_pay_password: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('user.validate_pay_password') }}",
+                            type: "post",
+                            data: {
+                                old_pay_password: function () {
+                                    return $("#old_pay_password").val();
+                                }
+                            }
+                        }
+                    },
+                    edit_pay_password: {
+                        minlength: 8,
+                        maxlength: 20,
+                        checkPassword: true
+                    },
+                    edit_pay_password2: {
+                        equalTo: "#edit_pay_password"
+                    }
+                },
+                messages: {          //自定义提示信息
+                    old_pay_password: {
+                        required: "*旧密码必填",
+                        remote: "*密码错误"
+                    },
+                    edit_independent_password: {
+                        required: "*请选择是否设置单独支付密码"
+                    },
+                    edit_pay_password: {
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20"
+                    },
+                    edit_pay_password2: {
+                        equalTo: "*两次密码输入不一致"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    if (element.is(':checkbox'))
+                        $(element).parent().siblings(".form-control-feedback").html(error)
+                    else if (element.is(':radio'))
+                        $(element).parent().parent().siblings(".form-control-feedback").html(error)
+                    else
+                        $(element).siblings(".form-control-feedback").html(error)
+                }
+            });
+            $.validator.addMethod("checkPassword", function (value, element, params) {
+                var checkName = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+                return this.optional(element) || (checkName.test(value));
+            }, "*支付密码由字母、数字、特殊符号组成，区分大小写");
+        });
+        //editForm ajax
         $('#update').on('click', function () {
             let currentBtn = $(this);
             $.ajax({
@@ -542,6 +767,7 @@
 
             })
         })
+        //头像
         $('#avatar').change(function () {
             $("#avatarForm").submit();
         })

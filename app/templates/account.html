@@ -68,9 +68,6 @@
         <!-- End PAge Content -->
     </div>
     <!-- End Container fluid  -->
-    <!-- footer -->
-    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
-    <!-- End footer -->
 
     <!-- addModal -->
     <div class="modal fade" id="addModal" tabindex="-1">
@@ -445,6 +442,7 @@
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
 
     <script>
+        //表单js提交
         $("#add_submit").click(function () {
             $("#accountForm").submit();
         });
@@ -454,6 +452,7 @@
         $("#password_submit").click(function () {
             $("#passwordForm").submit();
         });
+        //是否设置独立密码js控制字段
         $('#independent_password1').change(function () {
             $('#independent_password_field').show();
         })
@@ -524,8 +523,9 @@
                         required: true
                     },
                     pay_password: {
-                        minlength: 6,
-                        maxlength: 15,
+                        minlength: 8,
+                        maxlength: 20,
+                        checkPassword: true,
                         checkPayPassword: true
                     },
                     pay_password2: {
@@ -561,8 +561,8 @@
                         required: "*请选择是否设置单独支付密码"
                     },
                     pay_password: {
-                        minlength: "*密码最小长度为6",
-                        maxlength: "*密码最大长度为15"
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20",
                     },
                     pay_password2: {
                         equalTo: "*两次密码输入不一致"
@@ -583,6 +583,10 @@
             $.validator.addMethod("checkPayPassword", function (value, element, params) {
                 return !($(element).val() === '' && $("input[name='independent_password']:checked").val() === 'true');
             }, "*请输入独立支付密码");
+            $.validator.addMethod("checkPassword", function (value, element, params) {
+                var checkName = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+                return this.optional(element) || (checkName.test(value));
+            }, "*支付密码由字母、数字、特殊符号组成，区分大小写");
         });
         //accountEditForm
         $(function () {
@@ -681,7 +685,7 @@
                 }
             });
         });
-        //accountForm
+        //passwordForm
         $(function () {
             $("#passwordForm").validate({
                 rules: {
@@ -705,7 +709,8 @@
                     },
                     edit_password: {
                         minlength: 8,
-                        maxlength: 15,
+                        maxlength: 20,
+                        checkPassword: true,
                         checkPayPassword: true
                     },
                     edit_password2: {
@@ -721,8 +726,8 @@
                         required: "*请选择是否设置单独支付密码"
                     },
                     edit_password: {
-                        minlength: "*密码最小长度为6",
-                        maxlength: "*密码最大长度为15"
+                        minlength: "*密码最小长度为8",
+                        maxlength: "*密码最大长度为20"
                     },
                     edit_password2: {
                         equalTo: "*两次密码输入不一致"
@@ -740,6 +745,10 @@
             $.validator.addMethod("checkPayPassword", function (value, element, params) {
                 return !($(element).val() === '' && $("input[name='edit_independent_password']:checked").val() === 'true');
             }, "*请输入独立支付密码");
+            $.validator.addMethod("checkPassword", function (value, element, params) {
+                var checkName = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{8,20}$/g;
+                return this.optional(element) || (checkName.test(value));
+            }, "*支付密码由字母、数字、特殊符号组成，区分大小写");
         });
         //table
         $(function () {

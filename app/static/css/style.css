@@ -346,6 +346,7 @@ h6 {
 .color-muted,
 .text-muted {
     color: #607d8b;
+    margin: 5px 0;
 }
 
 .text-white {

@@ -5,7 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_uploads import UploadSet, configure_uploads
 from flask_login import LoginManager
 from config import config
+from .filters import ID
 
+id_code = ID()
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 avatars = UploadSet('AVATARS')
@@ -20,6 +22,8 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
+
+    id_code.init_app(app)
 
     bootstrap.init_app(app)
     db.init_app(app)

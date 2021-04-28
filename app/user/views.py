@@ -76,10 +76,41 @@ def certification():
     return redirect(url_for('user.index'))
 
 
-# 检查密码是否错误
+# 实名认证
+@user.route('/certification_edit', methods=['POST'])
+def certification_edit():
+    current_user.name = request.form.get("edit_name")
+    current_user.id_card = request.form.get("edit_id_card")
+    current_user.phone = request.form.get("edit_phone")
+    db.session.add(current_user._get_current_object())
+    db.session.commit()
+    flash('实名验证修改成功', 'success')
+    return redirect(url_for('user.index'))
+
+
+# 修改支付密码
+@user.route('/pay_password', methods=['POST'])
+def pay_password_change():
+    current_user.pay_password = request.form.get("edit_pay_password")
+    db.session.add(current_user._get_current_object())
+    db.session.commit()
+    flash('支付密码修改成功', 'success')
+    return redirect(url_for('user.index'))
+
+
+# 检查密码是否正确
 @user.route('/validate/password', methods=['POST'])
 def validate_password():
     if current_user.verify_password(password=request.form.get("old_password")):
+        return jsonify(True)
+    else:
+        return jsonify(False)
+
+
+# 检查支付密码是否正确
+@user.route('/validate/pay_password', methods=['POST'])
+def validate_pay_password():
+    if current_user.verify_pay_password(password=request.form.get("old_pay_password")):
         return jsonify(True)
     else:
         return jsonify(False)
@@ -92,29 +123,3 @@ def validate_username():
     if account and account.id != current_user.id:
         return jsonify(False)
     return jsonify(True)
-
-# # 检查chain_address-account_hash是否已经用过
-# @user.route('/validate/account_hash', methods=['POST'])
-# def validate_account_hash():
-#     account_id = int(request.form.get('account_id'))
-#     account = Account.query.filter_by(chain_address=request.form.get('chain_address'),
-#                                       account_hash=request.form.get('account_hash')).first()
-#     if account:
-#         if account_id and account.id == account_id:
-#             return jsonify(True)
-#         else:
-#             return jsonify(False)
-#     return jsonify(True)
-#
-#
-# # 检查account_alias是否已经用过
-# @account.route('/validate/account_alias', methods=['POST'])
-# def validate_account_alias():
-#     account_id = int(request.form.get('account_id'))
-#     account = Account.query.filter_by(account_alias=request.form.get('account_alias')).first()
-#     if account:
-#         if account_id and account.id == account_id:
-#             return jsonify(True)
-#         else:
-#             return jsonify(False)
-#     return jsonify(True)
