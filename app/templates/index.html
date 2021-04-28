@@ -4,13 +4,7 @@
     <!-- Bread crumb -->
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-primary">Dashboard</h3></div>
-        <div class="col-md-7 align-self-center">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-        </div>
+            <h3 class="text-primary">WalleX</h3></div>
     </div>
     <!-- End Bread crumb -->
     <!-- Container fluid  -->
@@ -269,7 +263,8 @@
                                     {% for account in accounts %}
                                         <tr>
                                             <td>{{ account.chain_address }}</td>
-                                            <td><i class="ti-wallet m-l-5 color-primary" > </i>{{ account.account_hash }}</td>
+                                            <td><i class="ti-wallet m-l-5 color-primary"> </i>{{ account.account_hash }}
+                                            </td>
                                             <td>{{ account.account_alias }}</td>
                                         </tr>
                                     {% endfor %}
@@ -303,8 +298,12 @@
                                 {% for record in common_exchange_records %}
                                     <tr>
                                         <td>{{ record.account.chain_address }}</td>
-                                        <td><i class="ti-wallet m-l-5 color-info"> </i> {{ record.account.account_hash }}</td>
-                                        <td><i class="ti-wallet m-l-5 color-success"> </i> {{ record.exchange_account_hash }}</td>
+                                        <td>
+                                            <i class="ti-wallet m-l-5 color-info"> </i> {{ record.account.account_hash }}
+                                        </td>
+                                        <td>
+                                            <i class="ti-wallet m-l-5 color-success"> </i> {{ record.exchange_account_hash }}
+                                        </td>
                                         <td><i class="cc ETH "> </i>{{ record.exchange_money }}</td>
                                         <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                     </tr>
@@ -319,7 +318,4 @@
         <!-- End PAge Content -->
     </div>
     <!-- End Container fluid  -->
-    <!-- footer -->
-    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
-    <!-- End footer -->
 {% endblock %}

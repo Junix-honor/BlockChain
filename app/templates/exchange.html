@@ -10,12 +10,12 @@
     <!-- Bread crumb -->
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
-            <h3 class="text-primary">Dashboard</h3>
+            <h3 class="text-primary">WalleX</h3>
         </div>
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item"><a href="{{ url_for("main.index") }}">主页</a></li>
+                <li class="breadcrumb-item active">交易</li>
             </ol>
         </div>
     </div>
@@ -41,7 +41,8 @@
                                         <select class="form-control  form-type" id="personal_account"
                                                 name="personal_account">
                                             {% for account in accounts %}
-                                                <option value="{{ account.id }}" class="select-value">{{ account.account_alias }}</option>
+                                                <option value="{{ account.id }}"
+                                                        class="select-value">{{ account.account_alias }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>

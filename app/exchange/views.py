@@ -1,17 +1,23 @@
 import decimal
-import os
 import time
 
 from flask import render_template, session, redirect, url_for, current_app, flash, request
 from flask.json import jsonify
 from flask_login import login_required, current_user
-import base64
 
 from . import exchange
 from .. import db, avatars
 from ..models import User, Account, CommonExchangeRecord
 
 from ..common_deal.Bitcoin import create_deal
+
+
+@exchange.before_request
+@login_required
+def before_request():
+    if not current_user.is_certificated:
+        flash('访问交易平台，请先完成实名认证！', 'info')
+        return redirect(url_for('user.index'))
 
 
 @exchange.route('/', methods=['GET'])

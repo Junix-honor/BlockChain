@@ -10,6 +10,14 @@ from .. import db, avatars
 from ..models import User, Account
 
 
+@account.before_request
+@login_required
+def before_request():
+    if not current_user.is_certificated:
+        flash('访问个人帐号，请先完成实名认证！', 'info')
+        return redirect(url_for('user.index'))
+
+
 @account.route('/', methods=['GET'])
 @login_required
 def index():
