@@ -24,165 +24,86 @@
     <div class="container-fluid">
         <!-- Start Page Content -->
         <div class="row">
-            <div class="col-lg-6 responsive-md-100">
+            <div class="col-lg-12 responsive-md-100">
                 <div class="card card-outline-info">
                     <div class="card-header">
                         <h4 class="m-b-0 text-white">普通交易</h4>
                     </div>
                     <div class="card-body m-l-10 m-r-10">
-                        <form class="form-horizontal p-t-20" method="post" role="form" id="exchangeForm"
-                              action="{{ url_for('exchange.common') }}">
-                            <div class="form-group row">
-                                <label for="personal_account" class="col-sm-2 control-label">本人账户
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-user"></i></div>
-                                        <select class="form-control  form-type" id="personal_account"
-                                                name="personal_account">
-                                            {% for account in accounts %}
-                                                <option value="{{ account.id }}"
-                                                        class="select-value">{{ account.account_alias }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="exchange_account" class="col-sm-2 control-label">交易账户
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-user"></i></div>
-                                        <input type="text" class="form-control form-type" name="exchange_account"
-                                               id="exchange_account" placeholder="请输入账户地址">
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="money" class="col-sm-2 control-label">交易金额
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-money"></i></div>
-                                        <input type="text" class="form-control form-type" id="money" name="money"
-                                               placeholder="请输入交易金额" onkeyup=" checknum(this);">
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="password" class="col-sm-2 control-label">支付密码
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
-                                        <input type="password" class="form-control form-type" name="password"
-                                               id="password" placeholder="请输入支付密码">
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <div class="checkbox checkbox-success">
-                                        <input id="subscribe" type="checkbox" name="subscribe">
-                                        <label for="subscribe">同意《xxxx》条款</label>
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row m-b-0">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <button type="submit" class="btn btn-info waves-effect waves-light"
-                                            id="common-submit">确定
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 responsive-md-100">
-                <div class="card card-outline-primary">
-                    <div class="card-header">
-                        <h4 class="m-b-0 text-white">跨链交易</h4>
-                    </div>
-                    <div class="card-body m-l-10 m-r-10">
-                        <form class="form-horizontal p-t-20" method="post" role="form" id="crossExchangeForm"
-                              action="{{ url_for('exchange.index') }}">
-                            <div class="form-group row">
-                                <label for="out_account" class="col-sm-2 control-label">转出账户
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-user"></i></div>
-                                        <select class="form-control form-type" id="out_account"
-                                                name="out_account">
-                                            {% for account in accounts %}
-                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="in_account" class="col-sm-2 control-label">转入账户
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-user"></i></div>
-                                        <select class="form-control form-type" id="in_account"
-                                                name="in_account">
-                                            {% for account in accounts %}
-                                                <option value="{{ account.id }}">{{ account.account_alias }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <small class="form-control-feedback form-feedback"></small>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="cross_money" class="col-sm-2 control-label">交易金额
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-money"></i></div>
-                                        <input type="text" class="form-control form-type" id="cross_money"
-                                               name="cross_money"
-                                               placeholder="请输入交易金额">
+                        <div class="row justify-content-center">
+                            <form class="form-horizontal p-t-50 col-sm-8" method="post" role="form" id="exchangeForm"
+                                  action="{{ url_for('exchange.common') }}">
+                                <div class="form-group row">
+                                    <label for="personal_account" class="col-sm-2 control-label">本人账户
+                                        <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                                            <select class="form-control  form-type" id="personal_account"
+                                                    name="personal_account">
+                                                {% for account in accounts %}
+                                                    <option value="{{ account.id }}"
+                                                            class="select-value">{{ account.account_alias }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <small class="form-control-feedback form-feedback"></small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="cross_password" class="col-sm-2 control-label">支付密码
-                                    <span class="text-danger">*</span></label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
-                                        <input type="password" class="form-control form-type" name="cross_password"
-                                               id="cross_password" placeholder="请输入支付密码">
+                                <div class="form-group row">
+                                    <label for="exchange_account" class="col-sm-2 control-label">交易账户
+                                        <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                                            <input type="text" class="form-control form-type" name="exchange_account"
+                                                   id="exchange_account" placeholder="请输入账户地址">
+                                        </div>
+                                        <small class="form-control-feedback form-feedback"></small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <div class="checkbox checkbox-success">
-                                        <input id="subscribe" type="checkbox">
-                                        <label for="subscribe">同意《xxxx》条款</label>
+                                <div class="form-group row">
+                                    <label for="money" class="col-sm-2 control-label">交易金额
+                                        <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ti-money"></i></div>
+                                            <input type="text" class="form-control form-type" id="money" name="money"
+                                                   placeholder="请输入交易金额" onkeyup=" checknum(this);">
+                                        </div>
+                                        <small class="form-control-feedback form-feedback"></small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row m-b-0">
-                                <div class="offset-sm-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary waves-effect waves-light">确定
-                                    </button>
+                                <div class="form-group row">
+                                    <label for="password" class="col-sm-2 control-label">支付密码
+                                        <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                            <input type="password" class="form-control form-type" name="password"
+                                                   id="password" placeholder="请输入支付密码">
+                                        </div>
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                                <div class="form-group row">
+                                    <div class="offset-sm-2 col-sm-10">
+                                        <div class="checkbox checkbox-success">
+                                            <input id="subscribe" type="checkbox" name="subscribe">
+                                            <label for="subscribe">同意《xxxx》条款</label>
+                                        </div>
+                                        <small class="form-control-feedback form-feedback"></small>
+                                    </div>
+                                </div>
+                                <div class="form-group row m-b-0">
+                                    <div class="offset-sm-2 col-sm-10">
+                                        <button type="submit" class="btn btn-info waves-effect waves-light"
+                                                id="common-submit">确定
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,11 +112,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="card card-outline-success">
-                    <div class="card-header">
-                        <h4 class="m-b-0 text-white">交易记录</h4>
-                    </div>
                     <div class="card-body m-l-10 m-r-10">
-                        <h5 class="card-title m-t-15">普通交易</h5>
+                        <h4 class="card-title">交易记录</h4>
                         <h6 class="card-subtitle">交易信息</h6>
                         <div class=" table-responsive">
                             <table id="commonExchangeTable" class="display nowrap table table-hover table-bordered">
@@ -222,32 +140,6 @@
                             </table>
                         </div>
                     </div>
-                    <hr>
-                    <div class="card-body m-l-10 m-r-10">
-                        <h5 class="card-title m-t-15">跨链交易</h5>
-                        <h6 class="card-subtitle">交易信息</h6>
-                        <div class=" table-responsive">
-                            <table id="crossExchangeTable" class="display nowrap table table-hover table-bordered">
-                                <thead class="thead-add">
-                                <tr>
-                                    <th>转出账户</th>
-                                    <th>转入账户</th>
-                                    <th>交易金额</th>
-                                    <th>交易时间</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                    <td>121123</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -356,7 +248,7 @@
                             text:
                                 "<hr>" +
                                 "<dl class='row m-l-30 m-r-30'>" +
-                                "<dt class='col-sm-4'>本人账户</dt><dd class='col-sm-8 dd-hiden'>" + $("#personal_account").text() + "</dd>" +
+                                "<dt class='col-sm-4'>本人账户</dt><dd class='col-sm-8 dd-hiden'>" + $("#personal_account").find("option:selected").text() + "</dd>" +
                                 "<dt class='col-sm-4' >交易账户</dt><dd class='col-sm-8 dd-hiden'>" + $("#exchange_account").val() + "</dd>" +
                                 "<dt class='col-sm-4'>交易金额</dt><dd class='col-sm-8'>" + $("#money").val() + "</dd>"
                                 + "</dl>"

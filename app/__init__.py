@@ -44,9 +44,12 @@ def create_app(config_name):
     app.register_blueprint(account_blueprint, url_prefix='/account')
 
     from .exchange import exchange as exchange_blueprint
-    app.register_blueprint(exchange_blueprint, url_prefix='/exchange')
+    app.register_blueprint(exchange_blueprint, url_prefix='/common_exchange')
 
     from .user import user as user_blueprint
     app.register_blueprint(user_blueprint, url_prefix='/user')
+
+    from .cross_exchange import cross_exchange as cross_exchange_blueprint
+    app.register_blueprint(cross_exchange_blueprint, url_prefix='/cross_exchange')
 
     return app

@@ -1,0 +1,711 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        .inner {
+            margin: 0 auto;
+        }
+
+        .steps {
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .steps ul {
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+
+        .steps li {
+            float: left;
+            width: 25%;
+        }
+
+        .steps a {
+            position: relative;
+            display: block;
+            padding: 10px;
+            padding-right: 0 !important;
+            /* important overrides media queries */
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .steps a:hover {
+            background: #eee;
+        }
+
+        .steps a.active {
+            color: #FFF;
+            background-color: #1976d2;
+        }
+
+        .steps a.active span:first-child {
+            color: #fff;
+            border-color: #fff;
+            background-color: #1976d2;
+        }
+
+        .steps a:before,
+        .steps a:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 100%;
+            z-index: 1;
+            display: block;
+            width: 0;
+            height: 0;
+            border-top: 23px solid transparent;
+            border-bottom: 23px solid transparent;
+            border-left: 23px solid transparent;
+        }
+
+        .steps a:before {
+            margin-left: 1px;
+            border-left-color: #d5d5d5;
+        }
+
+        .steps a:after {
+            border-left-color: #FFFFFF;
+        }
+
+        .steps a:hover:after {
+            border-left-color: #eee;
+        }
+
+        .steps a.active:after {
+            border-left-color: #1976d2;
+        }
+
+        .steps li:last-child a:before,
+        .steps li:last-child a:after {
+            display: none;
+        }
+
+
+    </style>
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">Dashboard</h3></div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    {#                    <div class="card-header">#}
+                    {#                        <h4 class="m-b-0 text-white">跨链交易</h4>#}
+                    {#                    </div>#}
+                    <div class="card-body p-t-20 p-l-20 p-r-20 ">
+                        <h4 class="card-title">跨链交易</h4>
+                        <h6 class="card-subtitle">交易流程</h6>
+                        <!-- Nav tabs -->
+                        <div class="steps">
+                            <div class='inner'>
+                                <ul class="nav" role="tablist" id="exchangeTab">
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#step1" role="tab">
+                                           <span class="fa-stack fa">
+                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                <span class="fa-stack-1x">1</span>
+                                            </span>
+                                            <span class="hidden-xs-down d-none d-sm-inline">交易发起</span></a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " data-toggle="tab" href="#step2" role="tab">
+                                           <span class="fa-stack fa">
+                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                <span class="fa-stack-1x">2</span>
+                                            </span>
+                                            <span class="hidden-xs-down d-none d-sm-inline">交易部署</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " data-toggle="tab" href="#step3" role="tab">
+                                            <span class="fa-stack fa">
+                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                <span class="fa-stack-1x">3</span>
+                                            </span>
+                                            <span class="hidden-xs-down d-none d-sm-inline">交易验证</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link " data-toggle="tab" href="#step4" role="tab">
+                                           <span class="fa-stack fa">
+                                                <i class="fa fa-circle-thin fa-stack-2x"></i>
+                                                <span class="fa-stack-1x">4</span>
+                                            </span>
+                                            <span class="hidden-xs-down d-none d-sm-inline">交易成功</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Tab panes -->
+                        <div class="tab-content tabcontent-border">
+                            <div class="tab-pane p-20" id="step1" role="tabpanel">
+                                {% if not record %}
+                                    <div class="row justify-content-center">
+                                        <form class="form-horizontal p-t-70 col-sm-8" method="post" role="form"
+                                              id="crossExchangeForm"
+                                              action="{{ url_for('cross_exchange.request_step1') }}">
+                                            <div class="form-group row">
+                                                <label for="out_account" class="col-sm-2 control-label">转出账户
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                                        <select class="form-control  form-type" id="out_account"
+                                                                name="out_account">
+                                                            {% for account in accounts %}
+                                                                <option value="{{ account.id }}"
+                                                                        class="select-value">{{ account.account_alias }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <small class="form-control-feedback form-feedback"></small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="in_account" class="col-sm-2 control-label">转入账户
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="ti-user"></i></div>
+                                                        <select class="form-control  form-type" id="in_account"
+                                                                name="in_account">
+                                                            {% for account in accounts %}
+                                                                <option value="{{ account.id }}"
+                                                                        class="select-value">{{ account.account_alias }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <small class="form-control-feedback form-feedback"></small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="money" class="col-sm-2 control-label">交易金额
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="ti-money"></i></div>
+                                                        <input type="text" class="form-control form-type" id="money"
+                                                               name="money"
+                                                               placeholder="请输入交易金额" onkeyup=" checknum(this);">
+                                                    </div>
+                                                    <small class="form-control-feedback form-feedback"></small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="password" class="col-sm-2 control-label">支付密码
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                                        <input type="password" class="form-control form-type"
+                                                               name="password"
+                                                               id="password" placeholder="请输入支付密码">
+                                                    </div>
+                                                    <small class="form-control-feedback form-feedback"></small>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <div class="checkbox checkbox-success">
+                                                        <input id="subscribe" type="checkbox" name="subscribe">
+                                                        <label for="subscribe">同意《xxxx》条款</label>
+                                                    </div>
+                                                    <small class="form-control-feedback form-feedback"></small>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                        <button class="btn btn-secondary m-r-20">
+                                            取消
+                                        </button>
+                                        <button class="btn btn-info step-next" id="crossExchange_submit" index="1">
+                                            确定
+                                        </button>
+                                    </div>
+                                {% elif record and record.in_account.user.id==current_user.id and record.status==1 %}
+                                    <div class="alert alert-info">
+                                        <i class="bi-check-circle m-r-5"></i>
+                                        正在等待匹配方同意交易
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20">返回</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif record and record.exchange_in_account.user.id==current_user.id and record.status==1 %}
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">拒绝交易</button>
+                                                <button type="button" class="btn btn-info" id="step1-approve">同意交易
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                            <div class="tab-pane  p-20" id="step2" role="tabpanel">
+                                {% if record and record.in_account.user.id==current_user.id and record.status==2 %}
+                                    <div class="alert alert-warning">
+                                        <i class="bi-info-circle m-r-5"></i>
+                                        请设置一次性私钥进行交易的部署
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            <form action="{{ url_for('cross_exchange.request_step2') }}" method="post"
+                                                  role="form" id="privateKeyForm">
+                                                <div class="form-body">
+                                                    <input type="hidden" name="record_id_private_key"
+                                                           id="record_id_private_key"
+                                                           value="{{ record.id }}"/>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group has-danger">
+                                                                <label class="control-label" for="private_key">一次性私钥
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input type="password" id="private_key"
+                                                                       name="private_key"
+                                                                       class="form-control form-control-danger"
+                                                                       placeholder="">
+                                                                <small class="form-control-feedback form-feedback"></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group has-danger">
+                                                                <label class="control-label" for="private_key2">确认私钥
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input type="password" id="private_key2"
+                                                                       name="private_key2"
+                                                                       class="form-control form-control-danger"
+                                                                       placeholder="">
+                                                                <small class="form-control-feedback form-feedback"> </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20"
+                                                        id="private_key_submit">确认
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif record and record.exchange_in_account.user.id==current_user.id and record.status==2 %}
+                                    <div class="alert alert-info">
+                                        <i class="bi-check-circle m-r-5"></i>
+                                        正在等待发起方部署交易
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20">返回</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane p-20" id="step3" role="tabpanel">
+                                {% if record and record.in_account.user.id==current_user.id and record.status==4 %}
+                                    <div class="alert alert-warning">
+                                        <i class="bi-info-circle m-r-5"></i>
+                                        请验证一次性密钥
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            <form action="{{ url_for('cross_exchange.request_step2') }}" method="post"
+                                                  role="form" id="privateKeyValidationForm1">
+                                                <div class="form-body">
+                                                    <input type="hidden" name="record_id_private_key"
+                                                           id="record_id_private_key"
+                                                           value="{{ record.id }}"/>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group has-danger">
+                                                                <label class="control-label" for="private_key">一次性私钥
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input type="password" id="private_key"
+                                                                       name="private_key"
+                                                                       class="form-control form-control-danger"
+                                                                       placeholder="">
+                                                                <small class="form-control-feedback form-feedback"></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20"
+                                                        id="private_key_submit">确认
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif record and record.exchange_in_account.user.id==current_user.id and record.status==4 %}
+                                    <div class="alert alert-info">
+                                        <i class="bi-check-circle m-r-5"></i>
+                                        正在等待发起方验证交易
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20">返回</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif record and record.in_account.user.id==current_user.id and record.status==5 %}
+                                    <div class="alert alert-info">
+                                        <i class="bi-check-circle m-r-5"></i>
+                                        正在等待配对方验证交易
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20">返回</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif record and record.exchange_in_account.user.id==current_user.id and record.status==5 %}
+                                    <div class="alert alert-warning">
+                                        <i class="bi-info-circle m-r-5"></i>
+                                        请验证一次性密钥
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            <form action="{{ url_for('cross_exchange.request_step2') }}" method="post"
+                                                  role="form" id="privateKeyValidationForm2">
+                                                <div class="form-body">
+                                                    <input type="hidden" name="record_id_private_key"
+                                                           id="record_id_private_key"
+                                                           value="{{ record.id }}"/>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group has-danger">
+                                                                <label class="control-label" for="private_key">一次性私钥
+                                                                    <span class="text-danger">*</span></label>
+                                                                <input type="password" id="private_key"
+                                                                       name="private_key"
+                                                                       class="form-control form-control-danger"
+                                                                       placeholder="">
+                                                                <small class="form-control-feedback form-feedback"></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-info m-r-20"
+                                                        id="private_key_submit">确认
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="tab-pane p-20" id="step4" role="tabpanel">
+                                {% if record and record.status==6 %}
+                                    <div class="alert alert-success">
+                                        <i class="bi-check-circle m-r-5"></i>
+                                        交易成功
+                                    </div>
+                                    <div class="row justify-content-center m-t-70">
+                                        <div class="col-lg-6">
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            交易信息
+                                            <hr>
+                                            <div class="text-center m-t-70">
+                                                <button type="button" class="btn btn-info m-r-20">确定</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <!-- Form validation -->
+    <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+
+    <script>
+        //金额
+        function checknum(obj) {
+            if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
+                obj.value = obj.value;
+            } else {
+                obj.value = obj.value.substring(0, obj.value.length - 1);
+            }
+        }
+
+        //表单js提交
+        $("#crossExchange_submit").click(function () {
+            $("#crossExchangeForm").submit();
+        });
+        $("#private_key_submit").click(function () {
+            $("#privateKeyForm").submit();
+        });
+
+        //接收方同意交易
+        $("#step1-approve").click(function () {
+            $.ajax({
+                url: "{{ url_for('cross_exchange.respond_step1') }}",
+                type: 'post',
+                data_type: 'json',
+                data: {
+                    'id':{{record.id}}
+                },
+                success: function (args) {
+                    if (args.code === 1000) {
+                        swal({
+                            title: "同意交易",
+                            text: args.message,
+                            type: "success",
+                            customClass: "step1-respond-alert"
+                        });
+                        $('.step1-respond-alert .confirm').click(function () {
+                            window.location.reload()
+                        })
+                    } else {
+                        swal('错误', '出现了位置的错误', 'info')
+                    }
+                }
+            })
+        })
+
+        //crossExchangeForm
+        $(function () {
+            $("#crossExchangeForm").validate({
+                rules: {
+                    out_account: {
+                        required: true,
+                    },
+                    in_account: {
+                        required: true,
+                        checkAccount: true
+                    },
+                    money: {
+                        required: true,
+                    },
+                    password: {
+                        required: true,
+                        remote: {
+                            url: "{{ url_for('cross_exchange.validate_password') }}",
+                            type: "post",
+                            data: {
+                                password: function () {
+                                    return $("#password").val();
+                                },
+                                out_account: function () {
+                                    return $("#out_account").val();
+                                }
+                            }
+                        }
+                    },
+                    subscribe: {
+                        required: true
+                    }
+                },
+                messages: {          //自定义提示信息
+                    out_account: {
+                        required: "转出账户必填",
+                    },
+                    in_account: {
+                        required: "转入账户必填",
+                    },
+                    money: {
+                        required: "交易金额必填",
+                    },
+                    password: {
+                        required: "交易密码必填",
+                        remote: "交易密码错误"
+
+                    },
+                    subscribe: {
+                        required: "请阅读并同意相关条款"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).parent().siblings(".form-control-feedback").html(error)
+                },
+                submitHandler: function (form) {
+                    swal({
+                            title: "你确定要交易吗?",
+                            text:
+                                "<hr>" +
+                                "<dl class='row m-l-30 m-r-30'>" +
+                                "<dt class='col-sm-4'>转出账户</dt><dd class='col-sm-8 dd-hiden'>" +
+                                $("#out_account").find("option:selected").text() + "</dd>" +
+                                "<dt class='col-sm-4' >转入账户</dt><dd class='col-sm-8 dd-hiden'>" +
+                                $("#in_account").find("option:selected").text() + "</dd>" +
+                                "<dt class='col-sm-4'>交易金额</dt><dd class='col-sm-8'>" + $("#money").val() + "</dd>"
+                                + "</dl>"
+                                + "<hr>",
+                            html: true,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "确定",
+                            cancelButtonText: "取消",
+                            closeOnConfirm: false,
+                            closeOnCancel: false,
+                            showLoaderOnConfirm: true
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                swal("交易", "正在进行区块链交易，请稍等", "info");
+                                // 朝后端发送ajax请求删除数据之后 再弹下面的提示框
+                                $.ajax({
+                                    url: "{{ url_for('cross_exchange.request_step1') }}",
+                                    type: 'post',
+                                    data_type: 'json',
+                                    data: $('#crossExchangeForm').serialize(),
+                                    success: function (args) {
+                                        if (args.code === 1000) {
+                                            swal({
+                                                title: "交易成功",
+                                                text: args.message,
+                                                type: "success",
+                                                customClass: "common-exchange"
+                                            });
+                                            $('.common-exchange .confirm').click(function () {
+                                                window.location.href = '{{ url_for('cross_exchange.process') }}'
+                                                    + '?id=' + args.id
+                                            })
+                                        } else {
+                                            swal('错误', '出现了位置的错误', 'info')
+                                        }
+                                    }
+                                })
+                            } else {
+                                swal("取消", "取消成功", "error");
+                            }
+                        });
+                }
+            });
+            $.validator.addMethod("checkAccount", function (value, element, params) {
+                return $(element).val() !== $('#out_account').val();
+            }, "*转入账户和转出账户不能是同一个账户");
+        });
+        //privateKeyForm
+        $(function () {
+            $("#privateKeyForm").validate({
+                rules: {
+                    private_key: {
+                        required: true,
+                    },
+                    private_key2: {
+                        equalTo: "#private_key"
+                    }
+                },
+                messages: {          //自定义提示信息
+                    private_key: {
+                        required: "*一次性私钥必填",
+                    },
+                    private_key2: {
+                        equalTo: "*两次私钥输入不一致"
+                    }
+                },
+                errorPlacement: function (error, element) {      //错误信息的位置
+                    $(element).siblings(".form-control-feedback").html(error)
+                }
+            });
+        });
+        //TAB
+        $(function () {
+            {% if record == None %}
+                $('#exchangeTab li:eq(0) a').tab('show')
+            {% else %}
+                var index = parseInt(({{ record.status }}) / 2);
+                $('#exchangeTab li').eq(index).children('a').tab('show')
+            {% endif %}
+            $('#exchangeTab a').addClass('disabled')
+            {#$('.step-next').click(function () {#}
+            {#    $('#exchangeTab a').removeClass('disabled')#}
+            {#    var index = $(this).attr("index")#}
+            {#    $('#exchangeTab li').eq(index).children('a').tab('show')#}
+            {#    $('#exchangeTab a').addClass('disabled')})#}
+        })
+    </script>
+{% endblock %}

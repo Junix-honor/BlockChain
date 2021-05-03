@@ -37,7 +37,7 @@ def index():
 @login_required
 def common():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
-    time.sleep(5)
+    # time.sleep(5)
     # create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
     info = create_deal(personal_account.account_hash,
                        request.form.get("exchange_account"),
@@ -46,17 +46,11 @@ def common():
                        personal_account.chain_address)
     print(info)
     record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
-                                  exchange_money=request.form.get("money"),
+                                  exchange_money=float(request.form.get("money")),
                                   account=personal_account)
     db.session.add(record)
     db.session.commit()
     return jsonify({"code": 1000, "message": "交易成功"})
-
-
-@exchange.route('/cross', methods=['POST', 'GET'])
-@login_required
-def cross():
-    return render_template('cross_chain.html')
 
 
 # # 检查exchange_account是否存在

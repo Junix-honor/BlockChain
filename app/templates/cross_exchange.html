@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block styles %}
+    <link href="../static/css/lib/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/lib/bootstrap/bootstrap-select.min.css" rel="stylesheet"/>
+
+    {{ super() }}
+{% endblock %}
+{% block page_content %}
+    <!-- Bread crumb -->
+    <div class="row page-titles">
+        <div class="col-md-5 align-self-center">
+            <h3 class="text-primary">WalleX</h3>
+        </div>
+        <div class="col-md-7 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for("main.index") }}">主页</a></li>
+                <li class="breadcrumb-item active">交易</li>
+            </ol>
+        </div>
+    </div>
+    <!-- End Bread crumb -->
+    <!-- Container fluid  -->
+    <div class="container-fluid">
+        <!-- Start Page Content -->
+        <div class="row">
+            <div class="col-lg-12 responsive-md-100">
+                <div class="card card-outline-info">
+                    {#                    <div class="card-header m-b-20">#}
+                    {#                        <h4 class="m-b-0 text-white">跨链交易</h4>#}
+                    {#                    </div>#}
+                    <div class="card-body p-lg-3 p-sm-2">
+                        <h4 class="card-title">跨链交易</h4>
+                        <h6 class="card-subtitle">活动交易</h6>
+                        <div class=" table-responsive">
+                            <table id="statusTable" class="display nowrap table table-hover table-bordered">
+                                <thead class="thead-add">
+                                <tr>
+                                    <th>交易发起者</th>
+                                    <th>转出账户链</th>
+                                    <th>转入账户链</th>
+                                    <th>交易状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for exchange in active_exchanges %}
+                                    <tr>
+                                        <td>{{ exchange.out_account.user.username }}</td>
+                                        <td>{{ exchange.out_account.chain_address }}</td>
+                                        <td>{{ exchange.in_account.chain_address }}</td>
+                                        <td>{{ exchange.status }}</td>
+                                        {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
+                                        <td>
+                                            <a href="javascript:void(0);" class="table-action exchange-info"
+                                               exchange_id="{{ exchange.id }}"
+                                               title="详细信息"><i class="bi-list-task"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline-success">
+                    <div class="card-body  p-lg-3 p-sm-2">
+                        <h4 class="card-title">交易记录</h4>
+                        <h6 class="card-subtitle">交易信息</h6>
+                        <div class=" table-responsive">
+                            <table id="crossExchangeTable" class="display nowrap table table-hover table-bordered">
+                                <thead class="thead-add">
+                                <tr>
+                                    <th>RPC地址</th>
+                                    <th>本人账户地址</th>
+                                    <th>交易账户地址</th>
+                                    <th>交易金额</th>
+                                    <th>交易时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for record in common_exchange_records %}
+                                    <tr>
+                                        <td>{{ record.account.chain_address }}</td>
+                                        <td>{{ record.account.account_hash }}</td>
+                                        <td>{{ record.exchange_account_hash }}</td>
+                                        <td>{{ record.exchange_money }}</td>
+                                        <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End PAge Content -->
+    </div>
+    <!-- End Container fluid  -->
+    <!-- footer -->
+    <footer class="footer"> © 2018 CoinDash All Right <a href="http://www.17sucai.com/">Reserved</a>.</footer>
+    <!-- End footer -->
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="../static/js/lib/datatables/datatables.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="../static/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="../static/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- Form validation -->
+    <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+    <script src=../static/js/lib/bootstrap/bootstrap-select.min.js></script>
+    <script src="../static/js/lib/bootstrap/defaults-zh_CN.min.js"></script>
+
+    <script>
+        $('.exchange-info').click(function () {
+            let currentBtn = $(this);
+            window.location.href =
+                '{{ url_for('cross_exchange.process') }}' + '?id=' + currentBtn.attr('exchange_id')
+        })
+        //statusTable
+        $(function () {
+            $('#statusTable').DataTable(
+                {
+                    "bPaginate": true, //翻页功能
+                    "bLengthChange": true, //改变每页显示数据数量
+                    "bFilter": true, //过滤功能
+                    "bSort": true, //排序功能
+                    "bInfo": true,//页脚信息
+                    "bAutoWidth": true,//自动宽度
+                    "aaSorting": [[1, "desc"]],//默认第几个排序
+                    "bStateSave": true,//状态保存
+                    "pading": false,
+                    // "pagingType": "full_numbers",
+                    "searching": true,//搜索框是否显示
+                    "lengthChange": true,//左上角每页显示条数是否显示
+                    "oLanguage": {//插件的汉化
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        },
+                        "sZeroRecords": "没有检索到数据",
+                        "sProcessing": "<img src='' />",
+                        "sSearch": "Search"
+                    },
+                    dom: "<B><lfrt><'table-foot'ip>",
+                    buttons: [
+                        {
+                            text: 'New',
+                            action: function (e, dt, node, config) {
+                                window.location.replace("{{ url_for('cross_exchange.process') }}")
+                            }
+                        }
+                    ]
+                }
+            )
+        });
+        //crossExchangeTable
+        $(function () {
+            $('#crossExchangeTable').DataTable(
+                {
+                    "bPaginate": true, //翻页功能
+                    "bLengthChange": true, //改变每页显示数据数量
+                    "bFilter": true, //过滤功能
+                    "bSort": true, //排序功能
+                    "bInfo": true,//页脚信息
+                    "bAutoWidth": true,//自动宽度
+                    "aaSorting": [[1, "desc"]],//默认第几个排序
+                    "bStateSave": true,//状态保存
+                    "pading": false,
+                    // "pagingType": "full_numbers",
+                    "searching": true,//搜索框是否显示
+                    "lengthChange": true,//左上角每页显示条数是否显示
+                    "oLanguage": {//插件的汉化
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        },
+                        "sZeroRecords": "没有检索到数据",
+                        "sProcessing": "<img src='' />",
+                        "sSearch": "Search"
+                    },
+                    dom: "<B><lfrt><'table-foot'ip>",
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            text: 'Export'
+                        },
+                    ]
+                }
+            )
+        });
+    </script>
+{% endblock %}

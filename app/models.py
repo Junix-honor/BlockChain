@@ -117,6 +117,47 @@ class CommonExchangeRecord(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
 
+class CrossExchangeRecord(db.Model):
+    __tablename__ = 'cross_exchange_records'
+    id = db.Column(db.Integer, primary_key=True)
+    in_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    in_account = db.relationship('Account', foreign_keys=[in_account_id])
+    out_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    out_account = db.relationship('Account', foreign_keys=[out_account_id])
+    exchange_in_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    exchange_in_account = db.relationship('Account', foreign_keys=[exchange_in_account_id])
+    exchange_out_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    exchange_out_account = db.relationship('Account', foreign_keys=[exchange_out_account_id])
+    exchange_money = db.Column(db.Float)
+    status = db.Column(db.Integer, default=0)
+    private_key_hash = db.Column(db.String(128))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    # private_key哈希
+    @property
+    def private_key(self):
+        raise AttributeError('private_key is not a readable attribute')
+
+    @private_key.setter
+    def private_key(self, password):
+        self.private_key_hash = generate_password_hash(password)
+
+    def verify_private_key(self, password):
+        return check_password_hash(self.private_key_hash, password)
+
+    def set_request_step1(self):
+        self.status = 1
+
+    def set_respond_step1(self):
+        self.status = 2
+
+    def set_request_step2(self):
+        self.status = 3
+
+    def set_respond_step2(self):
+        self.status = 4
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))

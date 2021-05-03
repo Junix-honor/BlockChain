@@ -110,15 +110,11 @@
                         <li class="nav-label">Exchange</li>
                         <li><a href="{{ url_for('exchange.index') }}" aria-expanded="false">
                             <i class="fa fa-exchange"></i>
-                            <span class="hide-menu">交易</span></a>
+                            <span class="hide-menu">普通交易</span></a>
                         </li>
-                        <li><a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-bar-chart"></i><span
-                                class="hide-menu">区块链</span></a>
-                            <ul aria-expanded="false" class="collapse">
-
-                                <li><a href=#>交易平台</a></li>
-                                <li><a href=#>交易记录</a></li>
-                            </ul>
+                        <li><a href="{{ url_for('cross_exchange.index') }}" aria-expanded="false">
+                            <i class="ti-vector"></i>
+                            <span class="hide-menu">跨链交易</span></a>
                         </li>
                     </ul>
                 </nav>
