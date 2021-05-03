@@ -57,6 +57,7 @@ def create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
         print("地址错误")
         return -2
 
+
 if __name__ == "__main__":
     # print(w3.isConnected())
     # print(w3.eth.accounts)
@@ -70,7 +71,7 @@ if __name__ == "__main__":
     number = 12
 
     # 查询具体信息s
-    #print(create_deal(Second_address,First_address,Second_pw,number,RPC_server))
-    #地址错误返回-2，交易错误返回-1，正常退出返回0
+    # print(create_deal(Second_address,First_address,Second_pw,number,RPC_server))
+    # 地址错误返回-2，交易错误返回-1，正常退出返回0
     result = create_deal(First_address, Second_address, First_pw, number, RPC_server)
     print(result)

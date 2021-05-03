@@ -17,5 +17,5 @@ def Query_Balance(RPC_server,address):
 if __name__ == "__main__":
     RPC_server = "HTTP://127.0.0.1:7545"
     address = "0x5971E440b0b43536640d417F1502AA4F48489055"
-    result = Query_Balance(RPC_server,address)
-    print(round(result,3),'Eth')
+    result = Query_Balance(RPC_server, address)
+    print(round(result, 3), 'Eth')

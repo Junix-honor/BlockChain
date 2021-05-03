@@ -1,15 +1,14 @@
 import decimal
-import time
 
-from flask import render_template, session, redirect, url_for, current_app, flash, request
+from flask import render_template, redirect, url_for, flash, request
 from flask.json import jsonify
 from flask_login import login_required, current_user
 
 from . import exchange
-from .. import db, avatars
-from ..models import User, Account, CommonExchangeRecord
+from .. import db
+from ..models import Account, CommonExchangeRecord
 
-from ..common_deal.Bitcoin import create_deal
+from .deal import create_deal
 
 
 @exchange.before_request

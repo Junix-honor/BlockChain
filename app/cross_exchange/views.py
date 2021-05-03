@@ -1,16 +1,12 @@
-import decimal
 import time
 
-from flask import render_template, session, redirect, url_for, current_app, flash, request
+from flask import render_template, redirect, url_for, flash, request
 from flask.json import jsonify
 from flask_login import login_required, current_user
-from sqlalchemy import null
 
 from . import cross_exchange
-from .. import db, avatars
-from ..models import User, Account, CommonExchangeRecord, CrossExchangeRecord
-
-from ..common_deal.Bitcoin import create_deal
+from .. import db
+from ..models import Account, CrossExchangeRecord
 
 
 @cross_exchange.before_request
@@ -38,16 +34,6 @@ def index():
 @cross_exchange.route('/process', methods=['GET', 'POST'])
 @login_required
 def process():
-    accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
-    if 'id' in request.args:
-        record = CrossExchangeRecord.query.filter_by(id=request.args['id']).first()
-        return render_template('cross_process.html', accounts=accounts, record=record)
-    return render_template('cross_process.html', accounts=accounts, record=None)
-
-
-@cross_exchange.route('/info', methods=['POST'])
-@login_required
-def info():
     accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
     if 'id' in request.args:
         record = CrossExchangeRecord.query.filter_by(id=request.args['id']).first()
@@ -94,8 +80,6 @@ def request_step2():
     db.session.add(record)
     db.session.commit()
     return redirect(url_for('cross_exchange.process', id=record.id))
-
-
 
 
 # @exchange.route('/common', methods=['POST'])
