@@ -25,31 +25,37 @@ def create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
     # w3.personal.unlockAccount(address_vps_one, pw1)
 
     # 判断转账余额是否足够
-    if w3.fromWei(w3.eth.getBalance(sending_address), 'ether') + Decimal.from_float(0.1) > amount:
-        # 创建交易
+    try:
+        if w3.fromWei(w3.eth.getBalance(sending_address), 'ether') + Decimal.from_float(0.1) > amount:
+            # 创建交易
 
-        signed_txn = w3.eth.account.sign_transaction(dict(
-            nonce=w3.eth.getTransactionCount(sending_address),
-            gasPrice=w3.eth.gasPrice,
-            gas=400000,  # 默认值4712388
-            to=receiving_address,
-            value=w3.toWei(amount, "ether"),
-            data=b'',
-        ),
-            pw1,
-        )
+            signed_txn = w3.eth.account.sign_transaction(dict(
+                nonce=w3.eth.getTransactionCount(sending_address),
+                gasPrice=w3.eth.gasPrice,
+                gas=400000,  # 默认值4712388
+                to=receiving_address,
+                value=w3.toWei(amount, "ether"),
+                data=b'',
+            ),
+                pw1,
+            )
+            try:
+                tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
+            except:
+                print("交易错误")
+                return -1
+            # 交易完后打印账户的余额
+            # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(sending_address), 'ether'))
+            # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(receiving_address), 'ether'))
 
-        tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
-        # 交易完后打印账户的余额
-        # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(sending_address), 'ether'))
-        # print("Host has %f Ether" % w3.fromWei(w3.eth.getBalance(receiving_address), 'ether'))
+            return w3.eth.getTransaction(tx_hash)
 
-        return w3.eth.getTransaction(tx_hash)
-
-    else:
-        print("余额不够，无法转账！请重试！")
-        return 0
-
+        else:
+            print("余额不够，无法转账！请重试！")
+            return 0
+    except:
+        print("地址错误")
+        return -2
 
 if __name__ == "__main__":
     # print(w3.isConnected())
@@ -65,4 +71,6 @@ if __name__ == "__main__":
 
     # 查询具体信息s
     #print(create_deal(Second_address,First_address,Second_pw,number,RPC_server))
-    create_deal(First_address, Second_address, First_pw, number, RPC_server)
+    #地址错误返回-2，交易错误返回-1，正常退出返回0
+    result = create_deal(First_address, Second_address, First_pw, number, RPC_server)
+    print(result)
