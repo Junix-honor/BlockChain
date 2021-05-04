@@ -41,6 +41,7 @@
                                             <div class="input-group-addon"><i class="ti-user"></i></div>
                                             <select class="form-control  form-type" id="personal_account"
                                                     name="personal_account">
+                                                <option disabled selected value>请选择本人账户</option>
                                                 {% for account in accounts %}
                                                     <option value="{{ account.id }}"
                                                             class="select-value">{{ account.account_alias }}</option>
@@ -48,6 +49,14 @@
                                             </select>
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
+                                        <dl class="row m-t-10 m-b-0 account-al" style="display: none" id="account_info">
+                                            <dt class="col-lg-2">余额</dt>
+                                            <dd class="col-lg-10" id="money_info"></dd>
+                                            <dt class="col-lg-2">RPC地址</dt>
+                                            <dd class="col-lg-10" id="chain_address_info"></dd>
+                                            <dt class="col-lg-2">账户地址</dt>
+                                            <dd class="col-lg-10" id="account_hash_info"></dd>
+                                        </dl>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -67,7 +76,7 @@
                                         <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
                                         <div class="input-group">
-                                            <div class="input-group-addon"><i class="ti-money"></i></div>
+                                            <div class="input-group-addon"><i class="ti-wallet"></i></div>
                                             <input type="text" class="form-control form-type" id="money" name="money"
                                                    placeholder="请输入交易金额" onkeyup=" checknum(this);">
                                         </div>
@@ -175,6 +184,26 @@
             }
         }
 
+        //ajax
+        $("#personal_account").change(function () {
+            $.ajax({
+                url: "{{ url_for('exchange.account_info') }}",
+                type: 'post',
+                data_type: 'json',
+                data: {
+                    "id": $(this).val()
+                },
+                success: function (args) {
+                    if (args.code === 1000) {
+                        $("#account_info").show()
+                        $("#money_info").html(args.money)
+                        $("#chain_address_info").html(args.chain_address)
+                        $("#account_hash_info").html(args.account_hash)
+
+                    }
+                }
+            })
+        })
         //exchangeForm
         $(function () {
             $("#exchangeForm").validate({
@@ -199,6 +228,18 @@
                     },
                     money: {
                         required: true,
+                        remote: {
+                            url: "{{ url_for('exchange.validate_money') }}",
+                            type: "post",
+                            data: {
+                                money: function () {
+                                    return $("#money").val();
+                                },
+                                id: function () {
+                                    return $("#personal_account").val();
+                                }
+                            }
+                        }
                     },
                     password: {
                         required: true,
@@ -221,22 +262,23 @@
                 },
                 messages: {          //自定义提示信息
                     personal_account: {
-                        required: "个人账户必填",
+                        required: "*个人账户必填",
                     },
                     exchange_account: {
-                        required: "交易账户必填",
-                        remote: "交易账户不能是本人账户"
+                        required: "*交易账户必填",
+                        remote: "*交易账户不能是本人账户"
                     },
                     money: {
-                        required: "交易金额必填",
+                        required: "*交易金额必填",
+                        remote: "*账户余额不足"
                     },
                     password: {
-                        required: "交易密码必填",
-                        remote: "交易密码错误"
+                        required: "*交易密码必填",
+                        remote: "*交易密码错误"
 
                     },
                     subscribe: {
-                        required: "请阅读并同意相关条款"
+                        required: "*请阅读并同意相关条款"
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置

@@ -52,6 +52,14 @@ def common():
     return jsonify({"code": 1000, "message": "交易成功"})
 
 
+@exchange.route('/account', methods=['POST'])
+@login_required
+def account_info():
+    account = current_user.accounts.filter_by(id=int(request.form.get('id'))).first()
+    return jsonify({"code": 1000, "chain_address": account.chain_address, "account_hash": account.account_hash,
+                    "money": account.money})
+
+
 # # 检查exchange_account是否存在
 # @exchange.route('/validate/exchange_account', methods=['POST'])
 # def validate_exchange_account():
@@ -62,6 +70,15 @@ def common():
 #         return jsonify(True)
 #     else:
 #         return jsonify(False)
+
+# 检查交易金额是否超过帐号余额
+@exchange.route('/validate/money', methods=['POST'])
+def validate_money():
+    account = current_user.accounts.filter_by(id=int(request.form.get('id'))).first()
+    if float(request.form.get('money')) > account.money:
+        return jsonify(False)
+    else:
+        return jsonify(True)
 
 
 # 检查exchange_account是否是当前用户

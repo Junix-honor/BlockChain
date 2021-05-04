@@ -33,6 +33,7 @@
                                     <th>账户地址</th>
                                     <th>账户别名</th>
                                     <th>跨链权限</th>
+                                    <th>金额</th>
                                     <th>注册时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -44,6 +45,7 @@
                                         <td>{{ account.account_hash }}</td>
                                         <td>{{ account.account_alias }}</td>
                                         <td>{{ '有' if account.across_chain else '无' }}</td>
+                                        <td>{{ account.money }}</td>
                                         <td>{{ moment(account.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                         <td>
                                             <a href="javascript:void(0);" class="table-action account-edit"

@@ -2,7 +2,8 @@ import web3
 from web3 import Web3, IPCProvider
 from decimal import *
 
-def Query_Balance(RPC_server,address):
+
+def Query_Balance(RPC_server, address):
     try:
         web3.HTTPProvider(RPC_server)
     except ConnectionError:

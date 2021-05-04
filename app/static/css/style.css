@@ -7598,3 +7598,13 @@ tbody tr td {
 .index-a {
     color: #454545;
 }
+
+.account-al dt {
+    font-weight: 500;
+    color: gray;
+}
+
+.account-al dd {
+    font-weight: 500;
+    color: gray;
+}

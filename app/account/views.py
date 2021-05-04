@@ -8,6 +8,7 @@ import base64
 from . import account
 from .. import db, avatars
 from ..models import User, Account
+from ..help import help
 
 
 @account.before_request
@@ -42,7 +43,8 @@ def add():
                       is_independent_password=True
                       if request.form.get("independent_password") == 'true'
                       else False,
-                      user=current_user._get_current_object())
+                      user=current_user._get_current_object(),
+                      money=help.Query_Balance(request.form.get("chain_address"), request.form.get("account_hash")))
     db.session.add(account)
     db.session.commit()
     return redirect(url_for("account.index"))

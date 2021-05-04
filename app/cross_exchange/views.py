@@ -3,6 +3,7 @@ import time
 from flask import render_template, redirect, url_for, flash, request
 from flask.json import jsonify
 from flask_login import login_required, current_user
+from sqlalchemy.orm import aliased
 
 from . import cross_exchange
 from .. import db
@@ -41,45 +42,80 @@ def process():
     return render_template('cross_process.html', accounts=accounts, record=None)
 
 
-@cross_exchange.route('/request/step1', methods=['GET', 'POST'])
+@cross_exchange.route('/account', methods=['POST'])
 @login_required
-def request_step1():
+def account_info():
+    account = current_user.accounts.filter_by(id=int(request.form.get('id'))).first()
+    return jsonify({"code": 1000, "chain_address": account.chain_address, "account_hash": account.account_hash,
+                    "money": account.money})
+
+
+@cross_exchange.route('/initiate', methods=['GET', 'POST'])
+@login_required
+def initiate():
     out_account = current_user.accounts.filter_by(id=int(request.form.get('out_account'))).first()
     in_account = current_user.accounts.filter_by(id=int(request.form.get('in_account'))).first()
-    # TODO:寻找匹配的账户  exchange_in_account exchange_out_account
-    time.sleep(10)
-    record = CrossExchangeRecord(in_account=in_account, out_account=out_account,
-                                 exchange_in_account=None,
-                                 exchange_out_account=None,
-                                 exchange_money=float(request.form.get("money")))
-    record.set_request_step1()
-    db.session.add(record)
-    db.session.commit()
-    # return redirect(url_for('cross_exchange.process', id=record.id))
-    return jsonify({"code": 1000, "message": "交易发起成功", "id": record.id})
+    # 寻找匹配的账户  exchange_in_account exchange_out_account
+    account1 = aliased(Account)
+    account2 = aliased(Account)
+    res = db.session.query(account1.id, account2.id, account1.money, account2.money). \
+        join(account2, account1.user_id == account2.user_id). \
+        filter(account1.user_id != current_user.id). \
+        filter(account1.across_chain == 1). \
+        filter(account2.across_chain == 1). \
+        filter(account1.chain_address == in_account.chain_address). \
+        filter(account2.chain_address == out_account.chain_address). \
+        order_by(account1.money.desc()).first()
+    print(res)
+    if res is None:
+        return jsonify({"code": 5000, "message": "交易匹配失败"})
+    else:
+        record = CrossExchangeRecord(in_account=in_account, out_account=out_account,
+                                     exchange_in_account_id=res[1],
+                                     exchange_out_account_id=res[0],
+                                     exchange_money=float(request.form.get("money")))
+        record.set_initialized()
+        db.session.add(record)
+        db.session.commit()
+        # return redirect(url_for('cross_exchange.process', id=record.id))
+        return jsonify({"code": 1000, "message": "交易发起成功", "id": record.id})
 
 
-@cross_exchange.route('/respond/step1', methods=['GET', 'POST'])
+@cross_exchange.route('/agree', methods=['POST'])
 @login_required
-def respond_step1():
+def agree():
+    print(request.form.get('id'))
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('id'))).first()
-    record.set_respond_step1()
+    time.sleep(10)
+    # TODO：交易部署
+    record.set_agreed()
     db.session.add(record)
     db.session.commit()
-    return jsonify({"code": 1000, "message": "交易同意成功"})
+    return jsonify({"code": 1000, "message": "交易部署成功"})
 
 
-@cross_exchange.route('/request/step2', methods=['GET', 'POST'])
+@cross_exchange.route('/encrypt', methods=['POST'])
 @login_required
-def request_step2():
-    record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_private_key'))).first()
-    record.private_key = request.form.get('private_key')
-    record.set_request_step2()
-    # TODO: 检查并部署合约到链2
-    record.set_respond_step2()
+def encrypt():
+    record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_encrypt'))).first()
+    record.set_encrypted()
+    # TODO：设置HASH锁
+    time.sleep(15)
     db.session.add(record)
     db.session.commit()
-    return redirect(url_for('cross_exchange.process', id=record.id))
+    return jsonify({"code": 1000, "message": "交易加密成功"})
+
+
+@cross_exchange.route('/validate', methods=['GET', 'POST'])
+@login_required
+def validate():
+    record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_validate'))).first()
+    record.set_validated()
+    # TODO：交易验证
+    time.sleep(15)
+    db.session.add(record)
+    db.session.commit()
+    return jsonify({"code": 1000, "message": "交易验证成功"})
 
 
 # @exchange.route('/common', methods=['POST'])
@@ -132,6 +168,8 @@ def request_step2():
 #         return jsonify(True)
 #
 #
+
+# 检查交易密码是否正确
 @cross_exchange.route('/validate/validate_password', methods=['POST'])
 def validate_password():
     out_account = current_user.accounts.filter_by(id=int(request.form.get('out_account'))).first()
@@ -139,3 +177,24 @@ def validate_password():
         return jsonify(True)
     else:
         return jsonify(False)
+
+
+# 检查交易金额是否超过帐号余额
+@cross_exchange.route('/validate/money', methods=['POST'])
+def validate_money():
+    account = current_user.accounts.filter_by(id=int(request.form.get('id'))).first()
+    if float(request.form.get('money')) > account.money:
+        return jsonify(False)
+    else:
+        return jsonify(True)
+
+
+# 检查转出账户和转入账户是否在同一个链上
+@cross_exchange.route('/validate/same_blockchain', methods=['POST'])
+def validate_same_blockchain():
+    out_account = current_user.accounts.filter_by(id=int(request.form.get('out_account'))).first()
+    in_account = current_user.accounts.filter_by(id=int(request.form.get('in_account'))).first()
+    if out_account.chain_address == in_account.chain_address:
+        return jsonify(False)
+    else:
+        return jsonify(True)
