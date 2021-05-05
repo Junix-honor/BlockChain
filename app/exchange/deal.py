@@ -1,7 +1,10 @@
+import binascii
+
 import web3
 from web3 import Web3, IPCProvider
 from decimal import *
-import hashlib
+import socket
+
 
 
 # 输入信息正确情况
@@ -40,6 +43,9 @@ def create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
                 pw1,
             )
             try:
+                print('####################')
+                print(signed_txn.rawTransaction)
+                print('####################')
                 tx_hash = w3.eth.sendRawTransaction(signed_txn.rawTransaction)
             except:
                 print("交易错误")
@@ -73,5 +79,57 @@ if __name__ == "__main__":
     # 查询具体信息s
     # print(create_deal(Second_address,First_address,Second_pw,number,RPC_server))
     # 余额不足返回-3，地址错误返回-2，交易错误返回-1
-    result = create_deal(First_address, Second_address, First_pw, number, RPC_server)
-    print(result)
+    # result = create_deal(First_address, Second_address, First_pw, number, RPC_server)
+    # print(result)
+
+
+
+    # w3 = Web3(Web3.HTTPProvider(RPC_server))
+    #
+    # s = socket.socket()
+    # host = socket.gethostname()
+    # port = 12345
+    # s.bind((host,port))
+    #
+    # s.listen(5)
+    # while True:
+    #     c,addr = s.accept()
+    #     print ('连接地址:',addr)
+    #
+    #     Transaction = dict(
+    #             nonce=w3.eth.getTransactionCount(First_address),
+    #             gasPrice=w3.eth.gasPrice,
+    #             gas=400000,  # 默认值4712388
+    #             to=Second_address,
+    #             value=w3.toWei(number, "ether"),
+    #             data=b'',
+    #         )
+    #     #字典需先转换为json，后转换为byte
+    #     str = str(Transaction)
+    #     b_deal = str.encode('UTF-8')
+    #     c.send(b_deal)
+    #     data = []
+    #     i=0
+    #
+    #
+    #     text = bytes.decode(c.recv(1024))
+    #     print(text)
+    #     print(type(text))
+
+    #     s_rawTransaction = hexbytes.HexBytes(b_rawTransaction.hex())
+    #     s_hash = hexbytes.HexBytes(b_hash.hex())
+    #     print(b_rawTransaction)
+    #     print(s_hash)
+    #
+    #     s_r = int().from_bytes(b_r, byteorder='big', signed=True)
+    #     s_s = int().from_bytes(b_s, byteorder='big', signed=True)
+    #     s_v = int().from_bytes(b_v, byteorder='big', signed=True)
+    #     print(s_r)
+    #     print(s_s)
+    #     print(s_v)
+    #
+    #     text = 'SignedTransaction(rawTransaction = HexBytes(\'' + s_rawTransaction + '\'),hash=HexBytes(\'' + s_hash + '\'), r=' + str(s_r) + ', s=' + str(s_s) + ', v=' + str(s_v) + ')'
+    #     print(type(text))
+    #
+    #
+     #tx_hash = w3.eth.sendRawTransaction(text.rawTransaction)
