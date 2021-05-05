@@ -324,9 +324,15 @@
                                             $('.common-exchange .confirm').click(function () {
                                                 window.location.reload()
                                             })
-                                        } else {
+                                        } else if (args.code === 5000)
+                                            swal({
+                                                title: "交易失败",
+                                                text: args.message,
+                                                type: "error",
+                                                customClass: "common-exchange"
+                                            });
+                                        else
                                             swal('错误', '出现了位置的错误', 'info')
-                                        }
                                     }
                                 })
                             } else {

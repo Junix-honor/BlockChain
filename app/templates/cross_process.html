@@ -286,7 +286,9 @@
                                             交易信息
                                             <hr>
                                             <div class="text-center m-t-70">
-                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-danger m-r-20 exchange-cancel"
+                                                        record-id="{{ record.id }}">取消交易
+                                                </button>
                                                 <button type="button" class="btn btn-info m-r-20">返回</button>
                                             </div>
                                         </div>
@@ -355,7 +357,9 @@
                                                 </div>
                                             </form>
                                             <div class="text-center m-t-70">
-                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-danger m-r-20 exchange-cancel"
+                                                        record-id="{{ record.id }}">取消交易
+                                                </button>
                                                 <button type="button" class="btn btn-info m-r-20"
                                                         id="encrypt_submit" data-loading-text="Loading...">确认
                                                 </button>
@@ -378,7 +382,9 @@
                                             交易信息
                                             <hr>
                                             <div class="text-center m-t-70">
-                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-danger m-r-20 exchange-cancel"
+                                                        record-id="{{ record.id }}">取消交易
+                                                </button>
                                                 <button type="button" class="btn btn-info m-r-20">返回</button>
                                             </div>
                                         </div>
@@ -415,7 +421,9 @@
                                                 </div>
                                             </form>
                                             <div class="text-center m-t-70">
-                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-danger m-r-20 exchange-cancel"
+                                                        record-id="{{ record.id }}">取消交易
+                                                </button>
                                                 <button type="button" class="btn btn-info m-r-20"
                                                         id="validate_submit">确认
                                                 </button>
@@ -438,7 +446,9 @@
                                             交易信息
                                             <hr>
                                             <div class="text-center m-t-70">
-                                                <button type="button" class="btn btn-danger m-r-20">取消交易</button>
+                                                <button type="button" class="btn btn-danger m-r-20 exchange-cancel"
+                                                        record-id="{{ record.id }}">取消交易
+                                                </button>
                                                 <button type="button" class="btn btn-info m-r-20">返回</button>
                                             </div>
                                         </div>
@@ -544,6 +554,51 @@
             $("#privateKeyValidationForm").submit();
         });
 
+        //取消交易
+        $(".exchange-cancel").click(function () {
+            let button = $(this)
+            swal({
+                    title: "交易",
+                    text: "你确定取消该交易吗?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false,
+                    closeOnCancel: false,
+                    showLoaderOnConfirm: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        swal("交易", "正在进行交易部署，请稍等", "info");
+                        // 朝后端发送ajax请求删除数据之后 再弹下面的提示框
+                        $.ajax({
+                            url: "{{ url_for('cross_exchange.cancel') }}",
+                            type: 'post',
+                            data_type: 'json',
+                            data: {'id': button.attr('record-id')},
+                            success: function (args) {
+                                if (args.code === 1000) {
+                                    swal({
+                                        title: "交易",
+                                        text: args.message,
+                                        type: "success",
+                                        customClass: "agree-alert",
+                                        allowEscapeKey: false
+                                    });
+                                    $('.agree-alert .confirm').click(function () {
+                                        window.location.href = '{{ url_for('cross_exchange.index') }}'
+                                    })
+                                } else {
+                                    swal('错误', '出现了位置的错误', 'info')
+                                }
+                            }
+                        })
+                    } else {
+                        swal("取消", "取消成功", "error");
+                    }
+                });
+        })
         //接收方同意交易
         $("#exchange-agree").click(function () {
             let button = $(this)
@@ -570,7 +625,7 @@
                             success: function (args) {
                                 if (args.code === 1000) {
                                     swal({
-                                        title: "交易部署中",
+                                        title: "交易",
                                         text: args.message,
                                         type: "success",
                                         customClass: "agree-alert",

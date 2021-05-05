@@ -9,6 +9,7 @@ from .. import db
 from ..models import Account, CommonExchangeRecord
 
 from .deal import create_deal
+from ..help import help
 
 
 @exchange.before_request
@@ -37,6 +38,7 @@ def index():
 def common():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
     # time.sleep(5)
+    # 地址错误返回-2，交易错误返回-1，正常退出返回0
     # create_deal(address_vps_one, address_vps_two, pw1, number, RPC_server):
     info = create_deal(personal_account.account_hash,
                        request.form.get("exchange_account"),
@@ -44,12 +46,31 @@ def common():
                        decimal.Decimal(request.form.get("money")),
                        personal_account.chain_address)
     print(info)
-    record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
-                                  exchange_money=float(request.form.get("money")),
-                                  account=personal_account)
-    db.session.add(record)
-    db.session.commit()
-    return jsonify({"code": 1000, "message": "交易成功"})
+    if info == -3:
+        return jsonify({"code": 5000, "message": "余额不足"})
+    elif info == -2:
+        return jsonify({"code": 5000, "message": "地址错误"})
+    elif info == -1:
+        return jsonify({"code": 5000, "message": "交易错误"})
+    else:
+        record = CommonExchangeRecord(exchange_account_hash=request.form.get("exchange_account"),
+                                      exchange_money=float(request.form.get("money")),
+                                      account=personal_account)
+        db.session.add(record)
+        # 更新本人账户金额
+        personal_account.money = help.Query_Balance(personal_account.chain_address, personal_account.account_hash)
+        db.session.add(personal_account)
+
+        # 更新交易账户金额，如果在平台
+        exchange_account = Account.query.filter_by(chain_address=personal_account.chain_address,
+                                                   account_hash=request.form.get("exchange_account")).first()
+        if exchange_account:
+            exchange_account.money = help.Query_Balance(personal_account.chain_address,
+                                                        request.form.get("exchange_account"))
+            db.session.add(exchange_account)
+
+        db.session.commit()
+        return jsonify({"code": 1000, "message": "交易成功"})
 
 
 @exchange.route('/account', methods=['POST'])

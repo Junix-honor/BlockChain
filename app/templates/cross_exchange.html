@@ -44,19 +44,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for exchange in active_exchanges %}
-                                    <tr>
-                                        <td>{{ exchange.out_account.user.username }}</td>
-                                        <td>{{ exchange.out_account.chain_address }}</td>
-                                        <td>{{ exchange.in_account.chain_address }}</td>
-                                        <td>{{ exchange.status }}</td>
-                                        {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
-                                        <td>
-                                            <a href="javascript:void(0);" class="table-action exchange-info"
-                                               exchange_id="{{ exchange.id }}"
-                                               title="详细信息"><i class="bi-list-task"></i></a>
-                                        </td>
-                                    </tr>
+                                {% for exchange in exchanges %}
+                                    {% if exchange.status>0 and exchange.status<4 %}
+                                        <tr>
+                                            <td>{{ exchange.out_account.user.username }}</td>
+                                            <td>{{ exchange.out_account.chain_address }}</td>
+                                            <td>{{ exchange.in_account.chain_address }}</td>
+                                            <td>{{ exchange.status }}</td>
+                                            {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
+                                            <td>
+                                                <a href="javascript:void(0);" class="table-action exchange-info"
+                                                   exchange_id="{{ exchange.id }}"
+                                                   title="详细信息"><i class="bi-list-task"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -80,18 +82,25 @@
                                     <th>本人账户地址</th>
                                     <th>交易账户地址</th>
                                     <th>交易金额</th>
-                                    <th>交易时间</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for record in common_exchange_records %}
-                                    <tr>
-                                        <td>{{ record.account.chain_address }}</td>
-                                        <td>{{ record.account.account_hash }}</td>
-                                        <td>{{ record.exchange_account_hash }}</td>
-                                        <td>{{ record.exchange_money }}</td>
-                                        <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
-                                    </tr>
+                                {% for exchange in exchanges %}
+                                    {% if exchange.status<0 or exchange.status>=4 %}
+                                        <tr>
+                                            <td>{{ exchange.out_account.user.username }}</td>
+                                            <td>{{ exchange.out_account.chain_address }}</td>
+                                            <td>{{ exchange.in_account.chain_address }}</td>
+                                            <td>{{ exchange.status }}</td>
+                                            {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
+                                            <td>
+                                                <a href="javascript:void(0);" class="table-action exchange-info"
+                                                   exchange_id="{{ exchange.id }}"
+                                                   title="详细信息"><i class="bi-list-task"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

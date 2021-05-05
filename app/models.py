@@ -144,6 +144,9 @@ class CrossExchangeRecord(db.Model):
     def set_validated(self):
         self.status = 4
 
+    def set_canceled(self):
+        self.status = -self.status
+
 
 @login_manager.user_loader
 def load_user(user_id):

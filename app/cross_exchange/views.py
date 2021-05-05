@@ -7,7 +7,7 @@ from sqlalchemy.orm import aliased
 
 from . import cross_exchange
 from .. import db
-from ..models import Account, CrossExchangeRecord
+from ..models import Account, CrossExchangeRecord, User
 
 
 @cross_exchange.before_request
@@ -21,15 +21,20 @@ def before_request():
 @cross_exchange.route('/', methods=['GET'])
 @login_required
 def index():
-    send = []
-    receive = []
-    for account in current_user.accounts:
-        send += CrossExchangeRecord.query.filter_by(in_account=account).order_by(
-            CrossExchangeRecord.timestamp.desc()).all()
-        receive += CrossExchangeRecord.query.filter_by(exchange_in_account=account).order_by(
-            CrossExchangeRecord.timestamp.desc()).all()
-    active_exchanges = receive + send
-    return render_template('cross_exchange.html', active_exchanges=active_exchanges)
+    send = db.session.query(CrossExchangeRecord). \
+        join(Account, Account.id == CrossExchangeRecord.in_account_id). \
+        join(User, User.id == Account.user_id). \
+        filter(Account.user_id == current_user.id). \
+        order_by(CrossExchangeRecord.timestamp.desc()).all()
+    receive = db.session.query(CrossExchangeRecord). \
+        join(Account, Account.id == CrossExchangeRecord.exchange_in_account). \
+        join(User, User.id == Account.user_id). \
+        filter(Account.user_id == current_user.id). \
+        order_by(CrossExchangeRecord.timestamp.desc()).all()
+    print(send)
+    print(receive)
+    exchanges = receive + send
+    return render_template('cross_exchange.html', exchanges=exchanges)
 
 
 @cross_exchange.route('/process', methods=['GET', 'POST'])
@@ -116,6 +121,17 @@ def validate():
     db.session.add(record)
     db.session.commit()
     return jsonify({"code": 1000, "message": "交易验证成功"})
+
+
+@cross_exchange.route('/cancel', methods=['POST'])
+@login_required
+def cancel():
+    print(request.form.get('id'))
+    record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('id'))).first()
+    record.set_canceled()
+    db.session.add(record)
+    db.session.commit()
+    return jsonify({"code": 1000, "message": "交易取消成功"})
 
 
 # @exchange.route('/common', methods=['POST'])
