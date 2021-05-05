@@ -45,7 +45,6 @@ def common():
                        personal_account.chain_password,
                        decimal.Decimal(request.form.get("money")),
                        personal_account.chain_address)
-    print(info)
     if info == -3:
         return jsonify({"code": 5000, "message": "余额不足"})
     elif info == -2:

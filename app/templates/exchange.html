@@ -99,19 +99,25 @@
                                     <div class="offset-sm-2 col-sm-10">
                                         <div class="checkbox checkbox-success">
                                             <input id="subscribe" type="checkbox" name="subscribe">
-                                            <label for="subscribe">同意《xxxx》条款</label>
+                                            <label for="subscribe">同意《xxxx》条款
+                                                <span class="text-danger">*</span></label>
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
                                     </div>
                                 </div>
-                                <div class="form-group row m-b-0">
-                                    <div class="offset-sm-2 col-sm-10">
-                                        <button type="submit" class="btn btn-info waves-effect waves-light"
-                                                id="common-submit">确定
-                                        </button>
-                                    </div>
-                                </div>
+                                {#                                <div class="form-group row m-b-0">#}
+                                {#                                    <div class="offset-sm-2 col-sm-10">#}
+                                {#                                        <button type="submit" class="btn btn-info waves-effect waves-light"#}
+                                {#                                                id="common-submit">确定#}
+                                {#                                        </button>#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
                             </form>
+                        </div>
+                        <div class="row justify-content-end m-r-10">
+                            <button class="btn btn-info step-next" id="common-submit" index="1">
+                                确定
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -183,6 +189,11 @@
                 obj.value = obj.value.substring(0, obj.value.length - 1);
             }
         }
+
+        //表单js提交
+        $("#common-submit").click(function () {
+            $("#exchangeForm").submit();
+        });
 
         //ajax
         $("#personal_account").change(function () {
