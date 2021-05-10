@@ -15,7 +15,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url_for("main.index") }}">主页</a></li>
-                <li class="breadcrumb-item active">交易</li>
+                <li class="breadcrumb-item active">跨链交易</li>
             </ol>
         </div>
     </div>
@@ -30,34 +30,67 @@
                     {#                        <h4 class="m-b-0 text-white">跨链交易</h4>#}
                     {#                    </div>#}
                     <div class="card-body p-lg-3 p-sm-2">
-                        <h4 class="card-title">跨链交易</h4>
+                        <h4 class="card-title">{{ current_user.username }}的跨链交易</h4>
                         <h6 class="card-subtitle">活动交易</h6>
                         <div class=" table-responsive">
                             <table id="statusTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
                                     <th>交易发起者</th>
-                                    <th>转出账户链</th>
-                                    <th>转入账户链</th>
+                                    <th>转出账户</th>
+                                    <th>转入账户</th>
+                                    <th>交易金额</th>
                                     <th>交易状态</th>
+                                    <th>交易发起时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for exchange in exchanges %}
-                                    {% if exchange.status>0 and exchange.status<4 %}
-                                        <tr>
-                                            <td>{{ exchange.out_account.user.username }}</td>
-                                            <td>{{ exchange.out_account.chain_address }}</td>
-                                            <td>{{ exchange.in_account.chain_address }}</td>
-                                            <td>{{ exchange.status }}</td>
-                                            {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
-                                            <td>
-                                                <a href="javascript:void(0);" class="table-action exchange-info"
-                                                   exchange_id="{{ exchange.id }}"
-                                                   title="详细信息"><i class="bi-list-task"></i></a>
-                                            </td>
-                                        </tr>
+                                    <!-- 当前交易处于活动状态-->
+                                    {% if exchange.active() %}
+                                        <!-- 当前用户是发起用户-->
+                                        {% if exchange.is_request(current_user.id) %}
+                                            <tr>
+                                                <td>{{ exchange.out_account.user.username }}</td>
+                                                <td>{{ exchange.out_account.account_alias }}</td>
+                                                <td>{{ exchange.in_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td>
+                                                    {% if exchange.need_requester() %}
+                                                        <span class='badge badge-danger'>待处理</span>
+                                                    {% endif %}
+                                                    {{ exchange.status|exchange_status|safe }}
+                                                </td>
+                                                <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="table-action exchange-info"
+                                                       exchange_id="{{ exchange.id }}"
+                                                       title="详细信息"><i class="bi-list-task"></i></a>
+                                                </td>
+                                            </tr>
+
+                                            <!-- 当前用户是配对用户-->
+                                        {% elif exchange.is_respond(current_user.id) %}
+                                            <tr>
+                                                <td>{{ exchange.out_account.user.username }}</td>
+                                                <td>{{ exchange.exchange_out_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_in_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td>
+                                                    {% if exchange.need_responder() %}
+                                                        <span class='badge badge-danger'>待处理</span>
+                                                    {% endif %}
+                                                    {{ exchange.status|exchange_status|safe }}
+                                                </td>
+                                                <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="table-action exchange-info"
+                                                       exchange_id="{{ exchange.id }}"
+                                                       title="详细信息"><i class="bi-list-task"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>
@@ -78,28 +111,51 @@
                             <table id="crossExchangeTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
-                                    <th>RPC地址</th>
-                                    <th>本人账户地址</th>
-                                    <th>交易账户地址</th>
+                                    <th>交易发起者</th>
+                                    <th>转出账户</th>
+                                    <th>转入账户</th>
                                     <th>交易金额</th>
+                                    <th>交易状态</th>
+                                    <th>交易发起时间</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for exchange in exchanges %}
-                                    {% if exchange.status<0 or exchange.status>=4 %}
-                                        <tr>
-                                            <td>{{ exchange.out_account.user.username }}</td>
-                                            <td>{{ exchange.out_account.chain_address }}</td>
-                                            <td>{{ exchange.in_account.chain_address }}</td>
-                                            <td>{{ exchange.status }}</td>
-                                            {#                                        <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>#}
-                                            <td>
-                                                <a href="javascript:void(0);" class="table-action exchange-info"
-                                                   exchange_id="{{ exchange.id }}"
-                                                   title="详细信息"><i class="bi-list-task"></i></a>
-                                            </td>
-                                        </tr>
+                                    <!-- 当前交易处于活动状态-->
+                                    {% if exchange.finished() %}
+                                        <!-- 当前用户是发起用户-->
+                                        {% if exchange.is_request(current_user.id) %}
+                                            <tr>
+                                                <td>{{ exchange.out_account.user.username }}</td>
+                                                <td>{{ exchange.out_account.account_alias }}</td>
+                                                <td>{{ exchange.in_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td>{{ exchange.status|exchange_status|safe }}</td>
+                                                <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="table-action exchange-info"
+                                                       exchange_id="{{ exchange.id }}"
+                                                       title="详细信息"><i class="bi-list-task"></i></a>
+                                                </td>
+                                            </tr>
+
+                                            <!-- 当前用户是配对用户-->
+                                        {% elif exchange.is_respond(current_user.id) %}
+                                            <tr>
+                                                <td>{{ exchange.out_account.user.username }}</td>
+                                                <td>{{ exchange.exchange_out_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_in_account.account_alias }}</td>
+                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td>{{ exchange.status|exchange_status|safe }}</td>
+                                                <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" class="table-action exchange-info"
+                                                       exchange_id="{{ exchange.id }}"
+                                                       title="详细信息"><i class="bi-list-task"></i></a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>

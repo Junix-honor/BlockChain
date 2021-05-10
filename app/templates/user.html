@@ -35,7 +35,7 @@
                                         {% if current_user.avatar %}
                                             <img src="../static/images/avatar/{{ current_user.avatar }}" alt="avatar"/>
                                         {% else %}
-                                            <img src="../static/images/avatar/dragon_2.jpg" alt="avatar"/>
+                                            <img src="../static/images/avatar/default.svg" alt="avatar"/>
                                         {% endif %}
                                         <input type="file" id="avatar" name="avatar" accept="image/*"
                                                class="hiddenInput">
@@ -46,11 +46,11 @@
                             <h3>{{ current_user.username }}</h3>
 
                             {% if current_user.is_certificated %}
-                                <div class="is_certificated">
+                                <div class="is_certificated text-center p-b-10">
                                     <i class="ti-id-badge m-r-5"></i>已实名
                                 </div>
                             {% else %}
-                                <div class="not_certificated">
+                                <div class="not_certificated text-center p-b-10">
                                     <i class="ti-id-badge m-r-5"></i> 未实名
                                 </div>
                             {% endif %}

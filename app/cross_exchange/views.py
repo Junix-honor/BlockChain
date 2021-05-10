@@ -27,7 +27,7 @@ def index():
         filter(Account.user_id == current_user.id). \
         order_by(CrossExchangeRecord.timestamp.desc()).all()
     receive = db.session.query(CrossExchangeRecord). \
-        join(Account, Account.id == CrossExchangeRecord.exchange_in_account). \
+        join(Account, Account.id == CrossExchangeRecord.exchange_in_account_id). \
         join(User, User.id == Account.user_id). \
         filter(Account.user_id == current_user.id). \
         order_by(CrossExchangeRecord.timestamp.desc()).all()
@@ -188,8 +188,8 @@ def cancel():
 # 检查交易密码是否正确
 @cross_exchange.route('/validate/validate_password', methods=['POST'])
 def validate_password():
-    out_account = current_user.accounts.filter_by(id=int(request.form.get('out_account'))).first()
-    if out_account.verify_pay_password(request.form.get('password')):
+    account = current_user.accounts.filter_by(id=int(request.form.get('account'))).first()
+    if account.verify_pay_password(request.form.get('password')):
         return jsonify(True)
     else:
         return jsonify(False)

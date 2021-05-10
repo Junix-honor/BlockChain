@@ -43,8 +43,7 @@ def add():
                       is_independent_password=True
                       if request.form.get("independent_password") == 'true'
                       else False,
-                      user=current_user._get_current_object(),
-                      money=help.Query_Balance(request.form.get("chain_address"), request.form.get("account_hash")))
+                      user=current_user._get_current_object())
     db.session.add(account)
     db.session.commit()
     return redirect(url_for("account.index"))

@@ -18,7 +18,7 @@
                             <span><i class="ti-wallet f-s-40 color-primary"></i></span>
                         </div>
                         <div class="media-body text-right">
-                            <h4>2</h4>
+                            <h4>{{ wallet_num }}</h4>
                             <p class="m-b-0">账户钱包</p>
                         </div>
                     </div>
@@ -28,11 +28,11 @@
                 <div class="card p-30">
                     <div class="media">
                         <div class="media-left meida media-middle">
-                            <span><i class="ti-money f-s-40 color-success"></i></span>
+                            <span><i class="ti-vector f-s-40 color-success"></i></span>
                         </div>
                         <div class="media-body text-right">
-                            <h4>178</h4>
-                            <p class="m-b-0">钱包余额</p>
+                            <h4>{{ exchange_num }}</h4>
+                            <p class="m-b-0">交易次数</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,10 @@
                             <span><i class="ti-bar-chart f-s-40 color-warning"></i></span>
                         </div>
                         <div class="media-body text-right">
-                            <h4>$27647</h4>
+                            <h4>
+                                <i class="cc ETH color-warning"></i>
+                                {{ total_in }}
+                            </h4>
                             <p class="m-b-0">总收入</p>
                         </div>
                     </div>
@@ -57,7 +60,10 @@
                             <span><i class="ti-bar-chart-alt f-s-40 color-danger"></i></span>
                         </div>
                         <div class="media-body text-right">
-                            <h4>278</h4>
+                            <h4>
+                                <i class="cc ETH color-danger"></i>
+                                {{ total_out }}
+                            </h4>
                             <p class="m-b-0">总支出</p>
                         </div>
                     </div>
@@ -69,44 +75,52 @@
                 <div class="card">
                     <div class="card-title">
                         <h4><a class="index-a" href="{{ url_for('user.index') }}">个人中心</a></h4></div>
-                    <div class="index-content card-body">
+                    <div class="card-body margin-auto">
                         {% if current_user.avatar %}
                             <img class=index-author-img src="../static/images/avatar/{{ current_user.avatar }}"
                                  alt="avatar"/>
                         {% else %}
-                            <img class=index-author-img src="../static/images/avatar/dragon_2.jpg" alt="avatar"/>
+                            <img class=index-author-img src="../static/images/avatar/default.svg" alt="avatar"/>
                         {% endif %}
-                        <h3>{{ current_user.username }}</h3>
-                        <div id="index-user">
+                        <div class="">
+                            <h2 class="f-w-500">{{ current_user.username }}</h2>
+                            {% if current_user.is_certificated %}
+                                <div class="is_certificated">
+                                    <i class="ti-id-badge m-r-5"></i>已实名
+                                </div>
+                            {% else %}
+                                <div class="not_certificated">
+                                    <i class="ti-id-badge m-r-5"></i> 未实名
+                                </div>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <ul class="ul_line_height">
                             {% if current_user.location %}
-                                <div>
+                                <li>
                                     <i class="ti-location-pin"></i>
                                     {{ current_user.location }}
-                                </div>
+                                </li>
                             {% endif %}
                             {% if current_user.phone %}
-                                <div>
+                                <li>
                                     <i class="fa fa-phone"></i>
                                     {{ current_user.phone }}
-                                </div>
+                                </li>
                             {% endif %}
-                            <div>
+                            <li>
                                 <i class="ti-email"></i>
                                 <a href="mailto:{{ current_user.email }}">{{ current_user.email }}</a>
-                            </div>
-                        </div>
-                        {#                        <div>{% if current_user.signature %}#}
-                        {#                            <i class="fa fa-quote-left"></i>#}
-                        {#                            {{ current_user.signature }}#}
-                        {#                            <i class="fa fa-quote-right"></i>#}
-                        {#                        {% endif %}</div>#}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
             <div class="col-lg-8 ">
                 <div class="card">
                     <div class="card-title">
-                        <h4>个人账户</h4></div>
+                        <h4><a class="index-a" href="{{ url_for('account.index') }}">个人账户</a></h4>
+                    </div>
                     <div class="card-body">
                         <div class="account-table">
                             <div class="table-responsive">
@@ -135,40 +149,115 @@
                 </div>
             </div>
         </div>
+        <!--普通交易-->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-title">
-                        <h4>普通交易</h4>
+                        <h4><a class="index-a" href="{{ url_for('exchange.index') }}">普通交易</a></h4>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-de mb-0">
-                                <thead>
-                                <tr>
-                                    <th>RPC地址</th>
-                                    <th>本人账户地址</th>
-                                    <th>交易账户地址</th>
-                                    <th>金额</th>
-                                    <th>时间</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for record in common_exchange_records %}
+                        <div class="common-exchange-index">
+                            <div class="table-responsive">
+                                <table class="table table-de mb-0">
+                                    <thead>
                                     <tr>
-                                        <td>{{ record.account.chain_address }}</td>
-                                        <td>
-                                            <i class="ti-wallet m-l-5 color-info"> </i> {{ record.account.account_hash }}
-                                        </td>
-                                        <td>
-                                            <i class="ti-wallet m-l-5 color-success"> </i> {{ record.exchange_account_hash }}
-                                        </td>
-                                        <td><i class="cc ETH "> </i>{{ record.exchange_money }}</td>
-                                        <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                        <th>本人帐号</th>
+                                        <th>交易账户地址</th>
+                                        <th>交易金额</th>
+                                        <th>交易时间</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for record in common_exchange_records %}
+                                        <tr>
+                                            <td>
+                                                <i class="ti-wallet m-l-5 color-success"> </i>
+                                                {{ record.account.account_alias }}
+                                            </td>
+                                            <td>
+                                                <i class="ti-wallet m-l-5 color-info"> </i>
+                                                {{ record.exchange_account_hash }}
+                                            </td>
+                                            <td><i class="cc ETH color-primary"> </i>{{ record.exchange_money }}</td>
+                                            <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--跨链交易-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-title">
+                        <h4><a class="index-a" href="{{ url_for('cross_exchange.index') }}">跨链交易</a></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="cross-exchange-index">
+                            <div class="table-responsive">
+                                <table class="table table-de mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>交易发起者</th>
+                                        <th>转出账户</th>
+                                        <th>转入账户</th>
+                                        <th>交易金额</th>
+                                        <th>交易状态</th>
+                                        <th>交易发起时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for record in cross_exchange_records %}
+                                        <!-- 当前用户是发起用户-->
+                                        {% if record.is_request(current_user.id) %}
+                                            <tr>
+                                                <td>{{ record.out_account.user.username }}</td>
+                                                <td>
+                                                    <i class="ti-wallet m-l-5 color-success"> </i>
+                                                    {{ record.out_account.account_alias }}
+                                                </td>
+                                                <td>
+                                                    <i class="ti-wallet m-l-5 color-info"> </i>
+                                                    {{ record.in_account.account_alias }}
+                                                </td>
+                                                <td>
+                                                    <i class="cc ETH color-primary"> </i>
+                                                    {{ record.exchange_money }}
+                                                </td>
+                                                <td>{{ record.status|exchange_status|safe }}</td>
+                                                <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                            </tr>
+
+                                            <!-- 当前用户是配对用户-->
+                                        {% elif record.is_respond(current_user.id) %}
+                                            <tr>
+                                                <td>{{ record.out_account.user.username }}</td>
+                                                <td>
+                                                    <i class="ti-wallet m-l-5 color-success"> </i>
+                                                    {{ record.exchange_out_account.account_alias }}
+                                                </td>
+                                                <td>
+                                                    <i class="ti-wallet m-l-5 color-info"> </i>
+                                                    {{ record.exchange_in_account.account_alias }}
+                                                </td>
+                                                <td>
+                                                    <i class="cc ETH color-primary"> </i>
+                                                    {{ record.exchange_money }}
+                                                </td>
+                                                <td>{{ record.status|exchange_status|safe }}</td>
+                                                <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

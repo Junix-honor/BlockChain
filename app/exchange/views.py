@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 
 from . import exchange
 from .. import db
-from ..models import Account, CommonExchangeRecord
+from ..models import Account, CommonExchangeRecord, User
 
 from .deal import create_deal
 from ..help import help
@@ -23,13 +23,11 @@ def before_request():
 @exchange.route('/', methods=['GET'])
 @login_required
 def index():
+    common_exchange_records = db.session.query(CommonExchangeRecord). \
+        join(Account, Account.id == CommonExchangeRecord.account_id). \
+        filter(Account.user_id == current_user.id). \
+        order_by(CommonExchangeRecord.timestamp.desc()).all()
     accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
-    # common_exchange_records = CommonExchangeRecord.query.filter_by()
-    common_exchange_records = []
-    for account in accounts:
-        common_exchange_records += account.common_exchange_records.all()
-    print(common_exchange_records)
-    print(accounts)
     return render_template('exchange.html', accounts=accounts, common_exchange_records=common_exchange_records)
 
 
@@ -56,18 +54,6 @@ def common():
                                       exchange_money=float(request.form.get("money")),
                                       account=personal_account)
         db.session.add(record)
-        # 更新本人账户金额
-        personal_account.money = help.Query_Balance(personal_account.chain_address, personal_account.account_hash)
-        db.session.add(personal_account)
-
-        # 更新交易账户金额，如果在平台
-        exchange_account = Account.query.filter_by(chain_address=personal_account.chain_address,
-                                                   account_hash=request.form.get("exchange_account")).first()
-        if exchange_account:
-            exchange_account.money = help.Query_Balance(personal_account.chain_address,
-                                                        request.form.get("exchange_account"))
-            db.session.add(exchange_account)
-
         db.session.commit()
         return jsonify({"code": 1000, "message": "交易成功"})
 

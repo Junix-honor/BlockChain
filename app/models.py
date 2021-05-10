@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
 from flask_login import UserMixin
 from . import db, login_manager
+from .help import help
 
 
 class User(UserMixin, db.Model):
@@ -89,8 +90,16 @@ class Account(db.Model):
     pay_password_hash = db.Column(db.String(128))
     across_chain = db.Column(db.Boolean, default=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    money = db.Column(db.Float)
     common_exchange_records = db.relationship('CommonExchangeRecord', backref='account', lazy='dynamic')
+
+    # money
+    @property
+    def money(self):
+        return round(help.Query_Balance(self.chain_address, self.account_hash), 2)
+
+    @money.setter
+    def money(self, value):
+        raise AttributeError('money is not a editable attribute')
 
     # pay_password哈希
     @property
@@ -132,20 +141,72 @@ class CrossExchangeRecord(db.Model):
     status = db.Column(db.Integer, default=0)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    # 判断交易是否处于否活动状态
+    def active(self):
+        if 0 < self.status < 4:
+            return True
+        else:
+            return False
+
+    # 判断交易是否结束
+    def finished(self):
+        if self.status == 4 or self.status < 0:
+            return True
+        else:
+            return False
+
+    def need_requester(self):
+        if self.status == 2 or self.status == 3 or self.status == 4:
+            return True
+        else:
+            return False
+
+    def need_responder(self):
+        if self.status == 1:
+            return True
+        else:
+            return False
+
+    # 判断id是否为发起方userid
+    def is_request(self, userid):
+        return self.out_account.user.id == userid
+
+    # 判断id是否为发起方userid
+    def is_respond(self, userid):
+        return self.exchange_out_account.user.id == userid
+
     def set_initialized(self):
         self.status = 1
+
+    def is_initialized(self):
+        return self.status == 1
 
     def set_agreed(self):
         self.status = 2
 
+    def is_agreed(self):
+        return self.status == 2
+
     def set_encrypted(self):
         self.status = 3
+
+    def is_encrypted(self):
+        return self.status == 3
 
     def set_validated(self):
         self.status = 4
 
+    def is_validated(self):
+        return self.status == 4
+
+    def is_succeeded(self):
+        return self.status == 4
+
     def set_canceled(self):
         self.status = -self.status
+
+    def is_canceled(self):
+        return self.status < 0
 
 
 @login_manager.user_loader

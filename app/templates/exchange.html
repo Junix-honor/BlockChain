@@ -15,7 +15,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url_for("main.index") }}">主页</a></li>
-                <li class="breadcrumb-item active">交易</li>
+                <li class="breadcrumb-item active">普通交易</li>
             </ol>
         </div>
     </div>
@@ -29,7 +29,7 @@
                     <div class="card-header">
                         <h4 class="m-b-0 text-white">普通交易</h4>
                     </div>
-                    <div class="card-body m-l-10 m-r-10">
+                    <div class="card-body p-lg-3 p-sm-2">
                         <div class="row justify-content-center">
                             <form class="form-horizontal p-t-50 col-sm-8" method="post" role="form" id="exchangeForm"
                                   action="{{ url_for('exchange.common') }}">
@@ -99,7 +99,7 @@
                                     <div class="offset-sm-2 col-sm-10">
                                         <div class="checkbox checkbox-success">
                                             <input id="subscribe" type="checkbox" name="subscribe">
-                                            <label for="subscribe">同意《xxxx》条款
+                                            <label for="subscribe">同意<a href="#">《服务协议》</a>和<a href="#">《免责声明》</a>
                                                 <span class="text-danger">*</span></label>
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
@@ -127,15 +127,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="card card-outline-success">
-                    <div class="card-body m-l-10 m-r-10">
+                    <div class="card-body p-lg-3 p-sm-2">
                         <h4 class="card-title">交易记录</h4>
                         <h6 class="card-subtitle">交易信息</h6>
                         <div class=" table-responsive">
                             <table id="commonExchangeTable" class="display nowrap table table-hover table-bordered">
                                 <thead class="thead-add">
                                 <tr>
-                                    <th>RPC地址</th>
-                                    <th>本人账户地址</th>
+                                    <th>本人帐号</th>
                                     <th>交易账户地址</th>
                                     <th>交易金额</th>
                                     <th>交易时间</th>
@@ -144,8 +143,7 @@
                                 <tbody>
                                 {% for record in common_exchange_records %}
                                     <tr>
-                                        <td>{{ record.account.chain_address }}</td>
-                                        <td>{{ record.account.account_hash }}</td>
+                                        <td>{{ record.account.account_alias }}</td>
                                         <td>{{ record.exchange_account_hash }}</td>
                                         <td>{{ record.exchange_money }}</td>
                                         <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>

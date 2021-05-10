@@ -1409,8 +1409,8 @@ textarea {
 
 .badge {
     font-weight: 400;
-    padding: 0.15em .4em;
-    padding-top: 6px;
+    padding: 0.5em 0.5em;
+    /*padding-top: 6px;*/
 }
 
 .badge-xs {
@@ -6029,7 +6029,7 @@ tbody tr td {
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    width: 100px;
+    width: 94px;
     height: auto;
 }
 
@@ -7503,16 +7503,10 @@ tbody tr td {
 }
 
 .is_certificated {
-    padding: 0px 0px 10px 0px;
-    text-align: center;
-    line-height: 1.5;
     color: #1976d2;
 }
 
 .not_certificated {
-    padding: 0px 0px 10px 0px;
-    text-align: center;
-    line-height: 1.5;
     color: gray;
 }
 
@@ -7582,17 +7576,17 @@ tbody tr td {
 
 .index-author-img {
     border-radius: 50%;
-    height: 200px !important;
-    width: 200px !important;
+    height: 250px !important;
+    width: 250px !important;
     margin: 1rem auto;
 }
 
-.index-content {
-    text-align: center;
+.ul_line_height {
+    line-height: 30px
 }
 
-#index-user div {
-    margin: 10px 0px;
+.margin-auto {
+    margin: 10px auto;
 }
 
 .index-a {
@@ -7607,4 +7601,8 @@ tbody tr td {
 .account-al dd {
     font-weight: 500;
     color: gray;
+}
+
+.not-padding {
+    padding: 0 !important
 }
