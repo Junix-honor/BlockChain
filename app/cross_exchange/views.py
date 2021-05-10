@@ -8,6 +8,9 @@ from sqlalchemy.orm import aliased
 from . import cross_exchange
 from .. import db
 from ..models import Account, CrossExchangeRecord, User
+from .pyte import callsh
+from urllib.parse import urlparse
+from .callfx import *
 
 
 @cross_exchange.before_request
@@ -89,10 +92,22 @@ def initiate():
 @cross_exchange.route('/agree', methods=['POST'])
 @login_required
 def agree():
-    print(request.form.get('id'))
+    # print(request.form.get('id'))
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('id'))).first()
-    time.sleep(10)
-    # TODO：交易部署
+    # 发起账户部署
+    _url = urlparse(record.out_account.chain_address)
+    print(record.out_account.account_hash, record.exchange_in_account.account_hash,
+          float(record.exchange_money), _url.hostname, _url.port)
+    request_contract_address = callsh(record.out_account.account_hash, record.exchange_in_account.account_hash,
+                                      float(record.exchange_money), _url.hostname, _url.port)
+    record.request_contract_address = request_contract_address
+    # 匹配账户部署
+    _url = urlparse(record.exchange_out_account.chain_address)
+    print(record.exchange_out_account.account_hash, record.in_account.account_hash,
+          float(record.exchange_money), _url.hostname, _url.port)
+    respond_contract_address = callsh(record.exchange_out_account.account_hash, record.in_account.account_hash,
+                                      float(record.exchange_money), _url.hostname, _url.port)
+    record.respond_contract_address = respond_contract_address
     record.set_agreed()
     db.session.add(record)
     db.session.commit()
@@ -103,9 +118,22 @@ def agree():
 @login_required
 def encrypt():
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_encrypt'))).first()
-    record.set_encrypted()
+    print(record)
+    print(request.form.get('private_key'))
     # TODO：设置HASH锁
-    time.sleep(15)
+    # request  contract
+    _url = urlparse(record.out_account.chain_address)
+    calladdlock(record.out_account.account_hash, request.form.get('private_key'),
+                record.out_account.chain_password,
+                _url.hostname, _url.port, record.request_contract_address)
+    # respond contract
+    _url = urlparse(record.exchange_out_account.chain_address)
+    calladdlock(record.exchange_out_account.account_hash, request.form.get('private_key'),
+                record.exchange_out_account.chain_password,
+                _url.hostname, _url.port, record.respond_contract_address)
+    record.hash_clock = request.form.get('private_key')
+    print("encrypt sucess")
+    record.set_encrypted()
     db.session.add(record)
     db.session.commit()
     return jsonify({"code": 1000, "message": "交易加密成功"})
@@ -117,7 +145,24 @@ def validate():
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_validate'))).first()
     record.set_validated()
     # TODO：交易验证
-    time.sleep(15)
+    # request  contract
+    _url = urlparse(record.in_account.chain_address)
+    print("step1")
+    print(record.in_account.account_hash, request.form.get('validate_private_key'),
+          record.in_account.chain_password,
+          _url.hostname, _url.port, record.respond_contract_address)
+    callunlock(record.in_account.account_hash, request.form.get('validate_private_key'),
+               record.in_account.chain_password,
+               _url.hostname, _url.port, record.respond_contract_address)
+    # respond contract
+    _url = urlparse(record.exchange_in_account.chain_address)
+    print("step2")
+    print(record.exchange_in_account.account_hash, request.form.get('validate_private_key'),
+          record.exchange_in_account.chain_password,
+          _url.hostname, _url.port, record.request_contract_address)
+    callunlock(record.exchange_in_account.account_hash, request.form.get('validate_private_key'),
+               record.exchange_in_account.chain_password,
+               _url.hostname, _url.port, record.request_contract_address)
     db.session.add(record)
     db.session.commit()
     return jsonify({"code": 1000, "message": "交易验证成功"})
