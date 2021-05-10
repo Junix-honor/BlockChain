@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sourceAddr="$1"
+destinaAddr="$2"
+contractAddr="$3"
+value="$4"
+
+echo $sourceAddr
+echo $destinaAddr
+echo $contractAddr
+echo $value

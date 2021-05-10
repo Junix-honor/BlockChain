@@ -1,0 +1,31 @@
+#!/bin/bash
+
+sourceAddr="$1"
+destinaAddr="$2"
+value="$3"
+chainhost="$4"
+port="$5"
+cd /root/WXtest0419
+
+
+callerDIR="callerDIR""$sourceAddr"
+responDIR="responDIR""$destinaAddr"
+
+
+mkdir "callerDIR""$sourceAddr"
+#mkdir "responDIR""$destinaAddr"
+
+cd ./$callerDIR
+truffle init
+rm ./migrations/1_initial_migration.js
+rm ./contractions/Migrations.sol
+mkdir temp
+pwd
+cp ../testOri.js ./
+cp ../textprocess ./
+bash textprocess $sourceAddr $chainhost $port
+sed 's/value:"..0*"/value:\"'$value'\"/' ../2_walleX_migration.js|cat>>./mid_walleX_migration.js
+sed 's/0x........................................\"/'$destinaAddr'\"/' ./mid_walleX_migration.js|cat>>./migrations/1_walleX_migration.js
+cp ../walleX0503.sol ./contracts/
+truffle migrate
+rm -rf ../"callerDIR""$sourceAddr"

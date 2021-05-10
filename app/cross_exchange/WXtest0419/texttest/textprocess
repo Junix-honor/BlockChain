@@ -1,0 +1,10 @@
+#!/bin/bash
+
+orijs=./testOri.js
+sourceAddr=$1
+host=$2
+port=$3
+rm mid1.js mid2.js truffle-config.js
+sed 's/.*from:.*/      from:\"'$sourceAddr'\",/g'  $orijs|cat >> ./mid1.js
+sed 's/.*host:.*/      host:\"'$host'\",/g' ./mid1.js|cat >> ./mid2.js
+sed 's/.*port:.*/      port:'$port',/g' ./mid2.js|cat >> truffle-config.js

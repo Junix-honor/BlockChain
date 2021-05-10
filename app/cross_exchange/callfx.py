@@ -1,11 +1,12 @@
 from web3 import Web3
 import json
 import os
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def __host_port__(host, port):
-    host_port = 'http://'+host + ':' + port
+    host_port = 'http://' + host + ':' + port
     return host_port
 
 
@@ -47,7 +48,7 @@ def calladdlock(sourceaddr, hashstring, hexkeys, host, port, contractaddr):
     print("s1")
     byteskeys = w3.toBytes(hexstr=hexkeys)
     print("s1")
-    buildtr = ctr.functions.addlock(hashstring).buildTransaction({'nonce': nonce,'from': sourceaddr,})
+    buildtr = ctr.functions.addlock(hashstring).buildTransaction({'nonce': nonce, 'from': sourceaddr, })
     print("s1")
     print(buildtr)
     signed_txn = w3.eth.account.sign_transaction(buildtr, private_key=byteskeys)
@@ -74,7 +75,7 @@ def callunlock(sourceaddr, plainstring, byteskeys, host, port, contractaddr):
     buildtr = ctr.functions.unlock(plainstring).buildTransaction({'nonce': nonce, 'from': sourceaddr, })
     signed_txn = w3.eth.account.sign_transaction(buildtr, private_key=byteskeys)
     w3.eth.send_raw_transaction(signed_txn.rawTransaction)
-    calldrawmoney(sourceaddr,byteskeys,host,port,contractaddr)
+    calldrawmoney(sourceaddr, byteskeys, host, port, contractaddr)
 
 
 def calldrawmoney(sourceaddr, byteskeys, host, port, contractaddr):
