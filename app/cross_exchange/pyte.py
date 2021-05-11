@@ -11,19 +11,21 @@ def callsh(sourceaddr, destinaddr, value, host, port):
     # print(type(value))
     value = value * 1000000000000000000
     value = int(value)
-    cmm = 'bash ' + os.path.join(basedir, '/WXtest0419/starter') + ' ' + sourceaddr + ' ' + destinaddr + ' ' + str(
+    cmm = 'bash ' + os.path.join(basedir, 'WXtest0419/starter') + ' ' + sourceaddr + ' ' + destinaddr + ' ' + str(
         value) + ' ' + host + ' ' + str(port)
-    # print(cmm)
+    # cmm = 'bash /root/WXtest0419/starter' + ' ' + sourceaddr + ' ' + destinaddr + ' ' + str(
+    #     value) + ' ' + host + ' ' + str(port)
+    print(cmm)
     subp = subprocess.Popen(cmm, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out = subp.communicate()
-    # print(out)
+    print(out)
     out = str(out)
     loca = out.find('contract address:    0')
     ca = out[loca:loca + 63]
-    # print(ca)
+    print(ca)
     addrstart = ca.find('0')
     contraddr = ca[addrstart:]
-    # print(contraddr)
+    print(contraddr)
     print('')
     return contraddr
 # api callsh,format as above

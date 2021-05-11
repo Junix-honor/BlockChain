@@ -29,4 +29,3 @@ Werkzeug==0.12.2
 wincertstore==0.2
 WTForms==2.3.3
 zipp==3.4.1
-web3~=5.12.2

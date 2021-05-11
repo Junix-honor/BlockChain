@@ -66,14 +66,14 @@ def initiate():
     # 寻找匹配的账户  exchange_in_account exchange_out_account
     account1 = aliased(Account)
     account2 = aliased(Account)
-    res = db.session.query(account1.id, account2.id, account1.money, account2.money). \
+    res = db.session.query(account1.id, account2.id). \
         join(account2, account1.user_id == account2.user_id). \
         filter(account1.user_id != current_user.id). \
         filter(account1.across_chain == 1). \
         filter(account2.across_chain == 1). \
         filter(account1.chain_address == in_account.chain_address). \
         filter(account2.chain_address == out_account.chain_address). \
-        order_by(account1.money.desc()).first()
+        first()
     print(res)
     if res is None:
         return jsonify({"code": 5000, "message": "交易匹配失败"})
@@ -123,6 +123,9 @@ def encrypt():
     # TODO：设置HASH锁
     # request  contract
     _url = urlparse(record.out_account.chain_address)
+    print(record.out_account.account_hash, request.form.get('private_key'),
+          record.out_account.chain_password,
+          _url.hostname, _url.port, record.request_contract_address)
     calladdlock(record.out_account.account_hash, request.form.get('private_key'),
                 record.out_account.chain_password,
                 _url.hostname, _url.port, record.request_contract_address)

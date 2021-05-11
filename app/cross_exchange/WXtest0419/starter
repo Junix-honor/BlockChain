@@ -5,7 +5,9 @@ destinaAddr="$2"
 value="$3"
 chainhost="$4"
 port="$5"
-cd /root/WXtest0419
+
+workdir=$(cd $(dirname $0); pwd)
+cd "$workdir"
 
 
 callerDIR="callerDIR""$sourceAddr"

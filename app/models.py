@@ -138,6 +138,9 @@ class CrossExchangeRecord(db.Model):
     exchange_out_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
     exchange_out_account = db.relationship('Account', foreign_keys=[exchange_out_account_id])
     exchange_money = db.Column(db.Float)
+    hash_clock = db.Column(db.String(128))
+    request_contract_address = db.Column(db.String(128))
+    respond_contract_address = db.Column(db.String(128))
     status = db.Column(db.Integer, default=0)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
