@@ -95,7 +95,7 @@ class Account(db.Model):
     # money
     @property
     def money(self):
-        return round(help.Query_Balance(self.chain_address, self.account_hash), 2)
+        return float(round(help.Query_Balance(self.chain_address, self.account_hash), 2))
 
     @money.setter
     def money(self, value):

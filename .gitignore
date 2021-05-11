@@ -1,5 +1,6 @@
 # SQLite databases
 *.sqlite
+data-dev.sqlite
 
 # Virtual environment
 venv
