@@ -91,7 +91,7 @@ def validate_money():
 @exchange.route('/validate/same_user_account', methods=['POST'])
 def validate_same_user_account():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
-    print(personal_account.chain_address)
+    # print(personal_account.chain_address)
     if current_user.accounts.filter_by(account_hash=request.form.get('exchange_account'),
                                        chain_address=personal_account.chain_address).first():
         return jsonify(False)
@@ -102,7 +102,7 @@ def validate_same_user_account():
 @exchange.route('/validate/validate_password', methods=['POST'])
 def validate_password():
     personal_account = current_user.accounts.filter_by(id=int(request.form.get('personal_account'))).first()
-    print(personal_account.chain_address)
+    # print(personal_account.chain_address)
     if personal_account.verify_pay_password(request.form.get('password')):
         return jsonify(True)
     else:

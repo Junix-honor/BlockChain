@@ -24,7 +24,7 @@ def before_request():
 def index():
     # accounts = Account.query.filter_by().order_by(Account.timestamp.desc()).all()
     accounts = current_user.accounts.order_by(Account.timestamp.desc()).all()
-    print(accounts)
+    # print(accounts)
     return render_template('account.html', accounts=accounts)
 
 
@@ -67,8 +67,8 @@ def edit():
             return jsonify({"code": 5000})
     else:
         account = current_user.accounts.filter_by(id=int(request.form.get("account_id"))).first()
-        print(account)
-        print(request.form.get("account_id"))
+        # print(account)
+        # print(request.form.get("account_id"))
         account.chain_address = request.form.get("edit_chain_address")
         account.chain_password = request.form.get("edit_chain_password")
         account.account_hash = request.form.get("edit_account_hash")
@@ -104,8 +104,8 @@ def delete():
 # 检查密码是否正确
 @account.route('/validate/password', methods=['POST'])
 def validate_password():
-    print(request.form.get('password_account_id'))
-    print(request.form.get('old_password'))
+    # print(request.form.get('password_account_id'))
+    # print(request.form.get('old_password'))
     account = Account.query.filter_by(id=int(request.form.get('password_account_id'))).first()
     if account and account.verify_pay_password(password=request.form.get('old_password')):
         return jsonify(True)

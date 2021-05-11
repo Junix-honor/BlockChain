@@ -34,8 +34,8 @@ def index():
         join(User, User.id == Account.user_id). \
         filter(Account.user_id == current_user.id). \
         order_by(CrossExchangeRecord.timestamp.desc()).all()
-    print(send)
-    print(receive)
+    # print(send)
+    # print(receive)
     exchanges = receive + send
     return render_template('cross_exchange.html', exchanges=exchanges)
 
@@ -74,7 +74,7 @@ def initiate():
         filter(account1.chain_address == in_account.chain_address). \
         filter(account2.chain_address == out_account.chain_address). \
         first()
-    print(res)
+    # print(res)
     if res is None:
         return jsonify({"code": 5000, "message": "交易匹配失败"})
     else:
@@ -96,15 +96,15 @@ def agree():
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('id'))).first()
     # 发起账户部署
     _url = urlparse(record.out_account.chain_address)
-    print(record.out_account.account_hash, record.exchange_in_account.account_hash,
-          float(record.exchange_money), _url.hostname, _url.port)
+    # print(record.out_account.account_hash, record.exchange_in_account.account_hash,
+    #       float(record.exchange_money), _url.hostname, _url.port)
     request_contract_address = callsh(record.out_account.account_hash, record.exchange_in_account.account_hash,
                                       float(record.exchange_money), _url.hostname, _url.port)
     record.request_contract_address = request_contract_address
     # 匹配账户部署
     _url = urlparse(record.exchange_out_account.chain_address)
-    print(record.exchange_out_account.account_hash, record.in_account.account_hash,
-          float(record.exchange_money), _url.hostname, _url.port)
+    # print(record.exchange_out_account.account_hash, record.in_account.account_hash,
+    #       float(record.exchange_money), _url.hostname, _url.port)
     respond_contract_address = callsh(record.exchange_out_account.account_hash, record.in_account.account_hash,
                                       float(record.exchange_money), _url.hostname, _url.port)
     record.respond_contract_address = respond_contract_address
@@ -118,14 +118,14 @@ def agree():
 @login_required
 def encrypt():
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('record_id_encrypt'))).first()
-    print(record)
-    print(request.form.get('private_key'))
+    # print(record)
+    # print(request.form.get('private_key'))
     # TODO：设置HASH锁
     # request  contract
     _url = urlparse(record.out_account.chain_address)
-    print(record.out_account.account_hash, request.form.get('private_key'),
-          record.out_account.chain_password,
-          _url.hostname, _url.port, record.request_contract_address)
+    # print(record.out_account.account_hash, request.form.get('private_key'),
+    #       record.out_account.chain_password,
+    #       _url.hostname, _url.port, record.request_contract_address)
     calladdlock(record.out_account.account_hash, request.form.get('private_key'),
                 record.out_account.chain_password,
                 _url.hostname, _url.port, record.request_contract_address)
@@ -135,7 +135,7 @@ def encrypt():
                 record.exchange_out_account.chain_password,
                 _url.hostname, _url.port, record.respond_contract_address)
     record.hash_clock = request.form.get('private_key')
-    print("encrypt sucess")
+    # print("encrypt sucess")
     record.set_encrypted()
     db.session.add(record)
     db.session.commit()
@@ -150,19 +150,19 @@ def validate():
     # TODO：交易验证
     # request  contract
     _url = urlparse(record.in_account.chain_address)
-    print("step1")
-    print(record.in_account.account_hash, request.form.get('validate_private_key'),
-          record.in_account.chain_password,
-          _url.hostname, _url.port, record.respond_contract_address)
+    # print("step1")
+    # print(record.in_account.account_hash, request.form.get('validate_private_key'),
+    #       record.in_account.chain_password,
+    #       _url.hostname, _url.port, record.respond_contract_address)
     callunlock(record.in_account.account_hash, request.form.get('validate_private_key'),
                record.in_account.chain_password,
                _url.hostname, _url.port, record.respond_contract_address)
     # respond contract
     _url = urlparse(record.exchange_in_account.chain_address)
-    print("step2")
-    print(record.exchange_in_account.account_hash, request.form.get('validate_private_key'),
-          record.exchange_in_account.chain_password,
-          _url.hostname, _url.port, record.request_contract_address)
+    # print("step2")
+    # print(record.exchange_in_account.account_hash, request.form.get('validate_private_key'),
+    #       record.exchange_in_account.chain_password,
+    #       _url.hostname, _url.port, record.request_contract_address)
     callunlock(record.exchange_in_account.account_hash, request.form.get('validate_private_key'),
                record.exchange_in_account.chain_password,
                _url.hostname, _url.port, record.request_contract_address)
@@ -174,7 +174,7 @@ def validate():
 @cross_exchange.route('/cancel', methods=['POST'])
 @login_required
 def cancel():
-    print(request.form.get('id'))
+    # print(request.form.get('id'))
     record = CrossExchangeRecord.query.filter_by(id=int(request.form.get('id'))).first()
     record.set_canceled()
     db.session.add(record)

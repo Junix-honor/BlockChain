@@ -7495,11 +7495,7 @@ tbody tr td {
 }
 
 .dd-hiden {
-    display: block;
-    overflow: hidden;
-    word-break: keep-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    word-break:break-all
 }
 
 .is_certificated {

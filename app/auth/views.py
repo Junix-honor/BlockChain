@@ -17,7 +17,7 @@ def login():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form.get("username")).first()
         if user is not None and user.verify_password(password=request.form.get("password")):
-            print(request.form.get("remember_me"))
+            # print(request.form.get("remember_me"))
             login_user(user, request.form.get("remember_me"))
             next = request.args.get('next')
             if next is None or not next.startswith('/'):
