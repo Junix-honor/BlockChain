@@ -87,7 +87,38 @@
             display: none;
         }
 
+        .col-xs-1-5, .col-sm-1-5, .col-md-1-5, .col-lg-1-5 {
+            min-height: 1px;
+            padding-left: 15px;
+            padding-right: 15px;
+            position: relative;
+        }
 
+        .col-xs-1-5 {
+            width: 20%;
+            float: left;
+        }
+
+        @media (min-width: 768px) {
+            .col-sm-1-5 {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .col-md-1-5 {
+                width: 20%;
+                float: left;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-lg-1-5 {
+                width: 20%;
+                float: left;
+            }
+        }
     </style>
 {% endblock %}
 {% block page_content %}
@@ -120,14 +151,14 @@
                         <div class="steps">
                             <div class='inner'>
                                 <ul class="nav row" role="tablist" id="exchangeTab">
-                                    <li class="nav-item col-2 not-padding">
+                                    <li class="nav-item col-xs-1-5 not-padding">
                                         <a class="nav-link" data-toggle="tab" href="#step1" role="tab">
                                            <span class="fa-stack fa">
                                                 <i class="fa fa-circle-thin fa-stack-2x"></i>
                                                 <span class="fa-stack-1x">1</span>
                                             </span>
                                             <span class="hidden-xs-down d-none d-sm-inline">交易发起</span></a></li>
-                                    <li class="nav-item col-2 not-padding">
+                                    <li class="nav-item col-xs-1-5 not-padding">
                                         <a class="nav-link " data-toggle="tab" href="#step2" role="tab">
                                            <span class="fa-stack fa">
                                                 <i class="fa fa-circle-thin fa-stack-2x"></i>
@@ -135,7 +166,7 @@
                                             </span>
                                             <span class="hidden-xs-down d-none d-sm-inline">对方应答</span></a>
                                     </li>
-                                    <li class="nav-item col-2 not-padding">
+                                    <li class="nav-item col-xs-1-5 not-padding">
                                         <a class="nav-link " data-toggle="tab" href="#step3" role="tab">
                                             <span class="fa-stack fa">
                                                 <i class="fa fa-circle-thin fa-stack-2x"></i>
@@ -143,7 +174,7 @@
                                             </span>
                                             <span class="hidden-xs-down d-none d-sm-inline">交易加密</span></a>
                                     </li>
-                                    <li class="nav-item col-2 not-padding">
+                                    <li class="nav-item col-xs-1-5 not-padding">
                                         <a class="nav-link " data-toggle="tab" href="#step4" role="tab">
                                            <span class="fa-stack fa">
                                                 <i class="fa fa-circle-thin fa-stack-2x"></i>
@@ -151,7 +182,7 @@
                                             </span>
                                             <span class="hidden-xs-down d-none d-sm-inline">交易验证</span></a>
                                     </li>
-                                    {#                                    <li class="nav-item col-2 not-padding">#}
+                                    {#                                    <li class="nav-item col-xs-1-5 not-padding">#}
                                     {#                                        <a class="nav-link " data-toggle="tab" href="#step4" role="tab">#}
                                     {#                                           <span class="fa-stack fa">#}
                                     {#                                                <i class="fa fa-circle-thin fa-stack-2x"></i>#}
@@ -159,7 +190,7 @@
                                     {#                                            </span>#}
                                     {#                                            <span class="hidden-xs-down d-none d-sm-inline">对方验证</span></a>#}
                                     {#                                    </li>#}
-                                    <li class="nav-item col-2 not-padding">
+                                    <li class="nav-item col-xs-1-5 not-padding">
                                         <a class="nav-link " data-toggle="tab" href="#step5" role="tab">
                                            <span class="fa-stack fa">
                                                 <i class="fa fa-circle-thin fa-stack-2x"></i>
@@ -396,7 +427,7 @@
                                 {% if record and record.is_request(current_user.id)  and record.is_agreed() %}
                                     <div class="alert alert-info">
                                         <i class="bi-info-circle m-r-5"></i>
-                                        请设置一次性HASH锁进行交易加密
+                                        请设置一次性交易锁进行交易加密
                                     </div>
                                     <div class="row justify-content-center m-t-70">
                                         <div class="col-lg-6">
@@ -434,7 +465,7 @@
                                                        value="{{ record.id }}"/>
                                                 <div class="form-group row">
                                                     <label for="private_key"
-                                                           class="col-sm-3 control-label f-w-700">HASH锁</label>
+                                                           class="col-sm-3 control-label f-w-700">交易锁</label>
                                                     <div class="col-sm-9">
                                                         <div class="input-group">
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
@@ -448,7 +479,7 @@
 
                                                 <div class="form-group row">
                                                     <label for="private_key2"
-                                                           class="col-sm-3 control-label f-w-700">确认HASH锁</label>
+                                                           class="col-sm-3 control-label f-w-700">确认交易锁</label>
                                                     <div class="col-sm-9">
                                                         <div class="input-group">
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
@@ -519,7 +550,7 @@
                                 {% if record and record.is_request(current_user.id)  and record.is_encrypted() %}
                                     <div class="alert alert-info">
                                         <i class="bi-info-circle m-r-5"></i>
-                                        请验证交易HASH锁
+                                        请验证交易锁
                                     </div>
                                     <div class="row justify-content-center m-t-70">
                                         <div class="col-lg-6">
@@ -557,7 +588,7 @@
                                                        value="{{ record.id }}"/>
                                                 <div class="form-group row">
                                                     <label for="validate_private_key"
-                                                           class="col-sm-3 control-label f-w-700">HASH锁</label>
+                                                           class="col-sm-3 control-label f-w-700">交易锁</label>
                                                     <div class="col-sm-9">
                                                         <div class="input-group">
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
@@ -1063,10 +1094,10 @@
                 },
                 messages: {          //自定义提示信息
                     private_key: {
-                        required: "*HASH锁必填",
+                        required: "*交易锁必填",
                     },
                     private_key2: {
-                        equalTo: "*两次HASH锁输入不一致"
+                        equalTo: "*两次交易锁输入不一致"
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
@@ -1076,7 +1107,7 @@
                     let button = $(this)
                     swal({
                             title: "交易",
-                            text: "你确定加密该交易吗?" + CryptoJS.SHA256($("#private_key").val()).toString(),
+                            text: "你确定加密该交易吗?",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonText: "确定",
@@ -1096,7 +1127,7 @@
                                     //data: $('#privateKeyForm').serialize(),
                                     data: {
                                         "record_id_encrypt": $("#record_id_encrypt").val(),
-                                        "private_key": CryptoJS.SHA256($("#private_key").val()).toString(),
+                                        "private_key": "0x" + CryptoJS.SHA256($("#private_key").val()).toString(),
                                     },
                                     success: function (args) {
                                         if (args.code === 1000) {
@@ -1133,7 +1164,7 @@
                 },
                 messages: {          //自定义提示信息
                     validate_private_key: {
-                        required: "*HASH锁必填",
+                        required: "*交易锁必填",
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置

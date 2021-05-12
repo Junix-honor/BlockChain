@@ -39,11 +39,10 @@ def index():
     # total_out
     total_out = 0
     for record in common_exchange_records:
-        if record.is_succeeded():
-            total_out += record.exchange_money
+        total_out += record.exchange_money
     for record in send:
         if record.is_succeeded():
-            total_in += record.exchange_money
+            total_out += record.exchange_money
     return render_template('index.html', accounts=accounts, common_exchange_records=common_exchange_records,
                            cross_exchange_records=cross_exchange_records, wallet_num=wallet_num,
                            exchange_num=exchange_num, total_in=total_in, total_out=total_out)
