@@ -718,6 +718,8 @@
     {{ super() }}
     <!-- Form validation -->
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
+    <script src="../static/js/lib/CryptoJS-v3.1.2/components/core-min.js"></script>
+    <script src="../static/js/lib/CryptoJS-v3.1.2/components/sha256-min.js"></script>
 
     <script>
         //金额
@@ -1074,7 +1076,7 @@
                     let button = $(this)
                     swal({
                             title: "交易",
-                            text: "你确定加密该交易吗?",
+                            text: "你确定加密该交易吗?" + CryptoJS.SHA256($("#private_key").val()).toString(),
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonText: "确定",
@@ -1091,7 +1093,11 @@
                                     url: "{{ url_for('cross_exchange.encrypt') }}",
                                     type: 'post',
                                     data_type: 'json',
-                                    data: $('#privateKeyForm').serialize(),
+                                    //data: $('#privateKeyForm').serialize(),
+                                    data: {
+                                        "record_id_encrypt": $("#record_id_encrypt").val(),
+                                        "private_key": CryptoJS.SHA256($("#private_key").val()).toString(),
+                                    },
                                     success: function (args) {
                                         if (args.code === 1000) {
                                             swal({
