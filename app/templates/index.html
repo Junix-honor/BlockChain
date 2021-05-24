@@ -143,6 +143,16 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if not accounts %}
+                                    <div class="text-center p-t-100">
+                                        <div>
+                                            <img src="../static/images/no_data.svg" alt="no data">
+                                        </div>
+                                        <div class="m-t-10 no-data">
+                                            暂无数据
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -185,6 +195,16 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if not common_exchange_records %}
+                                    <div class="text-center p-t-50">
+                                        <div>
+                                            <img src="../static/images/no_data.svg" alt="no data" width="200">
+                                        </div>
+                                        <div class="m-t-10 no-data">
+                                            暂无数据
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -257,6 +277,16 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if not cross_exchange_records %}
+                                    <div class="text-center p-t-50">
+                                        <div>
+                                            <img src="../static/images/no_data.svg" alt="no data" width="200">
+                                        </div>
+                                        <div class="m-t-10 no-data">
+                                            暂无数据
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

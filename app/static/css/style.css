@@ -7495,7 +7495,7 @@ tbody tr td {
 }
 
 .dd-hiden {
-    word-break:break-all
+    word-break: break-all
 }
 
 .is_certificated {
@@ -7601,4 +7601,9 @@ tbody tr td {
 
 .not-padding {
     padding: 0 !important
+}
+
+.no-data {
+    color: #bfbfbf;
+    font-size: 1.1rem;
 }
