@@ -211,6 +211,9 @@ class CrossExchangeRecord(db.Model):
     def is_canceled(self):
         return self.status < 0
 
+    def page_status(self):
+        return self.status
+
 
 @login_manager.user_loader
 def load_user(user_id):

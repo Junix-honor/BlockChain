@@ -1222,7 +1222,7 @@
             {% if record == None %}
                 $('#exchangeTab li:eq(0) a').tab('show')
             {% else %}
-                var index = parseInt({{ record.status }});
+                var index ={{ record.page_status() }};
                 $('#exchangeTab li').eq(index).children('a').tab('show')
             {% endif %}
             $('#exchangeTab a').addClass('disabled')
