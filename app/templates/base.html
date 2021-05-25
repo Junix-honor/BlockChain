@@ -20,7 +20,6 @@
     <!-- Custom CSS -->
     <link href="../static/css/lib/sweetalert/sweetalert.css" rel="stylesheet">
     <link href="../static/css/style.css" rel="stylesheet">
-    <link href="../static/css/lib/notifications/notification.css" rel="stylesheet">
 {% endblock %}
 
 {#{% block navbar %}#}
@@ -164,13 +163,8 @@
     <script src="../static/js/lib/peitychart/jquery.peity.min.js"></script>
     <!-- sweetalert-->
     <script src="../static/js/lib/sweetalert/sweetalert.min.js"></script>
-    <!-- notification-->
-    <script src="../static/js/lib/notifyjs/dist/notify.min.js"></script>
-    <script src="../static/js/lib/notifications/notify-metro.js"></script>
-    <script src="../static/js/lib/notifications/notifications.js"></script>
     <!-- scripit init-->
     <script src="../static/js/custom.min.js"></script>
-    <script src="../static/js/dashboard-1.js"></script>
     <script>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
