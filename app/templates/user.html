@@ -35,7 +35,7 @@
                                         {% if current_user.avatar %}
                                             <img src="../static/images/avatar/{{ current_user.avatar }}" alt="avatar"/>
                                         {% else %}
-                                            <img src="../static/images/avatar/default.svg" alt="avatar"/>
+                                            <img src="../static/images/default.svg" alt="avatar"/>
                                         {% endif %}
                                         <input type="file" id="avatar" name="avatar" accept="image/*"
                                                class="hiddenInput">
@@ -160,6 +160,8 @@
                                                        name="username" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*用户名由4-10位英文字母、数字或者下画线组成</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="location">住址</label>
@@ -169,6 +171,8 @@
                                                        name="location" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*请输入您的住址</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="signature">个性签名</label>
@@ -178,6 +182,8 @@
                                                        name="signature" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*请输入您的个性签名，个性签名不能超过50字</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="about_me">个人简介</label>
@@ -187,6 +193,8 @@
                                                           name="about_me" placeholder="" rows="4"></textarea>
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*请输入您的个人简介，个人简介不能超过200字</small>
                                         </div>
                                         <button type="submit"
                                                 class="btn btn-info btn-flat m-b-30 m-t-10">确定
@@ -207,6 +215,8 @@
                                                        name="old_password" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*请输入旧密码</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="password">新密码
@@ -217,6 +227,8 @@
                                                        name="password" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*新密码由8-20位字母、数字、特殊符号组成，区分大小写</small>
                                         </div>
                                         <div class="form-group">
                                             <label for="password2">确认密码
@@ -227,6 +239,8 @@
                                                        name="password2" placeholder="">
                                             </div>
                                             <small class="form-control-feedback form-feedback"></small>
+                                            <small class="form-control-feedback form-tip"
+                                                   style="display: none;">*请确认输入的新密码</small>
                                         </div>
                                         <button type="submit"
                                                 class="btn btn-info btn-flat m-b-30 m-t-10">确定
@@ -280,7 +294,7 @@
                                             <h4 class="alert-heading"><i class="ti-alert m-r-10"></i>您还未实名认证！
                                             </h4>
                                             <hr>
-                                            <p>完成实名认证，才能开启个人账户、交易等功能。</p>
+                                            <p>完成实名认证，才能开启个人账户、普通交易、跨链交易等功能。</p>
                                         </div>
                                         <form class="form p-l-10 p-r-10" action="{{ url_for('user.certification') }}"
                                               method="post" role="form" id="certificationForm">
@@ -293,6 +307,8 @@
                                                            name="name" placeholder="">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请输入您的真实姓名</small>
                                             </div>
                                             <div class="form-group">
                                                 <label for="id_card">身份证号
@@ -303,6 +319,8 @@
                                                            name="id_card" placeholder="">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请输入您的身份证号</small>
                                             </div>
                                             <div class="form-group">
                                                 <label for="phone">手机号
@@ -313,6 +331,8 @@
                                                            name="phone" placeholder="">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请输入正确的手机号码</small>
                                             </div>
                                             <div class="form-group">
                                                 <label for="pay_password">支付密码
@@ -324,6 +344,8 @@
                                                            name="pay_password" placeholder="">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip" style="display: none;">
+                                                    *支付密码由8-20位字母、数字、特殊符号组成，区分大小写</small>
                                             </div>
                                             <div class="form-group">
                                                 <label for="pay_password2">确认密码
@@ -335,6 +357,8 @@
                                                            name="pay_password2" placeholder="">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请确认输入的支付密码</small>
                                             </div>
                                             <button type="submit"
                                                     class="btn btn-info btn-flat m-b-30 m-t-10">确定
@@ -354,7 +378,7 @@
     </div>
     <!-- End Container fluid  -->
 
-    <!-- passwordModal -->
+    <!-- payPasswordModal -->
     <div class="modal fade" id="payPasswordModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -368,41 +392,41 @@
                     <form action="{{ url_for('user.pay_password_change') }}" method="post"
                           role="form" id="payPasswordForm">
                         <div class="form-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group has-danger">
-                                        <label class="control-label" for="old_pay_password">旧密码
-                                            <span class="text-danger">*</span></label>
-                                        <input type="password" id="old_pay_password" name="old_pay_password"
-                                               class="form-control form-control-danger"
-                                               placeholder="">
-                                        <small class="form-control-feedback form-feedback"></small>
-                                    </div>
+                            <div class="form-group">
+                                <label for="old_pay_password">旧密码
+                                    <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="ti-key"></i></div>
+                                    <input type="password" class="form-control form-type" id="old_pay_password"
+                                           name="old_pay_password" placeholder="">
                                 </div>
+                                <small class="form-control-feedback form-feedback"></small>
+                                <small class="form-control-feedback form-tip"
+                                       style="display: none;">*请输入旧密码</small>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group has-danger">
-                                        <label class="control-label" for="edit_pay_password">新的支付密码
-                                            <span class="text-danger">*</span></label>
-                                        <input type="password" id="edit_pay_password" name="edit_pay_password"
-                                               class="form-control form-control-danger"
-                                               placeholder="">
-                                        <small class="form-control-feedback form-feedback"></small>
-                                    </div>
+                            <div class="form-group">
+                                <label for="edit_pay_password">新的支付密码
+                                    <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                    <input type="password" class="form-control form-type" id="edit_pay_password"
+                                           name="edit_pay_password" placeholder="">
                                 </div>
+                                <small class="form-control-feedback form-feedback"></small>
+                                <small class="form-control-feedback form-tip"
+                                       style="display: none;">*新支付密码由8-20位字母、数字、特殊符号组成，区分大小写</small>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group has-danger">
-                                        <label class="control-label" for="edit_pay_password2">确认密码
-                                            <span class="text-danger">*</span></label>
-                                        <input type="password" id="edit_pay_password2" name="edit_pay_password2"
-                                               class="form-control form-control-danger"
-                                               placeholder="">
-                                        <small class="form-control-feedback form-feedback"></small>
-                                    </div>
+                            <div class="form-group">
+                                <label for="edit_pay_password2">确认密码
+                                    <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="ti-lock"></i></div>
+                                    <input type="password" class="form-control form-type" id="edit_pay_password2"
+                                           name="edit_pay_password2" placeholder="">
                                 </div>
+                                <small class="form-control-feedback form-feedback"></small>
+                                <small class="form-control-feedback form-tip"
+                                       style="display: none;">*请确认输入的新支付密码</small>
                             </div>
                         </div>
                     </form>
@@ -438,6 +462,8 @@
                                        name="edit_name" placeholder="">
                             </div>
                             <small class="form-control-feedback form-feedback"></small>
+                            <small class="form-control-feedback form-tip"
+                                   style="display: none;">*请输入您的真实姓名</small>
                         </div>
                         <div class="form-group">
                             <label for="edit_id_card">身份证号
@@ -448,6 +474,8 @@
                                        name="edit_id_card" placeholder="">
                             </div>
                             <small class="form-control-feedback form-feedback"></small>
+                            <small class="form-control-feedback form-tip"
+                                   style="display: none;">*请输入您的身份证号</small>
                         </div>
                         <div class="form-group">
                             <label for="edit_phone">手机号
@@ -458,6 +486,8 @@
                                        name="edit_phone" placeholder="">
                             </div>
                             <small class="form-control-feedback form-feedback"></small>
+                            <small class="form-control-feedback form-tip"
+                                   style="display: none;">*请输入正确的手机号码</small>
                         </div>
                     </form>
                 </div>
@@ -474,6 +504,13 @@
     <!-- Form validation -->
     <script src="../static/js/lib/form-validation/jquery.validate.min.js"></script>
     <script>
+        $(".form-control").focus(function () {
+            $(this).parent().siblings(".form-tip").show()
+            $(this).parent().siblings(".form-feedback").hide()
+        }).blur(function () {
+            $(this).parent().siblings(".form-tip").hide()
+            $(this).parent().siblings(".form-feedback").show()
+        });
         //表单js提交
         $("#pay_password_edit_submit").click(function () {
             $("#payPasswordForm").submit();
@@ -487,6 +524,7 @@
                 rules: {
                     username: {
                         required: true,
+                        checkUsername: true,
                         remote: {
                             url: "{{ url_for('user.validate_username') }}",
                             type: "post",
@@ -519,9 +557,15 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 }
             });
+            $.validator.addMethod("checkUsername", function (value, element, params) {
+                var check = /^\w{4,10}$/g;
+                return this.optional(element) || (check.test(value));
+            }, "*只允许4-10位英文字母、数字或者下画线");
         });
         //passwordForm
         $(function () {
@@ -564,7 +608,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 }
             });
             $.validator.addMethod("checkPassword", function (value, element, params) {
@@ -595,10 +641,7 @@
                         checkPassword: true
                     },
                     pay_password2: {
-                        required: true,
                         equalTo: "#pay_password",
-                        minlength: 8,
-                        maxlength: 20
                     }
                 },
                 messages: {          //自定义提示信息
@@ -613,18 +656,17 @@
                     },
                     pay_password: {
                         required: "*支付密码必填",
-                        minlength: "*密码最小长度为8",
-                        maxlength: "*密码最大长度为20",
+                        minlength: "*支付密码最小长度为8",
+                        maxlength: "*支付密码最大长度为20",
                     },
                     pay_password2: {
-                        required: "*支付密码必填",
                         equalTo: "*两次密码输入不一致",
-                        minlength: "*密码最小长度为8",
-                        maxlength: "*密码最大长度为20",
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 }
             });
             $.validator.addMethod("checkPassword", function (value, element, params) {
@@ -673,7 +715,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 }
             });
             $.validator.addMethod("checkName", function (value, element, params) {
@@ -731,12 +775,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    if (element.is(':checkbox'))
-                        $(element).parent().siblings(".form-control-feedback").html(error)
-                    else if (element.is(':radio'))
-                        $(element).parent().parent().siblings(".form-control-feedback").html(error)
-                    else
-                        $(element).siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 }
             });
             $.validator.addMethod("checkPassword", function (value, element, params) {

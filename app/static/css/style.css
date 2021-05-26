@@ -7474,7 +7474,7 @@ tbody tr td {
 
 /* owm */
 
-.form-feedback {
+.form-feedback .error {
     color: darkred;
 }
 

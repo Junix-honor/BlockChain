@@ -21,7 +21,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-    #                           'mysql://root:mysql@127.0.0.1:3306/blockchain'
+    #                           'mysql+pymysql://%s:%s@127.0.0.1:3306/%s' % ('root', '', 'blockchain')
 
 
 class TestingConfig(Config):
@@ -36,7 +36,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data.sqlite')
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-    #                           'mysql://root:mysql@127.0.0.1:3306/blockchain'
+    #                           'mysql+pymysql://%s:%s@127.0.0.1:3306/%s' % ('root', '', 'blockchain')
 
 
 config = {

@@ -39,6 +39,8 @@
                                                name="username" placeholder="">
                                     </div>
                                     <small class="form-control-feedback form-feedback"></small>
+                                    <small class="form-control-feedback form-tip" style="display: none;">
+                                        *用户名由4-10位英文字母、数字或者下画线组成</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">邮箱
@@ -49,6 +51,8 @@
                                                name="email" placeholder="">
                                     </div>
                                     <small class="form-control-feedback form-feedback"></small>
+                                    <small class="form-control-feedback form-tip" style="display: none;">
+                                        *请输入正确的邮箱</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">密码
@@ -59,6 +63,8 @@
                                                name="password" placeholder="">
                                     </div>
                                     <small class="form-control-feedback form-feedback"></small>
+                                    <small class="form-control-feedback form-tip" style="display: none;">
+                                        *密码由8-20位字母、数字、特殊符号组成，区分大小写</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="password2">确认密码
@@ -69,6 +75,8 @@
                                                name="password2" placeholder="">
                                     </div>
                                     <small class="form-control-feedback form-feedback"></small>
+                                    <small class="form-control-feedback form-tip"
+                                           style="display: none;">*请确认输入的密码</small>
                                 </div>
                                 <div class="form-group">
                                     <div class="checkbox checkbox-success">
@@ -120,6 +128,13 @@
 <script src="../../static/js/lib/form-validation/jquery.validate.min.js"></script>
 
 <script>
+    $(".form-control").focus(function () {
+        $(this).parent().siblings(".form-tip").show()
+        $(this).parent().siblings(".form-feedback").hide()
+    }).blur(function () {
+        $(this).parent().siblings(".form-tip").hide()
+        $(this).parent().siblings(".form-feedback").show()
+    });
     //registerForm
     $(function () {
         $("#registerForm").validate({
@@ -192,7 +207,9 @@
                 }
             },
             errorPlacement: function (error, element) {      //错误信息的位置
-                $(element).parent().siblings(".form-control-feedback").html(error)
+                $(element).parent().siblings(".form-feedback").show()
+                $(element).parent().siblings(".form-tip").hide()
+                $(element).parent().siblings(".form-feedback").html(error)
             }
         });
         $.validator.addMethod("checkUsername", function (value, element, params) {
