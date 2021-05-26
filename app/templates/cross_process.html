@@ -477,6 +477,18 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="form-group row" style="display: none" id="hash_lock_div">
+                                                    <label for="hash_lock"
+                                                           class="col-sm-3 control-label f-w-700">交易锁哈希值</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group">
+                                                            <input type="text" readonly class="form-control-plaintext"
+                                                                   id="hash_lock" value="">
+                                                        </div>
+                                                        <small class="form-control-feedback form-feedback"></small>
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group row">
                                                     <label for="private_key2"
                                                            class="col-sm-3 control-label f-w-700">确认交易锁</label>
@@ -800,6 +812,10 @@
                     }
                 }
             })
+        })
+        $("#private_key").change(function () {
+            $("#hash_lock_div").show();
+            $("#hash_lock").val("0x" + CryptoJS.SHA256($("#private_key").val()).toString())
         })
 
         //表单js提交
