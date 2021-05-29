@@ -55,7 +55,7 @@
                                                 <td>{{ exchange.out_account.user.username }}</td>
                                                 <td>{{ exchange.out_account.account_alias }}</td>
                                                 <td>{{ exchange.in_account.account_alias }}</td>
-                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td><i class="cc ETH color-primary"> </i>{{ exchange.exchange_money }}</td>
                                                 <td>
                                                     {% if exchange.need_requester() %}
                                                         <span class='badge badge-danger'>待处理</span>
@@ -76,7 +76,7 @@
                                                 <td>{{ exchange.out_account.user.username }}</td>
                                                 <td>{{ exchange.exchange_out_account.account_alias }}</td>
                                                 <td>{{ exchange.exchange_in_account.account_alias }}</td>
-                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td><i class="cc ETH color-primary"> </i>{{ exchange.exchange_money }}</td>
                                                 <td>
                                                     {% if exchange.need_responder() %}
                                                         <span class='badge badge-danger'>待处理</span>
@@ -130,7 +130,7 @@
                                                 <td>{{ exchange.out_account.user.username }}</td>
                                                 <td>{{ exchange.out_account.account_alias }}</td>
                                                 <td>{{ exchange.in_account.account_alias }}</td>
-                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td><i class="cc ETH color-primary"> </i>{{ exchange.exchange_money }}</td>
                                                 <td>{{ exchange.status|exchange_status|safe }}</td>
                                                 <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                                 <td>
@@ -146,7 +146,7 @@
                                                 <td>{{ exchange.out_account.user.username }}</td>
                                                 <td>{{ exchange.exchange_out_account.account_alias }}</td>
                                                 <td>{{ exchange.exchange_in_account.account_alias }}</td>
-                                                <td>{{ exchange.exchange_money }}</td>
+                                                <td><i class="cc ETH color-primary"> </i>{{ exchange.exchange_money }}</td>
                                                 <td>{{ exchange.status|exchange_status|safe }}</td>
                                                 <td>{{ moment(exchange.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                                 <td>

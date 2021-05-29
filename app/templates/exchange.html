@@ -145,7 +145,7 @@
                                     <tr>
                                         <td>{{ record.account.account_alias }}</td>
                                         <td>{{ record.exchange_account_hash }}</td>
-                                        <td>{{ record.exchange_money }}</td>
+                                        <td><i class="cc ETH color-primary"> </i>{{ record.exchange_money }}</td>
                                         <td>{{ moment(record.timestamp).format('YYYY/M/D HH:mm:ss') }}</td>
                                     </tr>
                                 {% endfor %}
@@ -205,7 +205,7 @@
                 success: function (args) {
                     if (args.code === 1000) {
                         $("#account_info").show()
-                        $("#money_info").html(args.money)
+                        $("#money_info").html(args.money+" ETH")
                         $("#chain_address_info").html(args.chain_address)
                         $("#account_hash_info").html(args.account_hash)
 
