@@ -228,6 +228,8 @@
                                                     </select>
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请选择转出账户</small>
                                                 <dl class="row m-t-10 m-b-0 account-al" style="display: none"
                                                     id="out_account_info">
                                                     <dt class="col-lg-2">余额</dt>
@@ -255,6 +257,8 @@
                                                     </select>
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请选择转入账户</small>
                                                 <dl class="row m-t-10 m-b-0 account-al" style="display: none"
                                                     id="in_account_info">
                                                     <dt class="col-lg-2">余额</dt>
@@ -277,6 +281,8 @@
                                                            placeholder="请输入交易金额" onkeyup=" checknum(this);">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请输入交易金额，ETH为单位，注意：交易存在手续费，此交易金额为到账金额</small>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -290,6 +296,8 @@
                                                            id="password" placeholder="请输入支付密码">
                                                 </div>
                                                 <small class="form-control-feedback form-feedback"></small>
+                                                <small class="form-control-feedback form-tip"
+                                                       style="display: none;">*请输入转出账户的支付密码</small>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -340,7 +348,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -378,7 +386,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -407,6 +415,8 @@
                                                                    placeholder="请输入转出账户的支付密码">
                                                         </div>
                                                         <small class="form-control-feedback form-feedback"></small>
+                                                        <small class="form-control-feedback form-tip"
+                                                               style="display: none;">*请输入转出账户的支付密码</small>
                                                     </div>
 
                                                 </div>
@@ -448,7 +458,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -471,9 +481,11 @@
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
                                                             <input type="password" class="form-control form-type"
                                                                    id="private_key" name="private_key"
-                                                                   placeholder="">
+                                                                   placeholder="请设置一次性交易锁">
                                                         </div>
                                                         <small class="form-control-feedback form-feedback"></small>
+                                                        <small class="form-control-feedback form-tip"
+                                                               style="display: none;">*请设置一次性交易锁</small>
                                                     </div>
                                                 </div>
 
@@ -485,7 +497,6 @@
                                                             <input type="text" readonly class="form-control-plaintext"
                                                                    id="hash_lock" value="">
                                                         </div>
-                                                        <small class="form-control-feedback form-feedback"></small>
                                                     </div>
                                                 </div>
 
@@ -497,9 +508,11 @@
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
                                                             <input type="password" class="form-control form-type"
                                                                    id="private_key2" name="private_key2"
-                                                                   placeholder="">
+                                                                   placeholder="请确认设置的一次性交易锁">
                                                         </div>
                                                         <small class="form-control-feedback form-feedback"></small>
+                                                        <small class="form-control-feedback form-tip"
+                                                               style="display: none;">*请确认设置的一次性交易锁</small>
                                                     </div>
                                                 </div>
                                             </form>
@@ -539,7 +552,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -583,7 +596,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -606,9 +619,11 @@
                                                             <div class="input-group-addon"><i class="ti-lock"></i></div>
                                                             <input type="password" class="form-control form-type"
                                                                    id="validate_private_key" name="validate_private_key"
-                                                                   placeholder="">
+                                                                   placeholder="请输入交易锁">
                                                         </div>
                                                         <small class="form-control-feedback form-feedback"></small>
+                                                        <small class="form-control-feedback form-tip"
+                                                               style="display: none;">*请输入交易锁进行交易验证</small>
                                                     </div>
                                                 </div>
                                             </form>
@@ -648,7 +663,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -692,7 +707,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -730,7 +745,7 @@
 
                                                 <dt class="col-sm-3">交易金额</dt>
                                                 <dd class="col-sm-9">
-                                                    <p>{{ record.exchange_money }}</p>
+                                                    <p>{{ record.exchange_money }} ETH</p>
                                                 </dd>
 
                                                 <dt class="col-sm-3">交易发起时间</dt>
@@ -765,6 +780,14 @@
     <script src="../static/js/lib/CryptoJS-v3.1.2/components/sha256-min.js"></script>
 
     <script>
+        $(".form-control").focus(function () {
+            $(this).parent().siblings(".form-tip").show()
+            $(this).parent().siblings(".form-feedback").hide()
+        }).blur(function () {
+            $(this).parent().siblings(".form-tip").hide()
+            $(this).parent().siblings(".form-feedback").show()
+        });
+
         //金额
         function checknum(obj) {
             if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
@@ -786,7 +809,7 @@
                 success: function (args) {
                     if (args.code === 1000) {
                         $("#out_account_info").show()
-                        $("#out_money_info").html(args.money)
+                        $("#out_money_info").html(args.money + " ETH")
                         $("#out_chain_address_info").html(args.chain_address)
                         $("#out_account_hash_info").html(args.account_hash)
 
@@ -805,7 +828,7 @@
                 success: function (args) {
                     if (args.code === 1000) {
                         $("#in_account_info").show()
-                        $("#in_money_info").html(args.money)
+                        $("#in_money_info").html(args.money + " ETH")
                         $("#in_chain_address_info").html(args.chain_address)
                         $("#in_account_hash_info").html(args.account_hash)
 
@@ -957,7 +980,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 },
                 submitHandler: function (form) {
                     swal({
@@ -1049,7 +1074,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 },
                 submitHandler: function (form) {
                     swal({
@@ -1117,7 +1144,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 },
                 submitHandler: function (form) {
                     let button = $(this)
@@ -1184,7 +1213,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 },
                 submitHandler: function (form) {
                     let button = $(this)

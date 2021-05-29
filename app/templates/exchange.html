@@ -49,6 +49,8 @@
                                             </select>
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
+                                        <small class="form-control-feedback form-tip"
+                                               style="display: none;">*请选择本人账户</small>
                                         <dl class="row m-t-10 m-b-0 account-al" style="display: none" id="account_info">
                                             <dt class="col-lg-2">余额</dt>
                                             <dd class="col-lg-10" id="money_info"></dd>
@@ -69,6 +71,8 @@
                                                    id="exchange_account" placeholder="请输入账户地址">
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
+                                        <small class="form-control-feedback form-tip"
+                                               style="display: none;">*请输入交易账户地址</small>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -81,6 +85,8 @@
                                                    placeholder="请输入交易金额" onkeyup=" checknum(this);">
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
+                                        <small class="form-control-feedback form-tip"
+                                               style="display: none;">*请输入交易金额，ETH为单位，注意：交易存在手续费</small>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -93,6 +99,8 @@
                                                    id="password" placeholder="请输入支付密码">
                                         </div>
                                         <small class="form-control-feedback form-feedback"></small>
+                                        <small class="form-control-feedback form-tip"
+                                               style="display: none;">*请输入本人账户的支付密码</small>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -179,6 +187,14 @@
     <script src="../static/js/lib/bootstrap/defaults-zh_CN.min.js"></script>
 
     <script>
+        $(".form-control").focus(function () {
+            $(this).parent().siblings(".form-tip").show()
+            $(this).parent().siblings(".form-feedback").hide()
+        }).blur(function () {
+            $(this).parent().siblings(".form-tip").hide()
+            $(this).parent().siblings(".form-feedback").show()
+        });
+
         //金额
         function checknum(obj) {
             if (/^\d+\.?\d{0,2}$/.test(obj.value)) {
@@ -205,7 +221,7 @@
                 success: function (args) {
                     if (args.code === 1000) {
                         $("#account_info").show()
-                        $("#money_info").html(args.money+" ETH")
+                        $("#money_info").html(args.money + " ETH")
                         $("#chain_address_info").html(args.chain_address)
                         $("#account_hash_info").html(args.account_hash)
 
@@ -291,7 +307,9 @@
                     }
                 },
                 errorPlacement: function (error, element) {      //错误信息的位置
-                    $(element).parent().siblings(".form-control-feedback").html(error)
+                    $(element).parent().siblings(".form-feedback").show()
+                    $(element).parent().siblings(".form-tip").hide()
+                    $(element).parent().siblings(".form-feedback").html(error)
                 },
                 submitHandler: function (form) {
                     swal({
@@ -356,7 +374,7 @@
         $(function () {
             $('#commonExchangeTable').DataTable(
                 {
-                    "lengthMenu":[5,10,15,20,25,50,100],
+                    "lengthMenu": [5, 10, 15, 20, 25, 50, 100],
                     "language": {//插件的汉化
                         "lengthMenu": "每页显示 _MENU_ 条记录",
                         "info": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
