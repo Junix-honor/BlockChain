@@ -11,25 +11,25 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
-    id_card = db.Column(db.String(18), unique=True, index=True)
-    avatar = db.Column(db.Text())
-    card_front = db.Column(db.Text())
-    card_back = db.Column(db.Text())
+    username = db.Column(db.String(10), unique=True, index=True)
+    id_card = db.Column(db.String(18), index=True)
+    avatar = db.Column(db.String(64))
+    # card_front = db.Column(db.Text())
+    # card_back = db.Column(db.Text())
     password_hash = db.Column(db.String(128))
     pay_password_hash = db.Column(db.String(128))
     phone = db.Column(db.String(11))
-    name = db.Column(db.String(64))
+    name = db.Column(db.String(30))
     location = db.Column(db.String(64))
-    signature = db.Column(db.Text())
-    about_me = db.Column(db.Text())
+    signature = db.Column(db.String(100))
+    about_me = db.Column(db.String(200))
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
-    is_certificated = db.Column(db.Integer(), default=0)
+    is_certificated = db.Column(db.Boolean, default=False)
     accounts = db.relationship('Account', backref='user', lazy='dynamic')
     # 密保
-    protection_question = db.Column(db.String(128))
-    protection_answer_hash = db.Column(db.String(128))
+    # protection_question = db.Column(db.String(128))
+    # protection_answer_hash = db.Column(db.String(128))
 
     # password哈希
     @property
@@ -72,7 +72,7 @@ class User(UserMixin, db.Model):
         db.session.add(self)
 
     def certificate(self):
-        self.is_certificated = 1
+        self.is_certificated = True
 
     def __repr__(self):
         return '<User %r>' % self.username
