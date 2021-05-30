@@ -850,9 +850,9 @@ ul.list-style-none li a:hover {
     color: #67757c;
 }
 
-.custom-select {
-    background: url("../../assets/images/custom-select.png") right 0.75rem center no-repeat;
-}
+/*.custom-select {*/
+/*    background: url("../../assets/images/custom-select.png") right 0.75rem center no-repeat;*/
+/*}*/
 
 textarea {
     resize: none;
@@ -1781,29 +1781,6 @@ textarea {
     }
 }
 
-.amcharts-graph-column-front {
-    -webkit-transition: all 0.3s 0.3s ease-out;
-    transition: all 0.3s 0.3s ease-out;
-}
-
-.amcharts-graph-column-front:hover {
-    fill: #496375;
-    stroke: #496375;
-    -webkit-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
-}
-
-.amcharts-graph-g3 {
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    stroke-dasharray: 500%;
-    stroke-dasharray: 0 /;
-    /* fixes IE prob */
-    stroke-dashoffset: 0 /;
-    /* fixes IE prob */
-    -webkit-animation: am-draw 40s;
-    animation: am-draw 40s;
-}
 
 @-webkit-keyframes am-draw {
     0% {
